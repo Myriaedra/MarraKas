@@ -12,7 +12,7 @@ public class PartPreviewScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetKeyDown("space")) //Quit
+		if (Input.GetButtonDown("Jump")) //Quit
 			{
 				Destroy(gameObject);
 			}
