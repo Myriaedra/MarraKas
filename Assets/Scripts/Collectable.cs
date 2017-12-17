@@ -22,9 +22,12 @@ public class Collectable : MonoBehaviour {
 		thisMemento = new Memento (mementoID, mementoName);
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
+	void OnTriggerEnter(Collider other)//TRIGGER ENTER------------------------------------------------------
+	{
+		if (other.tag == "Player")//CHECK POUR LES COLLECTABLES---------------------------------
+		{
+				StartCoroutine ("Collected");
+		}//-----------------------------------------------------------------------------------
 	}
 
 	//Coroutine : oscillate between position+amplitude && position-amplitude on Y axis

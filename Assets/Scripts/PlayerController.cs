@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour {
         }//-----------------------------------------------------------------
     }
 
-	void OnTriggerEnter(Collider other)//TRIGGER ENTER------------------------------------------------------
+	/*void OnTriggerEnter(Collider other)//TRIGGER ENTER------------------------------------------------------
 	{
 		if (other.tag == "Collectable")//CHECK POUR LES COLLECTABLES---------------------------------
 		{
@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour {
 				col.StartCoroutine ("Collected");
 			}
 		}//-----------------------------------------------------------------------------------
-	} 
+	} */
 
 	void GroundMovement() //FONCTION MVT SOL
     {
