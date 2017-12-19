@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.InteropServices.ComTypes;
 
 public class BarkManagement : MonoBehaviour {
 
-    List<Animator> spotsDetected = new List<Animator>();
+    public List<Animator> spotsDetected = new List<Animator>();
     public PlayerController playerController;
 
     public float showRange;
@@ -20,7 +21,10 @@ public class BarkManagement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
+		if (Input.GetButtonDown ("Bark")) 
+		{
+			Bark();
+		}
 	}
 
     void OnTriggerEnter(Collider other)
@@ -51,7 +55,8 @@ public class BarkManagement : MonoBehaviour {
         int layerMask = LayerMask.GetMask("BarkInteractable");
         if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
         {
-            print(hit.collider.name);
+			Debug.DrawRay (transform.position, transform.forward, Color.red, 2f);
+			print(hit.collider.name);
             if (hit.collider.CompareTag("FlowerEmitter"))
             {
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
@@ -62,8 +67,15 @@ public class BarkManagement : MonoBehaviour {
         {
             for (int i = 0; i < spotsDetected.Count; i++)
             {
-                if (Vector3.Distance(spotsDetected[i].transform.position, playerController.transform.position) < showRange)
-                    spotsDetected[i].SetTrigger("EmissionTrigger");
+				if (spotsDetected [i] != null) 
+				{
+					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {	
+					
+						spotsDetected [i].SetTrigger ("EmissionTrigger");
+					}
+				}
+				else
+					spotsDetected.RemoveAt (i);
             }
         }
     }

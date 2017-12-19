@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DigManager : MonoBehaviour {
-	public GameObject digVisualize;
 	private bool digInput;
 	public ParticleSystem digFX;
 	public Canvas partPreview;
 	public PartsReference pRef;
+	public BarkManagement barkMan;
 
 	void Update()
 	{
@@ -27,16 +27,22 @@ public class DigManager : MonoBehaviour {
 	{
 		if (other.tag == "Spot" && digInput) 
 		{
-			Dig (other.transform.GetComponent<SpotManager> ());
+			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
 			digInput = false;
 		}
 	}
 
-	public void Dig(SpotManager diggedSpot) 
+	IEnumerator Dig(SpotManager diggedSpot) 
 	{
 		Debug.Log ("You digged out the " + diggedSpot.type + " number " + diggedSpot.part);
-		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part); //Add the sk part in the inventory
+		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part);
+		//print (diggedSpot.gameObject.GetComponent<Animator> ());
+		//barkMan.spotsDetected.Remove(barkMan.spotsDetected.Find(diggedSpot.gameObject.GetComponent<Animator>()));//Add the sk part in the inventory
 		Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
+
+		yield return new WaitForSeconds (2f);
+
+
 		PartPreview (diggedSpot.type, diggedSpot.part); //Instantiate canvas with preview of the sk part
 		//Destroy (fx, 1.5f);
 		Destroy (diggedSpot.transform.gameObject);
