@@ -12,17 +12,12 @@ public class PlayerController : MonoBehaviour {
     public float groundAcceleration;
     public float sprintAcceleration;
     public float airAcceleration;
-    public float glideAcceleration;
     public float sprintSpeed;
     public float maxSpeed;
-    public float glideSpeed;
-    public float climbAcceleration;
-    public float climbMaxSpeed;
 	public float jumpForce;
+	public float dragValue;
 
     bool landed = false;
-    bool gliding = true;
-    bool climbing = false;
 
     Vector3 startPosition;
 
@@ -49,63 +44,28 @@ public class PlayerController : MonoBehaviour {
         //JUMP MANAGEMENT
 		if (Input.GetButtonDown ("Jump") && IsGrounded ()) //Normal jump
 			rb.velocity = new Vector3 (rb.velocity.x, jumpForce, rb.velocity.z);
-		/*else if (Input.GetButtonDown ("Jump") && climbing && !IsGrounded()) //Wall Jump
-		{
-			climbing = false;
-			print (transform.forward);
-			rb.velocity = new Vector3 (-transform.forward.x*15, jumpForce, -transform.forward.z*15); //Opposite direction
-			transform.Rotate(new Vector3 (0, 180, 0));
-			print (rb.velocity);
-			camController.Invoke("SnapBack", 0.5f);
-		}*/
-
-        /*NOTES TRUC A FAIRE-------------------------------------------------------------------
-            Régler le feel de l'orientation quand on est immobile --> on devrait être capable de tourner sur soi-même pour s'orienter comme on veut
-        */
     }
 
 	void FixedUpdate ()//-------------------------------------------------------------------------------------------------------------------
     {
         if (IsGrounded())//MOUVEMENT AU SOL---------------------------------------------------
         {
-            if (gliding)
-                gliding = false;
-
-            GroundMovement();
+			GroundMovement();
+			Drag (dragValue);
         }
         else//MOUVEMENT AERIEN---------------------------------------------------------------------
         {
-            AirMovement();
+			AirMovement();
+			Drag (dragValue);
         }
     }
 
-    void OnTriggerStay(Collider other)//TRIGGER STAY------------------------------------------------------
-    {
-        if (other.tag == "Wall")//CHECK POUR LE WALLJUMP---------------------   À TESTER
-        {
-			if (Input.GetButtonDown ("Jump") && climbing && !IsGrounded()) //Wall Jump
-			{
-				climbing = false;
-				print (transform.forward);
-				rb.velocity = new Vector3 (-transform.forward.x*15, jumpForce, -transform.forward.z*15); //Opposite direction
-				transform.Rotate(new Vector3 (0, 180, 0));
-				print (rb.velocity);
-				camController.Invoke("SnapBack", 0.5f);
-			}
-        }//-----------------------------------------------------------------
-    }
-
-	void OnTriggerEnter(Collider other)//TRIGGER ENTER------------------------------------------------------
-	{
-		if (other.tag == "Collectable")//CHECK POUR LES COLLECTABLES---------------------------------
-		{
-			Collectable col = other.GetComponent<Collectable> ();
-			if (!col.collected) 
-			{
-				col.StartCoroutine ("Collected");
-			}
-		}//-----------------------------------------------------------------------------------
-	} 
+	void Drag(float drag){
+		Vector3 vel = rb.velocity;
+		vel.x *= 1 - drag;
+		vel.z *= 1 - drag;
+		rb.velocity = vel;
+	}
 
 	void GroundMovement() //FONCTION MVT SOL
     {
@@ -204,21 +164,22 @@ public class PlayerController : MonoBehaviour {
         int layerMask = 1 << 8;
         //On inverse et donc --> get tout sauf playerMask
         layerMask = ~layerMask;
-        if (Physics.Raycast(transform.position, -transform.up, 1.2f, layerMask))
+        if (Physics.Raycast(transform.position, -transform.up, 1.0f, layerMask))
         {
             if (!landed)
             {
-                landed = true;
+				landed = true;
                 //rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-				rb.velocity = new Vector3(0, 0, 0); //Avoid slipping
+				rb.velocity = new Vector3(rb.velocity.x/4, 0, rb.velocity.z/4); //Avoid slipping
             }     
             return true;
         }
         else
         {
 
-            if (landed)
-                landed = false;
+			if (landed){
+				landed = false;
+			}
             return false;
         }
     }
@@ -231,14 +192,11 @@ public class PlayerController : MonoBehaviour {
         {
             wantedVignetteValue = 0.45f;
             wantedFieldOfView = 80;
-            if (rb.velocity.magnitude > 4.0f)
-                speedParticleSystem.enableEmission = true;
         }
         else
         {
             wantedVignetteValue = 0;
             wantedFieldOfView = 60;
-            speedParticleSystem.enableEmission = false;
         }
         
         //vignette management---------------------------------------
