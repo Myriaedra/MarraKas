@@ -2,16 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AddingParts : MonoBehaviour {
-	public GameObject objPlayer;
-	public GameObject objLeg;
-	public GameObject objHead;
-	// Use this for initialization
-	void Start () 
-	{
-		AddLimb( objHead, objPlayer );
-		AddLimb (objLeg, objPlayer);
-	}
+public class skPartAdder : MonoBehaviour {
 
 	public void AddLimb( GameObject BonedObj, GameObject RootObj)
 	{
@@ -54,8 +45,5 @@ public class AddingParts : MonoBehaviour {
 		}
 		return null;
 	}
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }
