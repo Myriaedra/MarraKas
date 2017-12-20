@@ -17,12 +17,25 @@ public class skSpawner : MonoBehaviour {
 
 	public void SpawnFromParts (int headID, int torsoID, int legID)
 	{
+		//Spawn 3 parts (with head and leg child of torso)
 		GameObject spawnedTorso = Instantiate (pRef.torsoPrefabs [torsoID], new Vector3 (0, 0, 0), Quaternion.identity);
 		GameObject spawnedHead = Instantiate(pRef.headPrefabs[headID], spawnedTorso.transform);
 		GameObject spawnedLeg = Instantiate(pRef.legPrefabs[legID], spawnedTorso.transform);
 
+		//Add the adder script to torso
 		skPartAdder skPA = spawnedTorso.AddComponent<skPartAdder> ();
+		//Add head and leg to torso
 		skPA.AddLimb (spawnedHead, spawnedTorso);
 		skPA.AddLimb (spawnedLeg, spawnedTorso);
+	}
+
+	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj)
+	{
+		
+		//Add the adder script to torso
+		skPartAdder skPA = torsoObj.AddComponent<skPartAdder> ();
+		//Add head and leg to torso
+		skPA.AddLimb (headObj, torsoObj);
+		skPA.AddLimb (legObj, torsoObj);
 	}
 }

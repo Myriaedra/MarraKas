@@ -57,4 +57,39 @@ public class InventoryClass
 	{
 		mementos.Remove(memento);
 	}
+
+	public int GetIDFromReference (int type, int pos) //Returns a prefab skeleton part depending on the type (head, leg, torso) and the position in the array
+	{
+		switch (type)
+		{
+		case 0 :
+			return heads[pos];
+
+		case 1 :
+			return torsos[pos];
+
+		case 2 :
+			return legs[pos];
+		}
+
+		return -1;
+	} 
+
+	public int GetArrayLength (int type) //Returns a prefab skeleton part depending on the type (head, leg, torso) and the position in the array
+	{
+		switch (type)
+		{
+		case 0 :
+			return heads.Count;
+
+		case 1 :
+			return torsos.Count;
+
+		case 2 :
+			return legs.Count;
+		}
+
+		return -1;
+	} 
+
 }

@@ -5,10 +5,13 @@ using UnityEngine;
 public class skSelector : MonoBehaviour {
 	skSpawner skSP;
 	InventoryClass playerInventory;
+	PartsReference pRef;
 
-	int selectedHead;
-	int selectedTorso;
-	int selectedLeg;
+	Vector3 selectPosition;
+
+	GameObject[] currentParts = new GameObject[3];
+
+	int[] selectedParts = new int[3];
 	int selectedType;
 	bool snaped;
 
@@ -17,13 +20,15 @@ public class skSelector : MonoBehaviour {
 	void Start () 
 	{
 		skSP = GetComponent<skSpawner> ();
+		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
+		InitCurrentParts ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		//Selected Type
+		//Select type and parts
 		CheckNavigation();
 
 		//Validate
@@ -32,8 +37,10 @@ public class skSelector : MonoBehaviour {
 
 	}
 
+	//Navigates between head, torso and leg, and differant parts in he inventory
 	void CheckNavigation()
 	{
+	///////////Type
 		if (Input.GetAxis("Vertical") > 0.2f && !snaped) 
 		{
 			selectedType--;
@@ -48,13 +55,8 @@ public class skSelector : MonoBehaviour {
 			snaped = true;
 		}
 
-		if ((Input.GetAxis ("Vertical") < 0.2f && Input.GetAxis ("Vertical") > -0.2f) 
-			&& (Input.GetAxis ("Horizontal") < 0.2f && Input.GetAxis ("Horizontal") > -0.2f)) 
-		{
-			snaped = false;
-		}
-
-		//Selected Part
+	////////Selected Part OLD
+	/*
 		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
 		{
 			int modType = selectedType % 3;
@@ -110,22 +112,67 @@ public class skSelector : MonoBehaviour {
 
 			snaped = true;
 		}
+		*/
+		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
+		{
+			int modType = nfmod(selectedType, 3);
+			selectedParts [modType]++;
+			UpdateVisualisation(modType, playerInventory.GetIDFromReference(modType, nfmod(selectedParts[modType], playerInventory.GetArrayLength(modType))));
+
+			snaped = true;
+		}
+
+		if (Input.GetAxis("Horizontal") < -0.2f && !snaped) 
+		{
+			int modType = selectedType % 3;
+			selectedParts [modType]--;
+			UpdateVisualisation(modType, playerInventory.GetIDFromReference(modType, nfmod(selectedParts[modType], playerInventory.GetArrayLength(modType))));
+
+			snaped = true;
+
+		}
+	/////////Reset input
+		if ((Input.GetAxis ("Vertical") < 0.2f && Input.GetAxis ("Vertical") > -0.2f) 
+			&& (Input.GetAxis ("Horizontal") < 0.2f && Input.GetAxis ("Horizontal") > -0.2f)) 
+		{
+			snaped = false;
+		}	
 	}
 
+	void UpdateVisualisation(int type, int part)
+	{
+		Destroy (currentParts [type]);
+		currentParts[type] = Instantiate (pRef.GetPrefabFromReference (type, playerInventory.GetIDFromReference(type, nfmod(selectedParts[type], playerInventory.GetArrayLength(type)))), selectPosition, Quaternion.identity);
+	}
+
+	//Spawn a skeleton from the chosen parts if none of them is void
 	void CreateSkeleton()
 	{
 		if (playerInventory.heads.Count > 0 && playerInventory.torsos.Count > 0	&& playerInventory.legs.Count > 0)
 		{
-			int headID = nfmod(selectedHead, playerInventory.heads.Count);
-			int torsoID = nfmod(selectedTorso, playerInventory.torsos.Count);
-			int legID =  nfmod(selectedLeg, playerInventory.legs.Count); 
-
-			skSP.SpawnFromParts (headID, torsoID, legID);
+			skSP.SpawnFromParts (currentParts[0], currentParts[1], currentParts[2]);
 		} else {
 			print ("no can do");
 		}
 	}
 
+	void InitCurrentParts()
+	{
+		if (playerInventory.heads.Count > 0) 
+		{
+			currentParts[0] = Instantiate (pRef.GetPrefabFromReference (0, playerInventory.heads [0]), selectPosition, Quaternion.identity);
+		}
+		if (playerInventory.torsos.Count > 0) 
+		{
+			currentParts[1] = Instantiate (pRef.GetPrefabFromReference (1, playerInventory.torsos [0]), selectPosition, Quaternion.identity);
+		}
+		if (playerInventory.legs.Count > 0) 
+		{
+			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, Quaternion.identity);
+		}
+	}
+
+	//Better modulo
 	int nfmod(float a,float b)
 	{
 		return Mathf.RoundToInt(a - b * Mathf.Floor(a / b));
