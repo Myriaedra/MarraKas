@@ -8,6 +8,7 @@ public class PlayerController : MonoBehaviour {
 	Camera cam;
 	CamController camController;
 	Rigidbody rb;
+    public static bool controlsAble = true;
 
 	public float groundAcceleration;
 	public float sprintAcceleration;
@@ -37,27 +38,42 @@ public class PlayerController : MonoBehaviour {
 
 	void Update()//--------------------------------------------------------------------------------------------------------------------------
 	{
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            if (controlsAble)
+                controlsAble = false;
+            else
+                controlsAble = true;
+        }
 		//DEBUG RESTART POSITION----------------
 		if (Input.GetKeyDown(KeyCode.A))
 			transform.position = startPosition;
 
 		//JUMP MANAGEMENT
-		if (Input.GetButtonDown ("Jump") && IsGrounded ()) //Normal jump
+		if (Input.GetButtonDown ("Jump") && IsGrounded () && controlsAble) //Normal jump
 			rb.velocity = new Vector3 (rb.velocity.x, jumpForce, rb.velocity.z);
 	}
 
 	void FixedUpdate ()//-------------------------------------------------------------------------------------------------------------------
 	{
-		if (IsGrounded())//MOUVEMENT AU SOL---------------------------------------------------
-		{
-			GroundMovement();
-			Drag (dragValue);
-		}
-		else//MOUVEMENT AERIEN---------------------------------------------------------------------
-		{
-			AirMovement();
-			Drag (dragValue);
-		}
+        if (controlsAble)
+        {
+            if (IsGrounded())//MOUVEMENT AU SOL---------------------------------------------------
+            {
+                GroundMovement();
+                Drag(dragValue);
+            }
+            else//MOUVEMENT AERIEN---------------------------------------------------------------------
+            {
+                AirMovement();
+            }
+            if (Input.GetButtonDown("Bark"))
+            {
+                barkManagement.Bark();
+            }
+        }
+        else
+            rb.velocity = Vector3.zero;
 	}
 
 	void Drag(float drag){
@@ -76,35 +92,36 @@ public class PlayerController : MonoBehaviour {
 			LimitVelocity(maxSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
-		}
+            Drag(dragValue);
+        }
 		else
 		{
 			Move(sprintAcceleration);
 			LimitVelocity(sprintSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(true);
-		}
-
-		if (Input.GetButtonDown("Bark"))
-		{
-			barkManagement.Bark();
-		}
+            Drag(dragValue);
+        }
 	}
 
 	void AirMovement()//FONCTION MVT AIR
 	{
-
-		Move(airAcceleration);
-
-		GravityMod(3.0f);
-		LimitVelocity(maxSpeed);
-		OrientCharacter(0.05f);
-
-		if(rb.velocity.y<=0 && Input.GetButton("Jump"))
-		{
-			//gliding = true;
-			//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-		}
+        if (Input.GetAxisRaw("Sprint") < 0.2f)
+        {
+            Move(airAcceleration);
+            GravityMod(3.0f);
+            LimitVelocity(maxSpeed);
+            OrientCharacter(0.05f);
+            Drag(dragValue);
+        }
+        else
+        {
+            Move(airAcceleration*1.2f);
+            GravityMod(3.0f);
+            LimitVelocity(sprintSpeed);
+            OrientCharacter(0.05f);
+            Drag(dragValue);
+        }
 	}
 
 	void LimitVelocity(float speedLimit)//FONCTION MAXSPEED
@@ -165,9 +182,16 @@ public class PlayerController : MonoBehaviour {
 		int layerMask = 1 << 8;
 		//On inverse et donc --> get tout sauf playerMask
 		layerMask = ~layerMask;
-		if (Physics.Raycast(transform.position, -transform.up, 1.0f, layerMask))
+        //Set des différentes positions
+        Vector3 position1 = transform.position - transform.forward;
+        Vector3 position2 = transform.position;
+        Vector3 position3 = transform.position + transform.forward;
+        //Raycasts !
+        if (Physics.Raycast(position1, -transform.up, 1.0f, layerMask) 
+        || Physics.Raycast(position2, -transform.up, 1.0f, layerMask) 
+        || Physics.Raycast(position3, -transform.up, 1.0f, layerMask))
 		{
-			if (!landed)
+            if (!landed)
 			{
 				landed = true;
 				//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
@@ -177,8 +201,7 @@ public class PlayerController : MonoBehaviour {
 		}
 		else
 		{
-
-			if (landed){
+            if (landed){
 				landed = false;
 			}
 			return false;
