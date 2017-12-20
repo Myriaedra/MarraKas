@@ -5,24 +5,32 @@ using UnityEngine;
 public class TriggerFlower : MonoBehaviour {
 
     public GameObject spottedParticle;
-    Rigidbody rb;
+    ParticleSystem part;
+    BoxCollider col;
     public Vector3 wantedVelocity;
     public float timerLife;
+    bool emittingStopped = false;
 
 	// Use this for initialization
 	void Start () {
-        rb = GetComponent<Rigidbody>();
         timerLife = Time.time;
+        part = GetComponent<ParticleSystem>();
+        col = GetComponent<BoxCollider>();
     }
 	
 	// Update is called once per frame
 	void Update () {
         transform.position += new Vector3(wantedVelocity.x, 0, wantedVelocity.z);
-        transform.localScale += new Vector3(0.1f, 0, 0);
-        if(Time.time - timerLife > 10)
+        var sh = part.shape;
+        sh.scale += new Vector3(0.25f, 0.06f, 0);
+        col.size = sh.scale;
+        if (Time.time - timerLife > 5 && !emittingStopped)
         {
-            Destroy(gameObject);
+            emittingStopped = true;
+            part.Stop();
         }
+        if (Time.time - timerLife > 7)
+            Destroy(gameObject);
 	}
 
     void OnTriggerEnter(Collider other)
