@@ -6,16 +6,16 @@ public class TriggerFlower : MonoBehaviour {
 
     public GameObject spottedParticle;
     ParticleSystem part;
-    Rigidbody rb;
+    BoxCollider col;
     public Vector3 wantedVelocity;
     public float timerLife;
     bool emittingStopped = false;
 
 	// Use this for initialization
 	void Start () {
-        rb = GetComponent<Rigidbody>();
         timerLife = Time.time;
         part = GetComponent<ParticleSystem>();
+        col = GetComponent<BoxCollider>();
     }
 	
 	// Update is called once per frame
@@ -23,6 +23,7 @@ public class TriggerFlower : MonoBehaviour {
         transform.position += new Vector3(wantedVelocity.x, 0, wantedVelocity.z);
         var sh = part.shape;
         sh.scale += new Vector3(0.25f, 0.06f, 0);
+        col.size = sh.scale;
         if (Time.time - timerLife > 5 && !emittingStopped)
         {
             emittingStopped = true;
