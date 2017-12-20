@@ -66,7 +66,10 @@ public class PlayerController : MonoBehaviour {
             else//MOUVEMENT AERIEN---------------------------------------------------------------------
             {
                 AirMovement();
-                Drag(dragValue);
+            }
+            if (Input.GetButtonDown("Bark"))
+            {
+                barkManagement.Bark();
             }
         }
         else
@@ -89,35 +92,36 @@ public class PlayerController : MonoBehaviour {
 			LimitVelocity(maxSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
-		}
+            Drag(dragValue);
+        }
 		else
 		{
 			Move(sprintAcceleration);
 			LimitVelocity(sprintSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(true);
-		}
-
-		if (Input.GetButtonDown("Bark"))
-		{
-			barkManagement.Bark();
-		}
+            Drag(dragValue);
+        }
 	}
 
 	void AirMovement()//FONCTION MVT AIR
 	{
-
-		Move(airAcceleration);
-
-		GravityMod(3.0f);
-		LimitVelocity(maxSpeed);
-		OrientCharacter(0.05f);
-
-		if(rb.velocity.y<=0 && Input.GetButton("Jump"))
-		{
-			//gliding = true;
-			//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-		}
+        if (Input.GetAxisRaw("Sprint") < 0.2f)
+        {
+            Move(airAcceleration);
+            GravityMod(3.0f);
+            LimitVelocity(maxSpeed);
+            OrientCharacter(0.05f);
+            Drag(dragValue);
+        }
+        else
+        {
+            Move(airAcceleration*1.2f);
+            GravityMod(3.0f);
+            LimitVelocity(sprintSpeed);
+            OrientCharacter(0.05f);
+            Drag(dragValue);
+        }
 	}
 
 	void LimitVelocity(float speedLimit)//FONCTION MAXSPEED
