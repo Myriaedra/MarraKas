@@ -1,7 +1,7 @@
 // Shader created with Shader Forge v1.38 
 // Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
 // Note: Manually altering this data may prevent you from opening it in Shader Forge
-/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:1,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:4013,x:32719,y:32712,varname:node_4013,prsc:2|diff-1304-RGB,emission-2680-OUT;n:type:ShaderForge.SFN_Color,id:1304,x:32443,y:32712,ptovrint:False,ptlb:Color,ptin:_Color,varname:node_1304,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:1,c2:0.7655173,c3:0,c4:1;n:type:ShaderForge.SFN_Time,id:4895,x:31722,y:32866,varname:node_4895,prsc:2;n:type:ShaderForge.SFN_Sin,id:5313,x:31895,y:32866,varname:node_5313,prsc:2|IN-4895-TDB;n:type:ShaderForge.SFN_RemapRange,id:8481,x:32055,y:32866,varname:node_8481,prsc:2,frmn:-1,frmx:1,tomn:0.2,tomx:1|IN-5313-OUT;n:type:ShaderForge.SFN_Multiply,id:2680,x:32426,y:32902,varname:node_2680,prsc:2|A-1304-RGB,B-8481-OUT;proporder:1304;pass:END;sub:END;*/
+/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:1,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:1,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:4013,x:32719,y:32712,varname:node_4013,prsc:2|diff-534-RGB,emission-2680-OUT;n:type:ShaderForge.SFN_Color,id:1304,x:32224,y:32717,ptovrint:False,ptlb:Color,ptin:_Color,varname:node_1304,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:1,c2:0.7655173,c3:0,c4:1;n:type:ShaderForge.SFN_Time,id:4895,x:31722,y:32866,varname:node_4895,prsc:2;n:type:ShaderForge.SFN_Sin,id:5313,x:31895,y:32866,varname:node_5313,prsc:2|IN-4895-TDB;n:type:ShaderForge.SFN_RemapRange,id:8481,x:32055,y:32866,varname:node_8481,prsc:2,frmn:-1,frmx:1,tomn:0.2,tomx:1|IN-5313-OUT;n:type:ShaderForge.SFN_Multiply,id:2680,x:32426,y:32902,varname:node_2680,prsc:2|A-1304-RGB,B-8481-OUT;n:type:ShaderForge.SFN_VertexColor,id:534,x:32394,y:32662,varname:node_534,prsc:2;proporder:1304;pass:END;sub:END;*/
 
 Shader "Shader Forge/petalShader" {
     Properties {
@@ -33,16 +33,19 @@ Shader "Shader Forge/petalShader" {
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                float4 vertexColor : COLOR;
             };
             struct VertexOutput {
                 float4 pos : SV_POSITION;
                 float4 posWorld : TEXCOORD0;
                 float3 normalDir : TEXCOORD1;
+                float4 vertexColor : COLOR;
                 LIGHTING_COORDS(2,3)
                 UNITY_FOG_COORDS(4)
             };
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
+                o.vertexColor = v.vertexColor;
                 o.normalDir = UnityObjectToWorldNormal(v.normal);
                 o.posWorld = mul(unity_ObjectToWorld, v.vertex);
                 float3 lightColor = _LightColor0.rgb;
@@ -64,7 +67,7 @@ Shader "Shader Forge/petalShader" {
                 float3 directDiffuse = max( 0.0, NdotL) * attenColor;
                 float3 indirectDiffuse = float3(0,0,0);
                 indirectDiffuse += UNITY_LIGHTMODEL_AMBIENT.rgb; // Ambient Light
-                float3 diffuseColor = _Color.rgb;
+                float3 diffuseColor = i.vertexColor.rgb;
                 float3 diffuse = (directDiffuse + indirectDiffuse) * diffuseColor;
 ////// Emissive:
                 float4 node_4895 = _Time;
@@ -100,16 +103,19 @@ Shader "Shader Forge/petalShader" {
             struct VertexInput {
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
+                float4 vertexColor : COLOR;
             };
             struct VertexOutput {
                 float4 pos : SV_POSITION;
                 float4 posWorld : TEXCOORD0;
                 float3 normalDir : TEXCOORD1;
+                float4 vertexColor : COLOR;
                 LIGHTING_COORDS(2,3)
                 UNITY_FOG_COORDS(4)
             };
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
+                o.vertexColor = v.vertexColor;
                 o.normalDir = UnityObjectToWorldNormal(v.normal);
                 o.posWorld = mul(unity_ObjectToWorld, v.vertex);
                 float3 lightColor = _LightColor0.rgb;
@@ -129,7 +135,7 @@ Shader "Shader Forge/petalShader" {
 /////// Diffuse:
                 float NdotL = max(0.0,dot( normalDirection, lightDirection ));
                 float3 directDiffuse = max( 0.0, NdotL) * attenColor;
-                float3 diffuseColor = _Color.rgb;
+                float3 diffuseColor = i.vertexColor.rgb;
                 float3 diffuse = directDiffuse * diffuseColor;
 /// Final Color:
                 float3 finalColor = diffuse;
