@@ -83,7 +83,6 @@ public class BarkManagement : MonoBehaviour {
     public void FlowerEmitterAction()
     {
         GameObject newTriggerFlower = Instantiate(triggerFlower, flowerEmitterTransform.position, flowerEmitterTransform.rotation);
-        Vector3 olala = flowerEmitterTransform.position - transform.position;
         newTriggerFlower.GetComponent<TriggerFlower>().direction = flowerEmitterTransform.forward;
     }
 }

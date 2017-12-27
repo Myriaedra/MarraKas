@@ -10,21 +10,31 @@ public class PlayerController : MonoBehaviour {
 	Rigidbody rb;
     public static bool controlsAble = true;
 
-	public float groundAcceleration;
-	public float sprintAcceleration;
-	public float airAcceleration;
-	public float sprintSpeed;
-	public float maxSpeed;
-	public float jumpForce;
-	public float dragValue;
+    [Header("GroundValues : ")]
+    public float groundAcceleration;
+    public float groundMaxSpeed;
+    public float groundDragValue;
+
+    [Header("GroundSprintValues : ")]
+    public float groundSprintAcceleration;
+    public float groundSprintMaxSpeed;
+    public float groundSprintDragValue;
+
+    [Header("AirValues : ")]
+    public float airAcceleration;
+    public float airMaxSpeed;
+    public float airDragValue;
+
+    [Header("AirSprintValues : ")]
+    public float airSprintAcceleration;
+    public float airSprintMaxSpeed;
+    public float airSprintDragValue;
+
+    [Header("OtherValues : ")]
+    public float jumpForce;
 
 	bool landed = false;
-
-	Vector3 startPosition;
-
 	public PostProcessingProfile postProcess;
-	public ParticleSystem speedParticleSystem;
-
 	public BarkManagement barkManagement;
 
 	// Use this for initialization
@@ -33,7 +43,6 @@ public class PlayerController : MonoBehaviour {
 		cam = Camera.main;
 		camController = cam.GetComponent<CamController>();
 		rb = GetComponent<Rigidbody>();
-		startPosition = transform.position;
 	}
 
 	void Update()//--------------------------------------------------------------------------------------------------------------------------
@@ -45,13 +54,12 @@ public class PlayerController : MonoBehaviour {
             else
                 controlsAble = true;
         }
-		//DEBUG RESTART POSITION----------------
-		if (Input.GetKeyDown(KeyCode.A))
-			transform.position = startPosition;
 
-		//JUMP MANAGEMENT
-		if (Input.GetButtonDown ("Jump") && IsGrounded () && controlsAble) //Normal jump
-			rb.velocity = new Vector3 (rb.velocity.x, jumpForce, rb.velocity.z);
+        //JUMP MANAGEMENT
+        if (Input.GetButtonDown("Jump") && IsGrounded() && controlsAble)
+        {
+            rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
+        }
 	}
 
 	void FixedUpdate ()//-------------------------------------------------------------------------------------------------------------------
@@ -61,7 +69,6 @@ public class PlayerController : MonoBehaviour {
             if (IsGrounded())//MOUVEMENT AU SOL---------------------------------------------------
             {
                 GroundMovement();
-                Drag(dragValue);
             }
             else//MOUVEMENT AERIEN---------------------------------------------------------------------
             {
@@ -89,18 +96,18 @@ public class PlayerController : MonoBehaviour {
 		if (Input.GetAxisRaw("Sprint") < 0.2f)
 		{
 			Move(groundAcceleration);
-			LimitVelocity(maxSpeed);
+			LimitVelocity(groundMaxSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
-            Drag(dragValue);
+            Drag(groundDragValue);
         }
 		else
 		{
-			Move(sprintAcceleration);
-			LimitVelocity(sprintSpeed);
+			Move(groundSprintAcceleration);
+			LimitVelocity(groundSprintMaxSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(true);
-            Drag(dragValue);
+            Drag(groundSprintDragValue);
         }
 	}
 
@@ -110,17 +117,17 @@ public class PlayerController : MonoBehaviour {
         {
             Move(airAcceleration);
             GravityMod(3.0f);
-            LimitVelocity(maxSpeed);
+            LimitVelocity(airMaxSpeed);
             OrientCharacter(0.05f);
-            Drag(dragValue);
+            Drag(airDragValue);
         }
         else
         {
-            Move(airAcceleration*1.2f);
+            Move(airSprintAcceleration);
             GravityMod(3.0f);
-            LimitVelocity(sprintSpeed);
+            LimitVelocity(airSprintMaxSpeed);
             OrientCharacter(0.05f);
-            Drag(dragValue);
+            Drag(airSprintDragValue);
         }
 	}
 
