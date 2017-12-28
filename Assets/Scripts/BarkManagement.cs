@@ -56,7 +56,6 @@ public class BarkManagement : MonoBehaviour {
         if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
         {
 			Debug.DrawRay (transform.position, transform.forward, Color.red, 2f);
-			print(hit.collider.name);
             if (hit.collider.CompareTag("FlowerEmitter"))
             {
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
