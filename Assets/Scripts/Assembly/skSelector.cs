@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class skSelector : MonoBehaviour {
 	skSpawner skSP;
 	InventoryClass playerInventory;
 	PartsReference pRef;
+
+	bool isActivated;
+	public CinemachineVirtualCamera assemblyView;
+
 
 	Vector3 selectPosition;
 
@@ -22,18 +27,24 @@ public class skSelector : MonoBehaviour {
 		skSP = GetComponent<skSpawner> ();
 		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
-		InitCurrentParts ();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		//Select type and parts
-		CheckNavigation();
+		if (Input.GetKeyDown ("a")) {
+			BeginAssembly ();
+		}
 
-		//Validate
-		if (Input.GetButtonDown("Jump"))
-			CreateSkeleton();
+		if (isActivated) 
+		{
+			//Select type and parts
+			CheckNavigation ();
+
+			//Validate
+			if (Input.GetButtonDown ("Jump"))
+				CreateSkeleton ();
+		}
 
 	}
 
@@ -55,64 +66,6 @@ public class skSelector : MonoBehaviour {
 			snaped = true;
 		}
 
-	////////Selected Part OLD
-	/*
-		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
-		{
-			int modType = selectedType % 3;
-			switch (modType) 
-			{
-			case 0:
-				selectedHead++;
-				if (playerInventory.heads.Count != 0) {
-					print ("head n°" + nfmod(selectedHead, playerInventory.heads.Count));
-				}
-				break;
-			case 1:
-				selectedTorso++;
-				if (playerInventory.torsos.Count != 0) {
-					print ("torso n°" + nfmod(selectedTorso, playerInventory.torsos.Count));
-				}
-				break;
-			case 2:
-				selectedLeg++;
-				if (playerInventory.legs.Count != 0) {
-					print ("leg n°" + nfmod(selectedLeg, playerInventory.legs.Count));
-				}
-				break;
-			}
-
-			snaped = true;
-		}
-
-		if (Input.GetAxis("Horizontal") < -0.2f && !snaped) 
-		{
-			int modType = selectedType % 3;
-			switch (modType) 
-			{
-			case 0:
-				selectedHead--;
-				if (playerInventory.heads.Count != 0) {
-					print ("head n°" + nfmod(selectedHead, playerInventory.heads.Count));
-				}
-				break;
-			case 1:
-				selectedTorso--;
-				if (playerInventory.torsos.Count != 0) {
-					print ("torso n°" + nfmod(selectedTorso, playerInventory.torsos.Count));
-				}
-				break;
-			case 2:
-				selectedLeg--;
-				if (playerInventory.legs.Count != 0) {
-					print ("leg n°" + nfmod(selectedLeg, playerInventory.legs.Count));
-				}
-				break;
-			}
-
-			snaped = true;
-		}
-		*/
 		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
 		{
 			int modType = nfmod(selectedType, 3);
@@ -151,12 +104,16 @@ public class skSelector : MonoBehaviour {
 		if (playerInventory.heads.Count > 0 && playerInventory.torsos.Count > 0	&& playerInventory.legs.Count > 0)
 		{
 			skSP.SpawnFromParts (currentParts[0], currentParts[1], currentParts[2]);
+			playerInventory.RemoveItem (0, playerInventory.GetIDFromReference (0, nfmod (selectedParts [0], playerInventory.GetArrayLength (0))));
+			playerInventory.RemoveItem (1, playerInventory.GetIDFromReference (1, nfmod (selectedParts [1], playerInventory.GetArrayLength (1))));
+			playerInventory.RemoveItem (2, playerInventory.GetIDFromReference (2, nfmod (selectedParts [2], playerInventory.GetArrayLength (2))));
 		} else {
 			print ("no can do");
 		}
+		EndAssembly ();
 	}
 
-	void InitCurrentParts()
+	public void InitCurrentParts()
 	{
 		if (playerInventory.heads.Count > 0) 
 		{
@@ -170,6 +127,19 @@ public class skSelector : MonoBehaviour {
 		{
 			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, Quaternion.identity);
 		}
+	}
+
+	public void BeginAssembly()
+	{
+		InitCurrentParts ();
+		assemblyView.enabled = true;
+		isActivated = true;
+	}
+
+	public void EndAssembly()
+	{
+		assemblyView.enabled = false;
+		isActivated = false;
 	}
 
 	//Better modulo
