@@ -27,6 +27,8 @@ public class skSpawner : MonoBehaviour {
 		//Add head and leg to torso
 		skPA.AddLimb (spawnedHead, spawnedTorso);
 		skPA.AddLimb (spawnedLeg, spawnedTorso);
+
+		spawnedTorso.AddComponent<Rigidbody> ();
 	}
 
 	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj)
@@ -37,5 +39,11 @@ public class skSpawner : MonoBehaviour {
 		//Add head and leg to torso
 		skPA.AddLimb (headObj, torsoObj);
 		skPA.AddLimb (legObj, torsoObj);
+		//Physics yeah !
+		CapsuleCollider capCo = torsoObj.AddComponent<CapsuleCollider> ();
+		capCo.height = 2f;
+		capCo.center = new Vector3 (0f, 1f, 0f);
+		torsoObj.AddComponent<Rigidbody> ();
+		//Behaviour
 	}
 }

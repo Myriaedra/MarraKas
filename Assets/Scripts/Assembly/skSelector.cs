@@ -11,6 +11,7 @@ public class skSelector : MonoBehaviour {
 	bool isActivated;
 	public CinemachineVirtualCamera assemblyView;
 
+	public GameObject confettiFX;
 
 	Vector3 selectPosition;
 
@@ -110,6 +111,8 @@ public class skSelector : MonoBehaviour {
 		} else {
 			print ("no can do");
 		}
+		GameObject conf = Instantiate (confettiFX, transform.position, Quaternion.Euler(new Vector3 (-90,0,0)));
+		Destroy (conf, 6f);
 		EndAssembly ();
 	}
 
