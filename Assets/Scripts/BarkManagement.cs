@@ -61,6 +61,13 @@ public class BarkManagement : MonoBehaviour {
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
                 FlowerEmitterAction();
             }
+
+			//assembly
+			if (hit.collider.CompareTag("SkSpawner"))
+			{
+					skSelector selector = hit.collider.GetComponent<skSelector>();
+					selector.BeginAssembly();
+			}
         }
         else
         {
