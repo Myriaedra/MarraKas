@@ -7,8 +7,14 @@ public class DigManager : MonoBehaviour {
 	private bool digInput;
 	public ParticleSystem digFX;
 	public Canvas partPreview;
-	public PartsReference pRef;
+	PartsReference pRef;
 	public BarkManagement barkMan;
+	public PlayerController player;
+
+	void Start()
+	{
+		pRef = Camera.main.GetComponent<PartsReference> ();
+	}
 
 	void Update()
 	{
@@ -28,6 +34,7 @@ public class DigManager : MonoBehaviour {
 		if (other.tag == "Spot" && digInput) 
 		{
 			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
+			player.PlayerControl (false);
 			digInput = false;
 		}
 	}

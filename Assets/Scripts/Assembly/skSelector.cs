@@ -7,6 +7,7 @@ public class skSelector : MonoBehaviour {
 	skSpawner skSP;
 	InventoryClass playerInventory;
 	PartsReference pRef;
+	public PlayerController player;
 
 	bool isActivated;
 	public CinemachineVirtualCamera assemblyView;
@@ -33,20 +34,20 @@ public class skSelector : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetKeyDown ("a")) {
-			BeginAssembly ();
-		}
-
-		if (isActivated) 
-		{
+		if (isActivated) {
 			//Select type and parts
 			CheckNavigation ();
 
 			//Validate
 			if (Input.GetButtonDown ("Jump"))
 				CreateSkeleton ();
+		} 
+		else 
+		{
+			if (Input.GetKeyDown ("a")) {
+				BeginAssembly ();
+			}
 		}
-
 	}
 
 	//Navigates between head, torso and leg, and differant parts in he inventory
@@ -137,12 +138,14 @@ public class skSelector : MonoBehaviour {
 		InitCurrentParts ();
 		assemblyView.enabled = true;
 		isActivated = true;
+		player.PlayerControl (false);
 	}
 
 	public void EndAssembly()
 	{
 		assemblyView.enabled = false;
 		isActivated = false;
+		player.PlayerControl (true);
 	}
 
 	//Better modulo

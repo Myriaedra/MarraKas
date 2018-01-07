@@ -234,4 +234,9 @@ public class PlayerController : MonoBehaviour {
 		//field of view management----------------------------------
 		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
 	}
+
+	public void PlayerControl( bool value)
+	{
+		controlsAble = value;
+	}
 }
