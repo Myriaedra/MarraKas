@@ -74,10 +74,6 @@ public class PlayerController : MonoBehaviour {
             {
                 AirMovement();
             }
-            if (Input.GetButtonDown("Bark"))
-            {
-                barkManagement.Bark();
-            }
         }
         else
             rb.velocity = Vector3.zero;

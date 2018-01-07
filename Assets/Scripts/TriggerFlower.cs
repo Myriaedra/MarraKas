@@ -36,7 +36,6 @@ public class TriggerFlower : MonoBehaviour {
         }
         if (decreaseOpacity)
         {
-            print(rend.material.GetFloat("_visibility"));
             rend.material.SetFloat("_visibility", rend.material.GetFloat("_visibility") - 0.01f);
             if (rend.material.GetFloat("_visibility") <= 0)
                 Destroy(gameObject);

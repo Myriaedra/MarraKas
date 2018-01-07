@@ -51,11 +51,11 @@ public class BarkManagement : MonoBehaviour {
     /// </summary>
     public void Bark()
     {
+        print("hey");
         RaycastHit hit;
         int layerMask = LayerMask.GetMask("BarkInteractable");
         if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
         {
-			Debug.DrawRay (transform.position, transform.forward, Color.red, 2f);
             if (hit.collider.CompareTag("FlowerEmitter"))
             {
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
