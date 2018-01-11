@@ -59,7 +59,31 @@ public class DigManager : MonoBehaviour {
 	{
 		Canvas newCanvas = Instantiate (partPreview);
 		newCanvas.worldCamera = Camera.main;
-		Instantiate (pRef.GetPrefabFromReference (type, part), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
+		GameObject foundPart;
+		switch (type) 
+		{
+			case 0:
+				foundPart = Instantiate (pRef.GetPrefabFromReference (type, part), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
+				foundPart.transform.localPosition = new Vector3 (0, -353, -53);
+				foundPart.transform.localRotation = Quaternion.Euler(new Vector3 (-5, -16, 0));
+				foundPart.transform.localScale = new Vector3 (200, 200, 200);
+				break;
+
+			case 1 :
+				foundPart = Instantiate (pRef.GetPrefabFromReference (type, part), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
+				foundPart.transform.localPosition = new Vector3 (0, -127, -80);
+				foundPart.transform.localScale = new Vector3 (100, 100, 100);
+				break;
+
+			case 2 :
+				foundPart = Instantiate (pRef.GetPrefabFromReference (type, part), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
+				foundPart.transform.localPosition = new Vector3 (0, -56, -84);
+			foundPart.transform.localRotation = Quaternion.Euler(new Vector3 (0, 196, 0));
+				foundPart.transform.localScale = new Vector3 (100, 100, 100);
+				break;
+
+		}
+		//foundPart.AddComponent<Rotator>();
 	}
 }
 

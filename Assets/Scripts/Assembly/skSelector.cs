@@ -29,6 +29,7 @@ public class skSelector : MonoBehaviour {
 		skSP = GetComponent<skSpawner> ();
 		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
+		selectPosition = transform.position;
 	}
 	
 	// Update is called once per frame
@@ -97,7 +98,7 @@ public class skSelector : MonoBehaviour {
 	void UpdateVisualisation(int type, int part)
 	{
 		Destroy (currentParts [type]);
-		currentParts[type] = Instantiate (pRef.GetPrefabFromReference (type, playerInventory.GetIDFromReference(type, nfmod(selectedParts[type], playerInventory.GetArrayLength(type)))), selectPosition, Quaternion.identity);
+		currentParts[type] = Instantiate (pRef.GetPrefabFromReference (type, playerInventory.GetIDFromReference(type, nfmod(selectedParts[type], playerInventory.GetArrayLength(type)))), selectPosition, transform.rotation);
 	}
 
 	//Spawn a skeleton from the chosen parts if none of them is void
@@ -121,15 +122,15 @@ public class skSelector : MonoBehaviour {
 	{
 		if (playerInventory.heads.Count > 0) 
 		{
-			currentParts[0] = Instantiate (pRef.GetPrefabFromReference (0, playerInventory.heads [0]), selectPosition, Quaternion.identity);
+			currentParts[0] = Instantiate (pRef.GetPrefabFromReference (0, playerInventory.heads [0]), selectPosition, transform.rotation);
 		}
 		if (playerInventory.torsos.Count > 0) 
 		{
-			currentParts[1] = Instantiate (pRef.GetPrefabFromReference (1, playerInventory.torsos [0]), selectPosition, Quaternion.identity);
+			currentParts[1] = Instantiate (pRef.GetPrefabFromReference (1, playerInventory.torsos [0]), selectPosition, transform.rotation);
 		}
 		if (playerInventory.legs.Count > 0) 
 		{
-			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, Quaternion.identity);
+			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, transform.rotation);
 		}
 	}
 
