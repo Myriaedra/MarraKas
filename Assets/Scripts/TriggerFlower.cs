@@ -8,10 +8,12 @@ public class TriggerFlower : MonoBehaviour {
     Renderer rend;
     ParticleSystem part;
     BoxCollider col;
+    [HideInInspector]
     public Vector3 direction;
+    [HideInInspector]
     public float timerLife;
     bool decreaseOpacity = false;
-    float speed = 0.2f;
+    public float speed;
 
 	// Use this for initialization
 	void Start () {

@@ -5,22 +5,23 @@ using System.Runtime.InteropServices.ComTypes;
 
 public class BarkManagement : MonoBehaviour {
 
+    [HideInInspector]
     public List<Animator> spotsDetected = new List<Animator>();
+    [Space(5)]
     public PlayerController playerController;
-
+    [Space(5)]
     public float showRange;
-    public float hintRange;
-
+    [Space(5)]
+    [Header("SpawningSpotDetector")]
     public GameObject triggerFlower;
     Transform flowerEmitterTransform;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    Renderer rendererInSight;
+    string whatIsInSight = "Nothing";
 	
 	// Update is called once per frame
 	void Update () {
+        
 		if (Input.GetButtonDown ("Bark")) 
 		{
 			Bark();
@@ -35,7 +36,8 @@ public class BarkManagement : MonoBehaviour {
             spotsDetected.Add(actualSpot);
             print("you're in my list !!!");
         }
-    }
+    }//new spot in list
+
     void OnTriggerExit(Collider other)
     {
         if (other.tag == "Spot")
@@ -44,6 +46,25 @@ public class BarkManagement : MonoBehaviour {
             spotsDetected.Remove(otherRenderer);
             print("not anymore");
         }
+    }//spot out of list
+
+    void CheckWhatIsInFront()
+    {
+        RaycastHit hit;
+        int layerMask = LayerMask.GetMask("Interactable");
+        if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
+        {
+            if (hit.collider.CompareTag("FlowerEmitter") && hit.collider.GetComponent<Renderer>()!= rendererInSight)
+            {
+                rendererInSight = hit.collider.GetComponent<Renderer>();
+                whatIsInSight = "FlowerEmitter";
+            }
+            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.GetComponent<Renderer>() != rendererInSight)
+            {
+                rendererInSight = hit.collider.GetComponent<Renderer>();
+                whatIsInSight = "SkSpawner";
+            }
+        }
     }
 
     /// <summary>
@@ -51,9 +72,8 @@ public class BarkManagement : MonoBehaviour {
     /// </summary>
     public void Bark()
     {
-        print("hey");
         RaycastHit hit;
-        int layerMask = LayerMask.GetMask("BarkInteractable");
+        int layerMask = LayerMask.GetMask("Interactable");
         if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
         {
             if (hit.collider.CompareTag("FlowerEmitter"))
@@ -75,8 +95,7 @@ public class BarkManagement : MonoBehaviour {
             {
 				if (spotsDetected [i] != null) 
 				{
-					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {	
-					
+					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {					
 						spotsDetected [i].SetTrigger ("EmissionTrigger");
 					}
 				}
