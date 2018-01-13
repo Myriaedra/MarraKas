@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Runtime.InteropServices.ComTypes;
+using UnityEngine.UI;
 
 public class BarkManagement : MonoBehaviour {
 
@@ -12,15 +13,14 @@ public class BarkManagement : MonoBehaviour {
     [Space(5)]
     public float showRange;
     [Space(5)]
-    [Header("SpawningSpotDetector")]
     public GameObject triggerFlower;
     Transform flowerEmitterTransform;
     [Space(5)]
-    [Header("LittleFlowerPartPrefab")]
     public GameObject littleFlowerPartPrefab;
     [Space(5)]
-    [Header("BarkPartPrefab")]
     public GameObject barkPartPrefab;
+    [Space(5)]
+    public Text barkToInteractText;
 
 
 
@@ -63,6 +63,14 @@ public class BarkManagement : MonoBehaviour {
         int layerMask = LayerMask.GetMask("Interactable");
         if (Physics.Raycast(transform.position, transform.forward, out hit, 9, layerMask))
         {
+            //UI BARK TO INTERACT
+            if(!barkToInteractText.enabled && PlayerController.controlsAble)
+                barkToInteractText.enabled = true;
+            else if(!PlayerController.controlsAble)
+                barkToInteractText.enabled = false;
+
+            //OUTLINE CASE BY CASE------------------------------
+            //flowerEmitter
             if (hit.collider.CompareTag("FlowerEmitter") && hit.collider.GetComponent<Renderer>()!= rendererInSight)
             {
                 OutlineOff();
@@ -70,6 +78,7 @@ public class BarkManagement : MonoBehaviour {
                 OutlineOn();
                 whatIsInSight = "FlowerEmitter";
             }
+            //SkSpawner
             else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(1).GetComponent<Renderer>() != rendererInSight)
             {
                 OutlineOff();
@@ -80,6 +89,8 @@ public class BarkManagement : MonoBehaviour {
         }
         else
         {
+            if (barkToInteractText.enabled)
+                barkToInteractText.enabled = false;
             if (whatIsInSight != "Nothing")
             {
                 OutlineOff();
@@ -99,6 +110,9 @@ public class BarkManagement : MonoBehaviour {
         {
             if (hit.collider.CompareTag("FlowerEmitter"))
             {
+                Vector3 spawnPosition = transform.position + new Vector3(0, -0.8f, 0);
+                GameObject barkPart = Instantiate(barkPartPrefab, spawnPosition, Quaternion.identity);
+                Destroy(barkPart, 4);
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
                 FlowerEmitterAction();
             }
