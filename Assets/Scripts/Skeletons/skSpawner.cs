@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class skSpawner : MonoBehaviour {
 	PartsReference pRef;
@@ -43,7 +44,10 @@ public class skSpawner : MonoBehaviour {
 		CapsuleCollider capCo = torsoObj.AddComponent<CapsuleCollider> ();
 		capCo.height = 2f;
 		capCo.center = new Vector3 (0f, 1f, 0f);
-		torsoObj.AddComponent<Rigidbody> ();
+		Rigidbody rB = torsoObj.AddComponent<Rigidbody> ();
+		rB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 		//Behaviour
+		torsoObj.AddComponent<NavMeshAgent>();
+		torsoObj.AddComponent<skBehaviour> ();
 	}
 }
