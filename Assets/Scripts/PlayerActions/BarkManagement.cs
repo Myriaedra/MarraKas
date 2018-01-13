@@ -6,7 +6,7 @@ using System.Runtime.InteropServices.ComTypes;
 public class BarkManagement : MonoBehaviour {
 
     [HideInInspector]
-    public List<Animator> spotsDetected = new List<Animator>();
+    public List<Transform> spotsDetected = new List<Transform>();
     [Space(5)]
     public PlayerController playerController;
     [Space(5)]
@@ -15,6 +15,14 @@ public class BarkManagement : MonoBehaviour {
     [Header("SpawningSpotDetector")]
     public GameObject triggerFlower;
     Transform flowerEmitterTransform;
+    [Space(5)]
+    [Header("LittleFlowerPartPrefab")]
+    public GameObject littleFlowerPartPrefab;
+    [Space(5)]
+    [Header("BarkPartPrefab")]
+    public GameObject barkPartPrefab;
+
+
 
     Renderer rendererInSight;
     string whatIsInSight = "Nothing";
@@ -33,7 +41,7 @@ public class BarkManagement : MonoBehaviour {
     {
         if(other.tag == "Spot")
         {
-            Animator actualSpot = other.GetComponent<Animator>();
+            Transform actualSpot = other.GetComponent<Transform>();
             spotsDetected.Add(actualSpot);
             print("you're in my list !!!");
         }
@@ -43,7 +51,7 @@ public class BarkManagement : MonoBehaviour {
     {
         if (other.tag == "Spot")
         {
-            Animator otherRenderer = other.GetComponent<Animator>();
+            Transform otherRenderer = other.GetComponent<Transform>();
             spotsDetected.Remove(otherRenderer);
             print("not anymore");
         }
@@ -104,12 +112,17 @@ public class BarkManagement : MonoBehaviour {
         }
         else
         {
+            Vector3 spawnPosition = transform.position + new Vector3(0, -0.8f, 0);
+            GameObject barkPart = Instantiate(barkPartPrefab, spawnPosition, Quaternion.identity);
+            Destroy(barkPart, 4);
+
             for (int i = 0; i < spotsDetected.Count; i++)
             {
 				if (spotsDetected [i] != null) 
 				{
-					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {					
-						spotsDetected [i].SetTrigger ("EmissionTrigger");
+					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {
+                        GameObject flowerPart = Instantiate(littleFlowerPartPrefab, spotsDetected[i].position, Quaternion.identity);
+                        Destroy(flowerPart, 4);
 					}
 				}
 				else

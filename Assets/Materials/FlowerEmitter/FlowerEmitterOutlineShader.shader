@@ -1,12 +1,12 @@
 // Shader created with Shader Forge v1.38 
 // Shader Forge (c) Neat Corporation / Joachim Holmer - http://www.acegikmo.com/shaderforge/
 // Note: Manually altering this data may prevent you from opening it in Shader Forge
-/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:1,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:0,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:4013,x:32719,y:32712,varname:node_4013,prsc:2|diff-1913-RGB,olwid-6861-OUT;n:type:ShaderForge.SFN_Color,id:1913,x:32288,y:32563,ptovrint:False,ptlb:Color,ptin:_Color,varname:node_1913,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.8455882,c2:0.7714921,c3:0.1740917,c4:1;n:type:ShaderForge.SFN_SwitchProperty,id:6861,x:32423,y:33007,ptovrint:False,ptlb:OutlineSwitch,ptin:_OutlineSwitch,varname:node_6861,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,on:True|A-5579-OUT,B-8414-OUT;n:type:ShaderForge.SFN_Vector1,id:5579,x:32146,y:32740,varname:node_5579,prsc:2,v1:0;n:type:ShaderForge.SFN_Vector1,id:8414,x:32162,y:33123,varname:node_8414,prsc:2,v1:0.05;proporder:1913-6861;pass:END;sub:END;*/
+/*SF_DATA;ver:1.38;sub:START;pass:START;ps:flbk:,iptp:0,cusa:False,bamd:0,cgin:,lico:1,lgpr:1,limd:1,spmd:1,trmd:0,grmd:0,uamb:True,mssp:True,bkdf:False,hqlp:False,rprd:False,enco:False,rmgx:True,imps:True,rpth:0,vtps:0,hqsc:True,nrmq:1,nrsp:0,vomd:0,spxs:False,tesm:0,olmd:0,culm:0,bsrc:0,bdst:1,dpts:2,wrdp:True,dith:0,atcv:False,rfrpo:True,rfrpn:Refraction,coma:15,ufog:True,aust:True,igpj:False,qofs:0,qpre:1,rntp:1,fgom:False,fgoc:False,fgod:False,fgor:False,fgmd:0,fgcr:0.5,fgcg:0.5,fgcb:0.5,fgca:1,fgde:0.01,fgrn:0,fgrf:300,stcl:False,atwp:False,stva:128,stmr:255,stmw:255,stcp:6,stps:0,stfa:0,stfz:0,ofsf:0,ofsu:0,f2p0:False,fnsp:False,fnfb:False,fsmp:False;n:type:ShaderForge.SFN_Final,id:4013,x:32719,y:32712,varname:node_4013,prsc:2|diff-1913-RGB,olwid-6861-OUT;n:type:ShaderForge.SFN_Color,id:1913,x:32288,y:32563,ptovrint:False,ptlb:Color,ptin:_Color,varname:node_1913,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,c1:0.8455882,c2:0.7714921,c3:0.1740917,c4:1;n:type:ShaderForge.SFN_SwitchProperty,id:6861,x:32423,y:33007,ptovrint:False,ptlb:OutlineSwitch,ptin:_OutlineSwitch,varname:node_6861,prsc:2,glob:False,taghide:False,taghdr:False,tagprd:False,tagnsco:False,tagnrm:False,on:True|A-5579-OUT,B-8414-OUT;n:type:ShaderForge.SFN_Vector1,id:5579,x:32146,y:32740,varname:node_5579,prsc:2,v1:0;n:type:ShaderForge.SFN_Vector1,id:8414,x:32162,y:33123,varname:node_8414,prsc:2,v1:0.08;proporder:1913-6861;pass:END;sub:END;*/
 
 Shader "Shader Forge/petalShader" {
     Properties {
         _Color ("Color", Color) = (0.8455882,0.7714921,0.1740917,1)
-        [MaterialToggle] _OutlineSwitch ("OutlineSwitch", Float ) = 0.05
+        [MaterialToggle] _OutlineSwitch ("OutlineSwitch", Float ) = 0.08
     }
     SubShader {
         Tags {
@@ -38,7 +38,7 @@ Shader "Shader Forge/petalShader" {
             };
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
-                o.pos = UnityObjectToClipPos( float4(v.vertex.xyz + normalize(v.vertex)*lerp( 0.0, 0.05, _OutlineSwitch ),1) );
+                o.pos = UnityObjectToClipPos( float4(v.vertex.xyz + normalize(v.vertex)*lerp( 0.0, 0.08, _OutlineSwitch ),1) );
                 UNITY_TRANSFER_FOG(o,o.pos);
                 return o;
             }
