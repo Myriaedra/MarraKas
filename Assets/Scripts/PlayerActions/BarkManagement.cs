@@ -21,8 +21,9 @@ public class BarkManagement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
-		if (Input.GetButtonDown ("Bark")) 
+        CheckWhatIsInFront();
+
+        if (Input.GetButtonDown ("Bark")) 
 		{
 			Bark();
 		}
@@ -56,13 +57,25 @@ public class BarkManagement : MonoBehaviour {
         {
             if (hit.collider.CompareTag("FlowerEmitter") && hit.collider.GetComponent<Renderer>()!= rendererInSight)
             {
+                OutlineOff();
                 rendererInSight = hit.collider.GetComponent<Renderer>();
+                OutlineOn();
                 whatIsInSight = "FlowerEmitter";
             }
-            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.GetComponent<Renderer>() != rendererInSight)
+            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(1).GetComponent<Renderer>() != rendererInSight)
             {
-                rendererInSight = hit.collider.GetComponent<Renderer>();
+                OutlineOff();
+                rendererInSight = hit.collider.transform.GetChild(1).GetComponent<Renderer>();
+                OutlineOn();
                 whatIsInSight = "SkSpawner";
+            }
+        }
+        else
+        {
+            if (whatIsInSight != "Nothing")
+            {
+                OutlineOff();
+                whatIsInSight = "Nothing";
             }
         }
     }
@@ -109,5 +122,21 @@ public class BarkManagement : MonoBehaviour {
     {
         GameObject newTriggerFlower = Instantiate(triggerFlower, flowerEmitterTransform.position, flowerEmitterTransform.rotation);
         newTriggerFlower.GetComponent<TriggerFlower>().direction = flowerEmitterTransform.forward;
+    }
+
+    void OutlineOff()
+    {
+        if (rendererInSight != null)
+        {
+            rendererInSight.material.SetFloat("_OutlineSwitch", 0);
+            rendererInSight = null;
+        }
+    }
+    void OutlineOn()
+    {
+        if (rendererInSight != null)
+        {
+            rendererInSight.material.SetFloat("_OutlineSwitch", 1);
+        }
     }
 }

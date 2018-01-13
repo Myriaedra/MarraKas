@@ -12,6 +12,7 @@ public class TriggerFlower : MonoBehaviour {
     public Vector3 direction;
     [HideInInspector]
     public float timerLife;
+    float lifeTime = 4.0f;
     bool decreaseOpacity = false;
     public float speed;
 
@@ -31,7 +32,7 @@ public class TriggerFlower : MonoBehaviour {
         transform.position += direction * speed;
         transform.localScale += new Vector3(0.25f, 0.1f, 0);
         transform.position -= transform.up*0.03f;
-        if (Time.time - timerLife > 6 && !decreaseOpacity)
+        if (Time.time - timerLife > lifeTime && !decreaseOpacity)
         {
             decreaseOpacity = true;
             //part.Stop();
