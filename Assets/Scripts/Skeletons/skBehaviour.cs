@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class skBehaviour : MonoBehaviour {
 	NavMeshAgent navMesh;
+	Rigidbody skRb;
+
 	RubbleManager targetRubble;
 
 	public Transform targetSpot;
@@ -12,6 +14,7 @@ public class skBehaviour : MonoBehaviour {
 	void Start () 
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
+		skRb = GetComponent<Rigidbody> ();
 		targetRubble = FindObjectOfType<RubbleManager> ();
 		targetSpot = targetRubble.GetSpotTransform ();
 		MoveToRubble ();
@@ -30,4 +33,5 @@ public class skBehaviour : MonoBehaviour {
 	{
 		navMesh.SetDestination (targetSpot.position);
 	}
+		
 }

@@ -37,6 +37,13 @@ public class DigManager : MonoBehaviour {
 			player.PlayerControl (false);
 			digInput = false;
 		}
+
+		if (other.tag == "Rubble" && digInput) 
+		{
+			other.gameObject.GetComponent<RubbleManager>().StartCoroutine("RubbleClear");
+			player.PlayerControl (false);
+			digInput = false;
+		}
 	}
 
 	IEnumerator Dig(SpotManager diggedSpot) 

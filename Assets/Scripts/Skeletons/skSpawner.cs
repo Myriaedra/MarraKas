@@ -46,8 +46,11 @@ public class skSpawner : MonoBehaviour {
 		capCo.center = new Vector3 (0f, 1f, 0f);
 		Rigidbody rB = torsoObj.AddComponent<Rigidbody> ();
 		rB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		rB.isKinematic = true;
 		//Behaviour
 		torsoObj.AddComponent<NavMeshAgent>();
 		torsoObj.AddComponent<skBehaviour> ();
+
+		torsoObj.tag = "Skeleton";
 	}
 }
