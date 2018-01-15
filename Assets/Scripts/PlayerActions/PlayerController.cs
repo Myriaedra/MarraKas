@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour {
 
 	Camera cam;
 	CamController camController;
+    public  CinemachineFreeLook freeLookCM;
 	Rigidbody rb;
     public static bool controlsAble = true;
 
@@ -116,6 +118,7 @@ public class PlayerController : MonoBehaviour {
             LimitVelocity(airMaxSpeed);
             OrientCharacter(0.05f);
             Drag(airDragValue);
+            FeedbacksManagement(false);
         }
         else
         {
@@ -124,6 +127,7 @@ public class PlayerController : MonoBehaviour {
             LimitVelocity(airSprintMaxSpeed);
             OrientCharacter(0.05f);
             Drag(airSprintDragValue);
+            FeedbacksManagement(true);
         }
 	}
 
@@ -217,13 +221,13 @@ public class PlayerController : MonoBehaviour {
 		float wantedFieldOfView;
 		if (sprintOrNot)
 		{
-			wantedVignetteValue = 0.45f;
-			wantedFieldOfView = 80;
+			wantedVignetteValue = 0.42f;
+			wantedFieldOfView = 53;
 		}
 		else
 		{
-			wantedVignetteValue = 0;
-			wantedFieldOfView = 60;
+			wantedVignetteValue = 0.30f;
+			wantedFieldOfView = 40;
 		}
 
 		//vignette management---------------------------------------
@@ -231,8 +235,9 @@ public class PlayerController : MonoBehaviour {
 		vignette.intensity = Mathf.Lerp(vignette.intensity, wantedVignetteValue, 0.05f);
 		postProcess.vignette.settings = vignette;
 
-		//field of view management----------------------------------
-		cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
+        //field of view management----------------------------------
+
+        freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
 	}
 
 	public void PlayerControl( bool value)

@@ -124,7 +124,7 @@ public class skSelector : MonoBehaviour {
 		{
 			currentParts[0] = Instantiate (pRef.GetPrefabFromReference (0, playerInventory.heads [0]), selectPosition, transform.rotation);
 		}
-		if (playerInventory.torsos.Count > 0) 
+		if (playerInventory.torsos.Count > 0)
 		{
 			currentParts[1] = Instantiate (pRef.GetPrefabFromReference (1, playerInventory.torsos [0]), selectPosition, transform.rotation);
 		}
