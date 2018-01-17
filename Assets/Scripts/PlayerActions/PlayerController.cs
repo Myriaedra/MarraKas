@@ -240,8 +240,13 @@ public class PlayerController : MonoBehaviour {
         freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
 	}
 
-	public void PlayerControl( bool value)
+	public void SetPlayerControl( bool value)
 	{
 		controlsAble = value;
+	}
+
+	public bool GetPlayerControl()
+	{
+		return controlsAble;
 	}
 }

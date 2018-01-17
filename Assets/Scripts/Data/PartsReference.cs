@@ -21,6 +21,9 @@ public class PartsReference : MonoBehaviour {
 
 		case 2 :
 			return legPrefabs[part];
+
+		case 3:
+			return mementoPrefabs [part];
 		}
 
 		return new GameObject();

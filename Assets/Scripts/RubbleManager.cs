@@ -50,16 +50,15 @@ public class RubbleManager : MonoBehaviour {
 
 	public IEnumerator RubbleClear()
 	{
-		//Disappear in the ground
-		while (transform.position.y > limitY) 
-		{
-			float xDif = Random.Range (-0.2f, 0.2f);
-			float zDif = Random.Range (-0.2f, 0.2f);
-			transform.position = new Vector3 (originalPosition.x+xDif, transform.position.y - 0.01f, originalPosition.z+zDif);
-			yield return null;
-		}
+			//Disappear in the ground
+			while (transform.position.y > limitY) {
+				float xDif = Random.Range (-0.2f, 0.2f);
+				float zDif = Random.Range (-0.2f, 0.2f);
+				transform.position = new Vector3 (originalPosition.x + xDif, transform.position.y - 0.01f, originalPosition.z + zDif);
+				yield return null;
 
-		//Gives control back to the player
-		player.PlayerControl(true);
+			//Gives control back to the player
+			player.SetPlayerControl (true);
+		}
 	}
 }

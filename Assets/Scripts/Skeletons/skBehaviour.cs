@@ -6,6 +6,7 @@ using UnityEngine.AI;
 public class skBehaviour : MonoBehaviour {
 	NavMeshAgent navMesh;
 	Rigidbody skRb;
+	public Memento memento;
 
 	RubbleManager targetRubble;
 
@@ -19,10 +20,11 @@ public class skBehaviour : MonoBehaviour {
 		targetSpot = targetRubble.GetSpotTransform ();
 		MoveToRubble ();
 	}
+
 	
 	// Update is called once per frame
 	void Update () {
-		if (navMesh.remainingDistance <= 0.1) 
+		if (targetSpot != null && navMesh.remainingDistance <= 0.1) 
 		{
 			navMesh.ResetPath ();
 			transform.rotation = targetSpot.rotation;
@@ -31,7 +33,13 @@ public class skBehaviour : MonoBehaviour {
 
 	void MoveToRubble()
 	{
-		navMesh.SetDestination (targetSpot.position);
+		if (targetSpot != null)
+			navMesh.SetDestination (targetSpot.position);
+	}
+
+	public void SetMemento (Memento givenMemento)
+	{
+		memento = givenMemento;
 	}
 		
 }

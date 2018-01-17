@@ -15,7 +15,7 @@ public class PartPreviewScript : MonoBehaviour {
 		if (Input.GetButtonDown("Jump")) //Quit
 			{
 				Destroy(gameObject);
-				player.PlayerControl (true);
+				player.SetPlayerControl (true);
 			}
 	}
 }

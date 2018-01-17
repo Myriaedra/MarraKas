@@ -15,10 +15,15 @@ public class skSelector : MonoBehaviour {
 	public GameObject confettiFX;
 
 	Vector3 selectPosition;
+	public Transform mementoPositionMarker;
+	Vector3 mementoPosition;
 
 	GameObject[] currentParts = new GameObject[3];
+	GameObject currentMementoMesh;
+	Memento currentMemento;
 
 	int[] selectedParts = new int[3];
+	int selectedMemento;
 	int selectedType;
 	bool snaped;
 
@@ -30,6 +35,7 @@ public class skSelector : MonoBehaviour {
 		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
 		selectPosition = transform.position;
+		mementoPosition = mementoPositionMarker.position;
 	}
 	
 	// Update is called once per frame
@@ -42,13 +48,13 @@ public class skSelector : MonoBehaviour {
 			//Validate
 			if (Input.GetButtonDown ("Jump"))
 				CreateSkeleton ();
-		} 
-		else 
-		{
-			if (Input.GetKeyDown ("a")) {
-				BeginAssembly ();
+
+			if (Input.GetButtonDown ("Cancel")) 
+			{
+				DestroyCurrentParts ();
+				EndAssembly ();
 			}
-		}
+		} 
 	}
 
 	//Navigates between head, torso and leg, and differant parts in he inventory
@@ -58,32 +64,47 @@ public class skSelector : MonoBehaviour {
 		if (Input.GetAxis("Vertical") > 0.2f && !snaped) 
 		{
 			selectedType--;
-			print ("type = " + nfmod(selectedType, 3));
+			print ("type = " + nfmod(selectedType, 4));
 			snaped = true;
 		}
 
 		if (Input.GetAxis("Vertical") < -0.2f && !snaped) 
 		{
 			selectedType++;
-			print ("type = " + nfmod(selectedType, 3));
+			print ("type = " + nfmod(selectedType, 4));
 			snaped = true;
 		}
 
 		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
 		{
-			int modType = nfmod(selectedType, 3);
-			selectedParts [modType]++;
-			UpdateVisualisation(modType, playerInventory.GetIDFromReference(modType, nfmod(selectedParts[modType], playerInventory.GetArrayLength(modType))));
+			int modType = nfmod(selectedType, 4);
+			if (modType < 3) {
+				selectedParts [modType]++;
+				UpdateVisualisation (modType, playerInventory.GetIDFromReference (modType, nfmod (selectedParts [modType], playerInventory.GetArrayLength (modType))));
+			} 
+			else 
+			{
+				selectedMemento++;
+				currentMemento = playerInventory.mementos[nfmod(selectedMemento, playerInventory.mementos.Count)];
+				UpdateVisualisation (modType, currentMemento.ID);
+			}
 
 			snaped = true;
 		}
 
 		if (Input.GetAxis("Horizontal") < -0.2f && !snaped) 
 		{
-			int modType = selectedType % 3;
-			selectedParts [modType]--;
-			UpdateVisualisation(modType, playerInventory.GetIDFromReference(modType, nfmod(selectedParts[modType], playerInventory.GetArrayLength(modType))));
-
+			int modType = nfmod(selectedType, 4);
+			if (modType < 3) {
+				selectedParts [modType]--;
+				UpdateVisualisation (modType, playerInventory.GetIDFromReference (modType, nfmod (selectedParts [modType], playerInventory.GetArrayLength (modType))));
+			} 
+			else 
+			{
+				selectedMemento--;
+				currentMemento = playerInventory.mementos[nfmod(selectedMemento, playerInventory.mementos.Count)];
+				UpdateVisualisation (modType, currentMemento.ID);
+			}
 			snaped = true;
 
 		}
@@ -97,19 +118,29 @@ public class skSelector : MonoBehaviour {
 
 	void UpdateVisualisation(int type, int part)
 	{
-		Destroy (currentParts [type]);
-		currentParts[type] = Instantiate (pRef.GetPrefabFromReference (type, playerInventory.GetIDFromReference(type, nfmod(selectedParts[type], playerInventory.GetArrayLength(type)))), selectPosition, transform.rotation);
+		if (type < 3) 
+		{
+			Destroy (currentParts [type]);
+			currentParts [type] = Instantiate (pRef.GetPrefabFromReference (type, part), selectPosition, transform.rotation);
+		} 
+		else 
+		{
+			Destroy (currentMementoMesh);
+			currentMementoMesh = Instantiate(pRef.GetPrefabFromReference(3, part), mementoPosition, transform.rotation);
+		}
 	}
 
 	//Spawn a skeleton from the chosen parts if none of them is void
 	void CreateSkeleton()
 	{
-		if (playerInventory.heads.Count > 0 && playerInventory.torsos.Count > 0	&& playerInventory.legs.Count > 0)
+		if (playerInventory.heads.Count > 0 && playerInventory.torsos.Count > 0	&& playerInventory.legs.Count > 0 && playerInventory.mementos.Count > 0)
 		{
-			skSP.SpawnFromParts (currentParts[0], currentParts[1], currentParts[2]);
+			skSP.SpawnFromParts (currentParts[0], currentParts[1], currentParts[2], currentMemento);
 			playerInventory.RemoveItem (0, playerInventory.GetIDFromReference (0, nfmod (selectedParts [0], playerInventory.GetArrayLength (0))));
 			playerInventory.RemoveItem (1, playerInventory.GetIDFromReference (1, nfmod (selectedParts [1], playerInventory.GetArrayLength (1))));
 			playerInventory.RemoveItem (2, playerInventory.GetIDFromReference (2, nfmod (selectedParts [2], playerInventory.GetArrayLength (2))));
+			playerInventory.RemoveItem (currentMemento);
+			Destroy (currentMementoMesh);
 		} else {
 			print ("no can do");
 		}
@@ -132,6 +163,20 @@ public class skSelector : MonoBehaviour {
 		{
 			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, transform.rotation);
 		}
+		if (playerInventory.mementos.Count > 0) 
+		{
+			currentMemento = playerInventory.mementos [0];
+			currentMementoMesh = Instantiate(pRef.GetPrefabFromReference(3, currentMemento.ID), mementoPosition, transform.rotation);
+		}
+		selectedType = 0;
+	}
+
+	public void DestroyCurrentParts()
+	{
+		for (int i = 0; i < 3; i++) {
+			Destroy (currentParts [i]);
+		}
+		Destroy(currentMementoMesh); 
 	}
 
 	public void BeginAssembly()
@@ -139,14 +184,14 @@ public class skSelector : MonoBehaviour {
 		InitCurrentParts ();
 		assemblyView.enabled = true;
 		isActivated = true;
-		player.PlayerControl (false);
+		player.SetPlayerControl (false);
 	}
 
 	public void EndAssembly()
 	{
 		assemblyView.enabled = false;
 		isActivated = false;
-		player.PlayerControl (true);
+		player.SetPlayerControl (true);
 	}
 
 	//Better modulo

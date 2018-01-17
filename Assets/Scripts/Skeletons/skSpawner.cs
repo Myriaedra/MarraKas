@@ -32,7 +32,7 @@ public class skSpawner : MonoBehaviour {
 		spawnedTorso.AddComponent<Rigidbody> ();
 	}
 
-	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj)
+	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj, Memento memento)
 	{
 		
 		//Add the adder script to torso
@@ -49,7 +49,9 @@ public class skSpawner : MonoBehaviour {
 		rB.isKinematic = true;
 		//Behaviour
 		torsoObj.AddComponent<NavMeshAgent>();
-		torsoObj.AddComponent<skBehaviour> ();
+		skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
+		skBh.SetMemento (memento);
+
 
 		torsoObj.tag = "Skeleton";
 	}
