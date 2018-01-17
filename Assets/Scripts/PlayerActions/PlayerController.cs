@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour {
     public  CinemachineFreeLook freeLookCM;
 	Rigidbody rb;
     public static bool controlsAble = true;
+	public SkinnedMeshRenderer meshRenderer;
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -240,13 +241,8 @@ public class PlayerController : MonoBehaviour {
         freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
 	}
 
-	public void SetPlayerControl( bool value)
+	public void SetRenderer(bool value)
 	{
-		controlsAble = value;
-	}
-
-	public bool GetPlayerControl()
-	{
-		return controlsAble;
+		meshRenderer.enabled = value;
 	}
 }

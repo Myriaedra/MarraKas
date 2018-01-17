@@ -12,10 +12,10 @@ public class PartPreviewScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (Input.GetButtonDown("Jump")) //Quit
+		if (Input.GetButtonDown("Jump") || Input.GetButtonDown("Cancel")) //Quit
 			{
 				Destroy(gameObject);
-				player.SetPlayerControl (true);
+				PlayerController.controlsAble = true;
 			}
 	}
 }

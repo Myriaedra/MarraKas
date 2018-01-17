@@ -18,7 +18,7 @@ public class DigManager : MonoBehaviour {
 
 	void Update()
 	{
-		if (Input.GetButtonDown ("Dig") && !digInput && player.GetPlayerControl()) {
+		if (Input.GetButtonDown ("Dig") && !digInput && PlayerController.controlsAble) {
 			digInput = true;	
 		} else if (digInput) {
 			digInput = false;
@@ -34,7 +34,7 @@ public class DigManager : MonoBehaviour {
 		if (other.tag == "Spot" && digInput) 
 		{
 			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
-			player.SetPlayerControl (false);
+			PlayerController.controlsAble = false;
 			digInput = false;
 		}
 
@@ -44,7 +44,7 @@ public class DigManager : MonoBehaviour {
 			if (rubMan.readyToDig) 
 			{
 				rubMan.StartCoroutine ("RubbleClear");
-				player.SetPlayerControl (false);
+				PlayerController.controlsAble = false;
 			}
 			digInput = false;
 		}

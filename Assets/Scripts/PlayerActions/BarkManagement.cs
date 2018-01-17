@@ -31,7 +31,7 @@ public class BarkManagement : MonoBehaviour {
 	void Update () {
         CheckWhatIsInFront();
 
-		if (Input.GetButtonDown ("Bark") && playerController.GetPlayerControl()) 
+		if (Input.GetButtonDown ("Bark") && PlayerController.controlsAble) 
 		{
 			Bark();
 		}

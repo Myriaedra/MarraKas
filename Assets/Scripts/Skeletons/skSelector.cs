@@ -45,7 +45,8 @@ public class skSelector : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (isActivated) {
+		if (isActivated) 
+		{
 			//Select type and parts
 			CheckNavigation ();
 
@@ -61,7 +62,10 @@ public class skSelector : MonoBehaviour {
 		} 
 	}
 
-	//Navigates between head, torso and leg, and differant parts in he inventory
+
+
+
+ ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	void CheckNavigation()
 	{
 	///////////Type
@@ -138,6 +142,10 @@ public class skSelector : MonoBehaviour {
 		}
 	}
 
+
+
+
+
 	//Spawn a skeleton from the chosen parts if none of them is void
 	void CreateSkeleton()
 	{
@@ -157,6 +165,10 @@ public class skSelector : MonoBehaviour {
 		EndAssembly ();
 	}
 
+
+
+
+
 	public void InitCurrentParts()
 	{
 		if (playerInventory.heads.Count > 0) 
@@ -171,12 +183,21 @@ public class skSelector : MonoBehaviour {
 		{
 			currentParts[2] =Instantiate (pRef.GetPrefabFromReference (2, playerInventory.legs [0]), selectPosition, transform.rotation);
 		}
-		if (playerInventory.mementos.Count > 0) 
-		{
+		if (playerInventory.mementos.Count > 0) {
 			currentMemento = playerInventory.mementos [0];
-			currentMementoMesh = Instantiate(pRef.GetPrefabFromReference(3, currentMemento.ID), mementoPosition, transform.rotation);
+			currentMementoMesh = Instantiate (pRef.GetPrefabFromReference (3, currentMemento.ID), mementoPosition, transform.rotation);
 		}
+
 		selectedType = 0;
+	}
+
+	public void ResetCurrentParts()
+	{
+		for (int i = 0; i < 3; i++) 
+		{
+			currentParts[i] = null;
+		}
+		currentMemento = null;
 	}
 
 	public void DestroyCurrentParts()
@@ -187,12 +208,16 @@ public class skSelector : MonoBehaviour {
 		Destroy(currentMementoMesh); 
 	}
 
+
+
+
 	public IEnumerator BeginAssembly()
 	{
 		InitCurrentParts ();
 		assemblyView.enabled = true;
 		isActivated = true;
-		player.SetPlayerControl (false);
+		PlayerController.controlsAble = false;
+		player.SetRenderer(false);
 		yield return new WaitForSeconds (1);
 		uiCanvas.SetActive(true);
 		ui.InitArrows (currentMemento);
@@ -203,9 +228,16 @@ public class skSelector : MonoBehaviour {
 	{
 		assemblyView.enabled = false;
 		uiCanvas.SetActive(false);
+		ResetCurrentParts ();
 		isActivated = false;
-		player.SetPlayerControl (true);
+		player.SetRenderer(true);
+		PlayerController.controlsAble = true;
 	}
+
+
+
+
+
 
 	//Better modulo
 	int nfmod(float a,float b)
