@@ -10,6 +10,8 @@ public class RubbleManager : MonoBehaviour {
 	public bool readyToDig;
 	public float limitY;
 
+	public GameObject rubbleDust;
+
 	public Vector3 originalPosition;
 
 	public PlayerController player;
@@ -51,6 +53,7 @@ public class RubbleManager : MonoBehaviour {
 	public IEnumerator RubbleClear()
 	{
 		//Disappear in the ground
+		rubbleDust = Instantiate(rubbleDust, transform.position, Quaternion.Euler(new Vector3 (-90,0,0)));
 		while (transform.position.y > limitY) 
 		{
 			float xDif = Random.Range (-0.2f, 0.2f);
@@ -60,6 +63,7 @@ public class RubbleManager : MonoBehaviour {
 		}
 
 		//Gives control back to the player
+		Destroy(rubbleDust);
 		PlayerController.controlsAble = true;
 	}
 }
