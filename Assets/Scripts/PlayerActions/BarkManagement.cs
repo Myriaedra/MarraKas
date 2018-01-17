@@ -43,7 +43,6 @@ public class BarkManagement : MonoBehaviour {
         {
             Transform actualSpot = other.GetComponent<Transform>();
             spotsDetected.Add(actualSpot);
-            print("you're in my list !!!");
         }
     }//new spot in list
 
@@ -53,7 +52,6 @@ public class BarkManagement : MonoBehaviour {
         {
             Transform otherRenderer = other.GetComponent<Transform>();
             spotsDetected.Remove(otherRenderer);
-            print("not anymore");
         }
     }//spot out of list
 
@@ -120,8 +118,8 @@ public class BarkManagement : MonoBehaviour {
 			//assembly
 			if (hit.collider.CompareTag("SkSpawner"))
 			{
-					skSelector selector = hit.collider.GetComponent<skSelector>();
-					selector.BeginAssembly();
+				skSelector selector = hit.collider.GetComponent<skSelector>();
+				selector.StartCoroutine("BeginAssembly");
 			}
         }
         else

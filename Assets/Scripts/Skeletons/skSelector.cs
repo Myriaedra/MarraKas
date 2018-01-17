@@ -27,11 +27,15 @@ public class skSelector : MonoBehaviour {
 	int selectedType;
 	bool snaped;
 
+	public GameObject uiCanvas;
+	UInterface_Assembly ui;
+
 
 	// Use this for initialization
 	void Start () 
 	{
 		skSP = GetComponent<skSpawner> ();
+		ui = uiCanvas.GetComponent<UInterface_Assembly> ();
 		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
 		selectPosition = transform.position;
@@ -65,6 +69,7 @@ public class skSelector : MonoBehaviour {
 		{
 			selectedType--;
 			print ("type = " + nfmod(selectedType, 4));
+			ui.UpdateArrows(nfmod(selectedType, 4), nfmod(selectedType+1, 4));
 			snaped = true;
 		}
 
@@ -72,6 +77,7 @@ public class skSelector : MonoBehaviour {
 		{
 			selectedType++;
 			print ("type = " + nfmod(selectedType, 4));
+			ui.UpdateArrows(nfmod(selectedType, 4), nfmod(selectedType-1, 4));
 			snaped = true;
 		}
 
@@ -86,6 +92,7 @@ public class skSelector : MonoBehaviour {
 			{
 				selectedMemento++;
 				currentMemento = playerInventory.mementos[nfmod(selectedMemento, playerInventory.mementos.Count)];
+				ui.UpdateName (currentMemento);
 				UpdateVisualisation (modType, currentMemento.ID);
 			}
 
@@ -103,6 +110,7 @@ public class skSelector : MonoBehaviour {
 			{
 				selectedMemento--;
 				currentMemento = playerInventory.mementos[nfmod(selectedMemento, playerInventory.mementos.Count)];
+				ui.UpdateName (currentMemento);
 				UpdateVisualisation (modType, currentMemento.ID);
 			}
 			snaped = true;
@@ -179,17 +187,22 @@ public class skSelector : MonoBehaviour {
 		Destroy(currentMementoMesh); 
 	}
 
-	public void BeginAssembly()
+	public IEnumerator BeginAssembly()
 	{
 		InitCurrentParts ();
 		assemblyView.enabled = true;
 		isActivated = true;
 		player.SetPlayerControl (false);
+		yield return new WaitForSeconds (1);
+		uiCanvas.SetActive(true);
+		ui.InitArrows (currentMemento);
+
 	}
 
 	public void EndAssembly()
 	{
 		assemblyView.enabled = false;
+		uiCanvas.SetActive(false);
 		isActivated = false;
 		player.SetPlayerControl (true);
 	}
