@@ -10,10 +10,19 @@ public class Collectable : MonoBehaviour {
 	public bool collected = false;
 	Transform player;
 
+	public Canvas partPreview;
+
+	public bool memento;
+	public bool preview = true;
+
 	//Iventory
 	public int mementoID;
 	public string mementoName;
 	Memento thisMemento;
+
+	public int type;
+	public int part;
+
 
 	// Use this for initialization
 	void Start () {
@@ -66,11 +75,32 @@ public class Collectable : MonoBehaviour {
 
 			//Add to player position and update own position
 			transform.position = player.position + newPos;
-
+				
 			yield return null;
 		}
-		Camera.main.GetComponent<InventoryManager>().playerInventory.AddItem (thisMemento);
+		if (memento) {
+			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (thisMemento);
+			if (preview) {
+				PlayerController.controlsAble = false;
+				PartPreview (mementoID);
+			}
+		} else {
+			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (type, part);
+		}
+
 		Destroy (gameObject);
 
+	}
+
+	public void PartPreview(int ID) //Spawn canvas with preview
+	{
+		PartsReference pRef = Camera.main.GetComponent<PartsReference> ();
+		Canvas newCanvas = Instantiate (partPreview);
+		newCanvas.worldCamera = Camera.main;
+		GameObject foundPart;
+		foundPart = Instantiate (pRef.GetPrefabFromReference (3, mementoID), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
+		foundPart.transform.localPosition = new Vector3 (0.5f, 1.7f, -13.8f);
+		/*foundPart.transform.localRotation = Quaternion.Euler(new Vector3 (-5, -16, 0));*/
+		foundPart.transform.localScale = new Vector3 (100f, 100f, 100f);
 	}
 }

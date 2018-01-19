@@ -56,7 +56,8 @@ public class DigManager : MonoBehaviour {
 		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part);
 		//print (diggedSpot.gameObject.GetComponent<Animator> ());
 		//barkMan.spotsDetected.Remove(barkMan.spotsDetected.Find(diggedSpot.gameObject.GetComponent<Animator>()));//Add the sk part in the inventory
-		Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
+		ParticleSystem instDigFX = Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
+		Destroy(instDigFX, 2f);
 
 		yield return new WaitForSeconds (2f);
 

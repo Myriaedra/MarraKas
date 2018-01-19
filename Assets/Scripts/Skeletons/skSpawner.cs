@@ -51,6 +51,7 @@ public class skSpawner : MonoBehaviour {
 		torsoObj.AddComponent<NavMeshAgent>();
 		skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
 		skBh.SetMemento (memento);
+		torsoObj.GetComponentInChildren<Animator> ().enabled = true;
 
 
 		torsoObj.tag = "Skeleton";

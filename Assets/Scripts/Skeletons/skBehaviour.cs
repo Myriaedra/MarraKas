@@ -18,6 +18,10 @@ public class skBehaviour : MonoBehaviour {
 		skRb = GetComponent<Rigidbody> ();
 		targetRubble = FindObjectOfType<RubbleManager> ();
 		targetSpot = targetRubble.GetSpotTransform ();
+		if (targetSpot == null)
+		{
+			targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
+		}
 		MoveToRubble ();
 	}
 

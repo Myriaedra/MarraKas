@@ -5,10 +5,14 @@ using UnityEngine;
 public class SpotManager : MonoBehaviour {
 	public int type;
 	public int part;
+	public bool randomInit;
 
 	// Use this for initialization
 	void Start () {
-		InitSpot ();
+		if (randomInit) 
+		{
+			InitSpot ();
+		}
 	}
 	
 	// Update is called once per frame
