@@ -7,13 +7,22 @@ using Cinemachine;
 public class PlayerController : MonoBehaviour {
 
 	public static PlayerController pc;
+	public static bool controlsAble = true;
+
+    public  CinemachineFreeLook freeLookCM;
+	public SkinnedMeshRenderer meshRenderer;
+	public PostProcessingProfile postProcess;
+	public BarkManagement barkManagement;
+
+	[HideInInspector]
+	public bool beingTalkedTo = false;
 
 	Camera cam;
 	CamController camController;
-    public  CinemachineFreeLook freeLookCM;
 	Rigidbody rb;
-    public static bool controlsAble = true;
-	public SkinnedMeshRenderer meshRenderer;
+	bool landed = false;
+
+
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -37,10 +46,6 @@ public class PlayerController : MonoBehaviour {
 
     [Header("OtherValues : ")]
     public float jumpForce;
-
-	bool landed = false;
-	public PostProcessingProfile postProcess;
-	public BarkManagement barkManagement;
 
 	// Use this for initialization
 	void Start ()

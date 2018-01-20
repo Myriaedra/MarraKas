@@ -56,7 +56,8 @@ public class skSpawner : MonoBehaviour {
 		dialogueMan.mySkBehaviour = skBh;
 		skBh.mySkDialogueManager = dialogueMan;
 		dialogueMan.SetMemento (memento);
-		dialogueMan.StartDialogue (0);
+		dialogueMan.dialogueType = "Spawn";
+		dialogueMan.StartDialogue (dialogueMan.dialogueType, 0);
 
 		torsoObj.tag = "Skeleton";
 	}

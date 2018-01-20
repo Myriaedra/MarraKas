@@ -4,17 +4,16 @@ using UnityEngine;
 using UnityEngine.AI;
 
 public class skBehaviour : MonoBehaviour {
+	
 	NavMeshAgent navMesh;
 	Rigidbody skRb;
-	public Memento memento;
-
 	RubbleManager targetRubble;
+
+	public Memento memento;
 	public skDialogueManager mySkDialogueManager;
-
 	public Transform targetSpot;
+	public string state = "Nothing";
 
-	public string state = "Idle";
-	// Use this for initialization
 	void Start () 
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
