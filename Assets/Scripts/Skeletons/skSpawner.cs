@@ -52,7 +52,11 @@ public class skSpawner : MonoBehaviour {
 		skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
 		skBh.SetMemento (memento);
 		torsoObj.GetComponentInChildren<Animator> ().enabled = true;
-
+		skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
+		dialogueMan.mySkBehaviour = skBh;
+		skBh.mySkDialogueManager = dialogueMan;
+		dialogueMan.SetMemento (memento);
+		dialogueMan.StartDialogue (0);
 
 		torsoObj.tag = "Skeleton";
 	}

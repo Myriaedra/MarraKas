@@ -6,6 +6,8 @@ using Cinemachine;
 
 public class PlayerController : MonoBehaviour {
 
+	public static PlayerController pc;
+
 	Camera cam;
 	CamController camController;
     public  CinemachineFreeLook freeLookCM;
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour {
 		cam = Camera.main;
 		camController = cam.GetComponent<CamController>();
 		rb = GetComponent<Rigidbody>();
+		pc = GetComponent<PlayerController> ();
 	}
 
 	void Update()//--------------------------------------------------------------------------------------------------------------------------

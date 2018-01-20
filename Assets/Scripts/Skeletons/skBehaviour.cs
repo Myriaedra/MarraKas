@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,8 +9,11 @@ public class skBehaviour : MonoBehaviour {
 	public Memento memento;
 
 	RubbleManager targetRubble;
+	public skDialogueManager mySkDialogueManager;
 
 	public Transform targetSpot;
+
+	public string state = "Idle";
 	// Use this for initialization
 	void Start () 
 	{
@@ -22,23 +25,36 @@ public class skBehaviour : MonoBehaviour {
 		{
 			targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
 		}
-		MoveToRubble ();
+		Invoke ("MoveToRubble", 2.0f);
 	}
 
 	
 	// Update is called once per frame
 	void Update () {
-		if (targetSpot != null && navMesh.remainingDistance <= 0.1) 
-		{
-			navMesh.ResetPath ();
-			transform.rotation = targetSpot.rotation;
+		switch(state){
+		case "Moving":
+			if (targetSpot != null && navMesh.remainingDistance <= 0.1) 
+			{
+				navMesh.ResetPath ();
+				transform.rotation = targetSpot.rotation;
+			}
+			break;
+		case "Talking":
+			transform.rotation = Quaternion.Lerp (transform.rotation, Quaternion.LookRotation (PlayerController.pc.transform.position - transform.position), 0.1f);
+			break;
+		case "Idle":
+
+			break;
 		}
 	}
 
 	void MoveToRubble()
 	{
 		if (targetSpot != null)
+		{
+			state = "Moving";
 			navMesh.SetDestination (targetSpot.position);
+		}
 	}
 
 	public void SetMemento (Memento givenMemento)

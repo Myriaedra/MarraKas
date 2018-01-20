@@ -162,9 +162,7 @@ public class skSelector : MonoBehaviour {
 			EndAssembly ();
 		} else {
 			//Play wrong sound
-		}
-
-	
+		}	
 	}
 
 
