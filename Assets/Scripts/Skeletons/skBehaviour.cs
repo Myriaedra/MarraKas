@@ -24,7 +24,7 @@ public class skBehaviour : MonoBehaviour {
 		{
 			targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
 		}
-		Invoke ("MoveToRubble", 2.0f);
+		//Invoke ("MoveToRubble", 2.0f);
 	}
 
 	
@@ -60,5 +60,7 @@ public class skBehaviour : MonoBehaviour {
 	{
 		memento = givenMemento;
 	}
+
+
 		
 }

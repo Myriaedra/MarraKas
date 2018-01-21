@@ -31,35 +31,29 @@ public class skDialogueManager : MonoBehaviour {
 	} // Start checkDistance coroutine
 
 	void Update(){
-        //print(dialogueState);
 		switch(dialogueState){
 		    case "PreDialogue": //At the end you can no longer have the Dialogue
                 timer -= Time.deltaTime;
 			    if(timer<=0){
-                    print("timer's up");
 				    dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
 			    }
 			    break;
             case "OutDialogue": // At the end you can have a PreDialogue again when entering in the PreDialogue Zone
-                print("outdialogue");
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
-                    print("timer's up");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
                 }
                 break;
             case "Dialogue": // At the end you can have an event and you have no more outdialogue when you go somewhere else
-                print("dialogue");
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
-                    print("timer's up");
-                    print("here comes the event");
+                    print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -75,6 +69,8 @@ public class skDialogueManager : MonoBehaviour {
 		    case "Spawn":
 			    print (spawnDialogues [whichDialogue]);
                 timer = timeSpawnDialogues[whichDialogue];
+                if (whichDialogue == 1)
+                    mySkBehaviour.Invoke("MoveToRubble", timer);
 			    break;
 		    case "Casual":
 			    print (casualDialogues [whichDialogue]);
@@ -135,7 +131,7 @@ public class skDialogueManager : MonoBehaviour {
 
     public void StartDialogue()
     {
-        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && (dialogueState == "NoDialogue" || dialogueState == "PreDialogue"))
+        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && ((dialogueState == "NoDialogue" && dialogueType == "Spawn") || dialogueState == "PreDialogue"))
         {
             ShowDialogueSetTimer(dialogueType, 1);
             dialogueState = "Dialogue";
