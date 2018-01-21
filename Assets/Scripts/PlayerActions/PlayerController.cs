@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour {
 	public BarkManagement barkManagement;
 
 	[HideInInspector]
-	public bool beingTalkedTo = false;
+	public GameObject beingTalkedTo;
 
 	Camera cam;
 	CamController camController;

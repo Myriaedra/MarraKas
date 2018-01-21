@@ -47,7 +47,7 @@ public class skBehaviour : MonoBehaviour {
 		}
 	}
 
-	void MoveToRubble()
+	public void MoveToRubble()
 	{
 		if (targetSpot != null)
 		{
