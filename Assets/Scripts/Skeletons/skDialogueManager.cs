@@ -21,7 +21,7 @@ public class skDialogueManager : MonoBehaviour {
 	float actualDistance;
 	float timer;
 	string playerZone; //(NoDialogue, PreDialogue, Dialogue)
-	string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue)
+	public string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue, InstantDialogue)
 	public string dialogueType; //(Spawn, Casual, Hint)
 
 
@@ -131,8 +131,9 @@ public class skDialogueManager : MonoBehaviour {
 
     public void StartDialogue()
     {
-        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && ((dialogueState == "NoDialogue" && dialogueType == "Spawn") || dialogueState == "PreDialogue"))
+        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && ((dialogueState == "NoDialogue" && dialogueType == "Spawn") || dialogueState == "PreDialogue" || dialogueState == "InstantDialogue"))
         {
+            print("hey");
             ShowDialogueSetTimer(dialogueType, 1);
             dialogueState = "Dialogue";
         }
