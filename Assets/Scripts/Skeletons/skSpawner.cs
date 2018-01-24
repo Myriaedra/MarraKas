@@ -2,9 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class skSpawner : MonoBehaviour {
 	PartsReference pRef;
+	public skDialogueUI UIDialogueText;
+
+	public DialogueSet[] didi = new DialogueSet[3];
+
 	// Use this for initialization
 	void Start () {
 		pRef = Camera.main.GetComponent<PartsReference> ();
@@ -49,13 +54,17 @@ public class skSpawner : MonoBehaviour {
 		rB.isKinematic = true;
 		//Behaviour
 		torsoObj.AddComponent<NavMeshAgent>();
+
 		skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
 		skBh.SetMemento (memento);
+
 		torsoObj.GetComponentInChildren<Animator> ().enabled = true;
+
 		skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
 		dialogueMan.mySkBehaviour = skBh;
 		skBh.mySkDialogueManager = dialogueMan;
 		dialogueMan.SetMemento (memento);
+		dialogueMan.SetUIDialogueText (UIDialogueText);
 		dialogueMan.dialogueType = "Spawn";
         dialogueMan.StartDialogue();
 
