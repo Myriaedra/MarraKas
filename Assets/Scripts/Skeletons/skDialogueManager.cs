@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class skDialogueManager : MonoBehaviour {
 
 	public Memento memento;
+	public skSpawner dialogueContainer;
 	skDialogueUI UIDialogueText;
 
 	public string[] spawnDialogues = new string[3];
@@ -160,119 +161,19 @@ public class skDialogueManager : MonoBehaviour {
 	public void SetMemento(Memento mementoParam)
 	{
 		memento = mementoParam;
-		SetSpawnDialogue ();
-		SetCasualDialogue ();
-		SetHintDialogue ();
+		SetDialogues ();
 	}
 	public void SetUIDialogueText(skDialogueUI text){
 		UIDialogueText = text;
 	}
-	void SetSpawnDialogue(){
-		switch (memento.ID) {
-		case 0:
-			spawnDialogues [0] = "spawn - 0 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 0 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 0 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 1:
-			spawnDialogues [0] = "spawn - 1 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "Je suis Mickaël Mancini et je suis vraiment un super intervenant";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 1 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 2:
-			spawnDialogues [0] = "spawn - 2 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 2 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 2 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 3:
-			spawnDialogues [0] = "spawn - 3 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 3 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 3 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		}
-	}
-	void SetCasualDialogue(){
-		switch (memento.ID) {
-		case 0:
-			casualDialogues [0] = "casual - 0 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 0 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 0 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 1:
-			casualDialogues [0] = "casual - 1 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 1 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 1 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 2:
-			casualDialogues [0] = "casual - 2 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 2 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 2 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 3:
-			casualDialogues [0] = "casual - 3 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 3 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 3 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		}
-	}
-	void SetHintDialogue(){
-		switch (memento.ID) {
-		case 0:
-			hintDialogues [0] = "hint - 0 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 0 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 0 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 1:
-			hintDialogues [0] = "hint - 1 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 1 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 1 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 2:
-			hintDialogues [0] = "hint - 2 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 2 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 2 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 3:
-			hintDialogues [0] = "hint - 3 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 3 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 3 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		}
+	void SetDialogues(){
+		spawnDialogues = dialogueContainer.dialogues [memento.ID].spawnDialogues;
+		timeSpawnDialogues = dialogueContainer.dialogues [memento.ID].timeSpawnDialogues;
+
+		hintDialogues = dialogueContainer.dialogues [memento.ID].hintDialogues;
+		timeHintDialogues = dialogueContainer.dialogues [memento.ID].timeHintDialogues;
+
+		casualDialogues = dialogueContainer.dialogues [memento.ID].casualDialogues;
+		timeCasualDialogues = dialogueContainer.dialogues [memento.ID].timeCasualDialogues;
 	}
 }

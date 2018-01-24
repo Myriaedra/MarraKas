@@ -8,7 +8,7 @@ public class skSpawner : MonoBehaviour {
 	PartsReference pRef;
 	public skDialogueUI UIDialogueText;
 
-	public DialogueSet[] didi = new DialogueSet[3];
+	public DialogueSet[] dialogues;
 
 	// Use this for initialization
 	void Start () {
@@ -61,6 +61,7 @@ public class skSpawner : MonoBehaviour {
 		torsoObj.GetComponentInChildren<Animator> ().enabled = true;
 
 		skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
+		dialogueMan.dialogueContainer = GetComponent<skSpawner> ();
 		dialogueMan.mySkBehaviour = skBh;
 		skBh.mySkDialogueManager = dialogueMan;
 		dialogueMan.SetMemento (memento);
