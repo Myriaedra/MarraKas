@@ -83,15 +83,16 @@ public class BarkManagement : MonoBehaviour {
             if (hit.collider.CompareTag("FlowerEmitter") && hit.collider.GetComponent<Renderer>()!= rendererInSight)
             {
                 OutlineOff();
-                rendererInSight = hit.collider.GetComponent<Renderer>();
+				rendererInSight = hit.collider.GetComponent<Renderer>();
                 OutlineOn();
                 whatIsInSight = "FlowerEmitter";
             }
             //SkSpawner
-            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(1).GetComponent<Renderer>() != rendererInSight)
+            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(2).GetComponent<Renderer>() != rendererInSight)
             {
                 OutlineOff();
-                rendererInSight = hit.collider.transform.GetChild(1).GetComponent<Renderer>();
+                rendererInSight = hit.collider.transform.GetChild(2).GetComponent<Renderer>();
+				print (rendererInSight.material);
                 OutlineOn();
                 whatIsInSight = "SkSpawner";
             }

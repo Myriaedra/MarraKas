@@ -31,14 +31,15 @@ public class DigManager : MonoBehaviour {
 
 	void OnTriggerStay(Collider other)
 	{
-		if (other.tag == "Spot" && digInput) 
+		float distance = Vector3.Distance (other.transform.position, transform.position);
+		if (other.tag == "Spot" && digInput && distance<3f) 
 		{
 			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
 			PlayerController.controlsAble = false;
 			digInput = false;
 		}
 
-		if (other.tag == "Rubble" && digInput) 
+		if (other.tag == "Rubble" && digInput && distance<4f) 
 		{
 			RubbleManager rubMan = other.gameObject.GetComponent<RubbleManager> ();
 			if (rubMan.readyToDig) 
