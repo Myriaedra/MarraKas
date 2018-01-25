@@ -8,6 +8,7 @@ public class BarkManagement : MonoBehaviour {
 
     [HideInInspector]
     public List<Transform> spotsDetected = new List<Transform>();
+    public List<skDialogueManager> skDetected = new List<skDialogueManager>();
     [Space(5)]
     public PlayerController playerController;
     [Space(5)]
@@ -44,6 +45,11 @@ public class BarkManagement : MonoBehaviour {
             Transform actualSpot = other.GetComponent<Transform>();
             spotsDetected.Add(actualSpot);
         }
+        else if(other.tag == "Skeleton")
+        {
+            skDialogueManager newSkeleton = other.GetComponent<skDialogueManager>();
+            skDetected.Add(newSkeleton);
+        }
     }//new spot in list
 
     void OnTriggerExit(Collider other)
@@ -52,6 +58,11 @@ public class BarkManagement : MonoBehaviour {
         {
             Transform otherRenderer = other.GetComponent<Transform>();
             spotsDetected.Remove(otherRenderer);
+        }
+        else if (other.tag == "Skeleton")
+        {
+            skDialogueManager oldSkeleton = other.GetComponent<skDialogueManager>();
+            skDetected.Remove(oldSkeleton);
         }
     }//spot out of list
 
@@ -72,15 +83,16 @@ public class BarkManagement : MonoBehaviour {
             if (hit.collider.CompareTag("FlowerEmitter") && hit.collider.GetComponent<Renderer>()!= rendererInSight)
             {
                 OutlineOff();
-                rendererInSight = hit.collider.GetComponent<Renderer>();
+				rendererInSight = hit.collider.GetComponent<Renderer>();
                 OutlineOn();
                 whatIsInSight = "FlowerEmitter";
             }
             //SkSpawner
-            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(1).GetComponent<Renderer>() != rendererInSight)
+            else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(2).GetComponent<Renderer>() != rendererInSight)
             {
                 OutlineOff();
-                rendererInSight = hit.collider.transform.GetChild(1).GetComponent<Renderer>();
+                rendererInSight = hit.collider.transform.GetChild(2).GetComponent<Renderer>();
+				print (rendererInSight.material);
                 OutlineOn();
                 whatIsInSight = "SkSpawner";
             }
@@ -124,6 +136,7 @@ public class BarkManagement : MonoBehaviour {
         }
         else
         {
+            //Detecting spots------------------------------------------------------------------------------------------
             Vector3 spawnPosition = transform.position + new Vector3(0, -0.8f, 0);
             GameObject barkPart = Instantiate(barkPartPrefab, spawnPosition, Quaternion.identity);
             Destroy(barkPart, 4);
@@ -140,6 +153,29 @@ public class BarkManagement : MonoBehaviour {
 				else
 					spotsDetected.RemoveAt (i);
             }
+
+            //Engage conversation with skeletons--------------------------------------------------------------------
+            float distanceToSkeleton = 20;
+            skDialogueManager nearestSk = null;
+            for(int i=0; i<skDetected.Count; i++)
+            {
+                float newDistance = Vector3.Distance(transform.position, skDetected[i].transform.position);
+                if (newDistance < distanceToSkeleton)
+                {
+                    distanceToSkeleton = newDistance;
+                    nearestSk = skDetected[i];
+                }
+            }
+            if(nearestSk != null && nearestSk.dialogueState != "Dialogue")
+            {
+                if (Random.Range(0, 2) == 0)
+                    nearestSk.dialogueType = "Casual";
+                else
+                    nearestSk.dialogueType = "Hint";
+                nearestSk.dialogueState = "InstantDialogue";
+                nearestSk.StartDialogue();
+            }
+
         }
     }
 

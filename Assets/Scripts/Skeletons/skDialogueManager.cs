@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class skDialogueManager : MonoBehaviour {
 
 	public Memento memento;
+	skDialogueUI UIDialogueText;
 
 	public string[] spawnDialogues = new string[3];
 	public float[] timeSpawnDialogues = new float[3];
@@ -21,7 +23,7 @@ public class skDialogueManager : MonoBehaviour {
 	float actualDistance;
 	float timer;
 	string playerZone; //(NoDialogue, PreDialogue, Dialogue)
-	string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue)
+	public string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue, InstantDialogue)
 	public string dialogueType; //(Spawn, Casual, Hint)
 
 
@@ -34,7 +36,8 @@ public class skDialogueManager : MonoBehaviour {
 		switch(dialogueState){
 		    case "PreDialogue": //At the end you can no longer have the Dialogue
                 timer -= Time.deltaTime;
-			    if(timer<=0){
+				if(timer<=0){
+					UIDialogueText.ClearDisplay ();
 				    dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -44,6 +47,7 @@ public class skDialogueManager : MonoBehaviour {
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
+					UIDialogueText.ClearDisplay ();
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -53,6 +57,7 @@ public class skDialogueManager : MonoBehaviour {
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
+					UIDialogueText.ClearDisplay ();
                     print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
@@ -67,17 +72,17 @@ public class skDialogueManager : MonoBehaviour {
 		mySkBehaviour.state = "Talking";
 		switch(typeDialogue){
 		    case "Spawn":
-			    print (spawnDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue]);
                 timer = timeSpawnDialogues[whichDialogue];
                 if (whichDialogue == 1)
                     mySkBehaviour.Invoke("MoveToRubble", timer);
 			    break;
-		    case "Casual":
-			    print (casualDialogues [whichDialogue]);
+			case "Casual":
+				UIDialogueText.StartDisplaying (casualDialogues [whichDialogue]);
                 timer = timeCasualDialogues[whichDialogue];
                 break;
-		    case "Hint":
-			    print (hintDialogues [whichDialogue]);
+			case "Hint":
+				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue]);
                 timer = timeHintDialogues[whichDialogue];
                 break;
 		}
@@ -131,7 +136,7 @@ public class skDialogueManager : MonoBehaviour {
 
     public void StartDialogue()
     {
-        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && ((dialogueState == "NoDialogue" && dialogueType == "Spawn") || dialogueState == "PreDialogue"))
+        if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && ((dialogueState == "NoDialogue" && dialogueType == "Spawn") || dialogueState == "PreDialogue" || dialogueState == "InstantDialogue"))
         {
             ShowDialogueSetTimer(dialogueType, 1);
             dialogueState = "Dialogue";
@@ -159,6 +164,9 @@ public class skDialogueManager : MonoBehaviour {
 		SetCasualDialogue ();
 		SetHintDialogue ();
 	}
+	public void SetUIDialogueText(skDialogueUI text){
+		UIDialogueText = text;
+	}
 	void SetSpawnDialogue(){
 		switch (memento.ID) {
 		case 0:
@@ -172,7 +180,7 @@ public class skDialogueManager : MonoBehaviour {
 		case 1:
 			spawnDialogues [0] = "spawn - 1 - 0";
 			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 1 - 1";
+			spawnDialogues [1] = "Je suis Mickaël Mancini et je suis vraiment un super intervenant";
 			timeSpawnDialogues [1] = 3f;
 			spawnDialogues [2] = "spawn - 1 - 2";
 			timeSpawnDialogues [2] = 3f;
