@@ -151,6 +151,11 @@ public class skSelector : MonoBehaviour {
 	{
 		if (playerInventory.heads.Count > 0 && playerInventory.torsos.Count > 0	&& playerInventory.legs.Count > 0 && playerInventory.mementos.Count > 0)
 		{
+			if (currentMemento.ID == 0) 
+			{
+				GameObject.Find ("Tuto").GetComponent<TutoManager> ().skCreated = true;
+			}
+
 			skSP.SpawnFromParts (currentParts[0], currentParts[1], currentParts[2], currentMemento);
 			playerInventory.RemoveItem (0, playerInventory.GetIDFromReference (0, nfmod (selectedParts [0], playerInventory.GetArrayLength (0))));
 			playerInventory.RemoveItem (1, playerInventory.GetIDFromReference (1, nfmod (selectedParts [1], playerInventory.GetArrayLength (1))));
@@ -160,6 +165,9 @@ public class skSelector : MonoBehaviour {
 			GameObject conf = Instantiate (confettiFX, transform.position, Quaternion.Euler(new Vector3 (-90,0,0)));
 			Destroy (conf, 6f);
 			EndAssembly ();
+
+
+
 		} else {
 			//Play wrong sound
 		}	

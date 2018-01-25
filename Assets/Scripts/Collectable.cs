@@ -14,6 +14,7 @@ public class Collectable : MonoBehaviour {
 
 	public bool memento;
 	public bool preview = true;
+	public bool floating = true;
 
 	//Iventory
 	public int mementoID;
@@ -26,7 +27,9 @@ public class Collectable : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine ("Floating");
+		if (floating)
+			StartCoroutine ("Floating");
+		
 		player = GameObject.FindWithTag ("Player").GetComponent<Transform>();
 		thisMemento = new Memento (mementoID, mementoName);
 	}
