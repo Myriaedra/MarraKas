@@ -55,19 +55,32 @@ public class skSpawner : MonoBehaviour {
 		//Behaviour
 		torsoObj.AddComponent<NavMeshAgent>();
 
-		skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
-		skBh.SetMemento (memento);
+		if (memento.ID == 0) 
+		{
+			skCaptainBehaviour skCBh  = torsoObj.AddComponent<skCaptainBehaviour> ();
+			skCBh.SetMemento (memento);
+			torsoObj.GetComponentInChildren<Animator> ().enabled = true;
 
-		torsoObj.GetComponentInChildren<Animator> ().enabled = true;
+			torsoObj.tag = "Captain";
 
-		skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
-		dialogueMan.mySkBehaviour = skBh;
-		skBh.mySkDialogueManager = dialogueMan;
-		dialogueMan.SetMemento (memento);
-		dialogueMan.SetUIDialogueText (UIDialogueText);
-		dialogueMan.dialogueType = "Spawn";
-        dialogueMan.StartDialogue();
+		}
+		else 
+		{
+			skBehaviour skBh = torsoObj.AddComponent<skBehaviour> ();
+			skBh.SetMemento (memento);
 
-		torsoObj.tag = "Skeleton";
+			torsoObj.GetComponentInChildren<Animator> ().enabled = true;
+
+			skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
+			dialogueMan.mySkBehaviour = skBh;
+			skBh.mySkDialogueManager = dialogueMan;
+			dialogueMan.SetMemento (memento);
+			dialogueMan.SetUIDialogueText (UIDialogueText);
+			dialogueMan.dialogueType = "Spawn";
+			dialogueMan.StartDialogue();
+
+			torsoObj.tag = "Skeleton";
+		}
+
 	}
 }

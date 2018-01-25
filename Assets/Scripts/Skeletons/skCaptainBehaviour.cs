@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class skBehaviour : MonoBehaviour {
+public class skCaptainBehaviour : MonoBehaviour {
 	
 	NavMeshAgent navMesh;
 	Rigidbody skRb;
-	RubbleManager targetRubble;
-
-	bool moves;
 
 	public Memento memento;
 	public skDialogueManager mySkDialogueManager;
@@ -20,12 +17,8 @@ public class skBehaviour : MonoBehaviour {
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
 		skRb = GetComponent<Rigidbody> ();
-		targetRubble = FindObjectOfType<RubbleManager> ();
-		targetSpot = targetRubble.GetSpotTransform ();
-		if (targetSpot == null)
-		{
-			targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
-		}
+		targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
+
 		//Invoke ("MoveToRubble", 2.0f);
 	}
 
@@ -34,12 +27,10 @@ public class skBehaviour : MonoBehaviour {
 	void Update () {
 		switch(state){
 		case "Moving":
-			if (navMesh != null) 
+			if (targetSpot != null && navMesh.remainingDistance <= 0.1) 
 			{
-				if (targetSpot != null && navMesh.remainingDistance <= 0.1) {
-					navMesh.ResetPath ();
-					transform.rotation = targetSpot.rotation;
-				}
+				navMesh.ResetPath ();
+				transform.rotation = targetSpot.rotation;
 			}
 			break;
 		case "Talking":
@@ -53,13 +44,11 @@ public class skBehaviour : MonoBehaviour {
 
 	public void MoveToRubble()
 	{
-			if ( navMesh != null && targetSpot != null) 
-			{
-				state = "Moving";
-				navMesh.SetDestination (targetSpot.position);
-			}
-		else
-			state = "Idle";
+		if (targetSpot != null)
+		{
+			state = "Moving";
+			navMesh.SetDestination (targetSpot.position);
+		}
 	}
 
 	public void SetMemento (Memento givenMemento)

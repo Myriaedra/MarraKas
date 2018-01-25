@@ -7,10 +7,14 @@ using UnityEngine.Timeline;
 public class TutoManager : MonoBehaviour {
 	public List<GameObject> neededParts;
 
+	public SphereCollider triggerHead;
+	public SphereCollider triggerCabin;
+
 	bool gotLegTorso;
 	bool gotEverything;
 	public bool skCreated;
 	bool tutoEnded;
+	bool captainReady;
 
 	//Timelines
 	int timelineID;
@@ -41,6 +45,7 @@ public class TutoManager : MonoBehaviour {
 		if (skCreated && timelineID == 2) 
 		{
 			StartCoroutine ("Cinematic");
+			triggerCabin.enabled = true;
 		}
 	}
 
@@ -49,6 +54,7 @@ public class TutoManager : MonoBehaviour {
 		neededParts.Remove (part);
 		if (neededParts.Count <= 2 && !gotLegTorso) {
 			gotLegTorso = true;
+			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
 			ActivateCollectability (neededParts [0]);
 			ActivateCollectability (neededParts [1]);
 		} 
@@ -75,11 +81,23 @@ public class TutoManager : MonoBehaviour {
 			if (!gotLegTorso && timelineID == 0) 
 			{
 				StartCoroutine ("Cinematic");
-			}
+			} 
+
 			else if (gotLegTorso && timelineID == 1) 
 			{
 				StartCoroutine ("Cinematic");
+				triggerHead.enabled = false;
+			} 
+
+			else if (!tutoEnded && timelineID == 3 && captainReady) 
+			{
+				StartCoroutine ("Cinematic");
 			}
+		}
+
+		if (other.gameObject.tag == "Captain") 
+		{
+			captainReady = true;
 		}
 	}
 
@@ -93,5 +111,32 @@ public class TutoManager : MonoBehaviour {
 			yield return null;	
 		}
 		PlayerController.controlsAble = true;
+		GameObject captain = GameObject.FindGameObjectWithTag ("Captain");
+
+		if (timelineID == 1) 
+		{
+			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
+		}
+
+		if (timelineID == 3) 
+		{
+			captain.GetComponent<skCaptainBehaviour> ().MoveToRubble ();
+		}
+
+		if (timelineID == 4) 
+		{
+			captain.GetComponent<skCaptainBehaviour> ().enabled = false;
+
+			skBehaviour skBh = captain.AddComponent<skBehaviour> ();
+			skBh.SetMemento (new Memento (0, "Captain Tuto"));
+
+			skDialogueManager dialogueMan = captain.AddComponent<skDialogueManager>();
+			dialogueMan.mySkBehaviour = skBh;
+			skBh.mySkDialogueManager = dialogueMan;
+			dialogueMan.SetMemento (new Memento (0, "Captain Tuto"));
+			dialogueMan.SetUIDialogueText (UIDialogueText);
+
+			captain.tag = "Skeleton";
+		}
 	}
 }

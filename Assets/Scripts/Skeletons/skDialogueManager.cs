@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class skDialogueManager : MonoBehaviour {
 
 	public Memento memento;
-	skDialogueUI UIDialogueText;
+	public skDialogueUI UIDialogueText;
 
 	public string[] spawnDialogues = new string[3];
 	public float[] timeSpawnDialogues = new float[3];
