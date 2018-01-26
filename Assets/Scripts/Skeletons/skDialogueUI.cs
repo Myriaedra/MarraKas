@@ -8,20 +8,21 @@ public class skDialogueUI : MonoBehaviour {
 	Text myText;
     string dialogueName;
 
+
 	void Start(){
 		myText = GetComponent<Text> ();
 	}
 
 	IEnumerator DisplayText(string sentence){
-        myText.text = dialogueName + " : ";
+        myText.text = "";
         int nbChar = 0;
 		foreach(char letter in sentence.ToCharArray ()){
 			myText.text += letter;
 			nbChar++;
-			if(nbChar>30 && letter == ' '){
+			if(nbChar>38 && letter == ' '){
 				nbChar = 0;
 				yield return new WaitForSeconds (0.75f);
-				myText.text = dialogueName + " : " + letter;				
+				myText.text = "" + letter;				
 			}
 			yield return new WaitForSeconds (0.02f);
 		}

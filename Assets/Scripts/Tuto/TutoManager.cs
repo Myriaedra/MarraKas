@@ -28,10 +28,13 @@ public class TutoManager : MonoBehaviour {
 	int previousID;
 	public string[] tutoDialogues;
 
+	Animator boxDialogueAnim;
+
 	// Use this for initialization
 	void Start () {
 		previousID = -1;
 		dialogueID = -1f;
+		boxDialogueAnim = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -39,7 +42,7 @@ public class TutoManager : MonoBehaviour {
 		if (previousID != Mathf.FloorToInt(dialogueID) )
 		{
 			previousID = Mathf.FloorToInt(dialogueID);
-			//UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)]);
+			UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)], "Captain Tuto");
 		}
 
 		if (skCreated && timelineID == 2) 
@@ -54,7 +57,7 @@ public class TutoManager : MonoBehaviour {
 		neededParts.Remove (part);
 		if (neededParts.Count <= 2 && !gotLegTorso) {
 			gotLegTorso = true;
-			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
+			//transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
 			ActivateCollectability (neededParts [0]);
 			ActivateCollectability (neededParts [1]);
 		} 
@@ -104,6 +107,7 @@ public class TutoManager : MonoBehaviour {
 	IEnumerator Cinematic()
 	{
 		PlayerController.controlsAble = false;
+		boxDialogueAnim.SetBool("opened", true);
 		pD.Play (timelines [timelineID]);
 		timelineID++;
 		while (pD.state == PlayState.Playing) 
@@ -111,12 +115,14 @@ public class TutoManager : MonoBehaviour {
 			yield return null;	
 		}
 		PlayerController.controlsAble = true;
+		boxDialogueAnim.SetBool("opened", false);
+		UIDialogueText.ClearDisplay ();
 		GameObject captain = GameObject.FindGameObjectWithTag ("Captain");
 
-		if (timelineID == 1) 
+		/*if (timelineID == 1) 
 		{
 			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
-		}
+		}*/
 
 		if (timelineID == 3) 
 		{
