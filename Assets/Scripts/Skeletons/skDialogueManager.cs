@@ -26,11 +26,21 @@ public class skDialogueManager : MonoBehaviour {
 	string playerZone; //(NoDialogue, PreDialogue, Dialogue)
 	public string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue, InstantDialogue)
 	public string dialogueType; //(Spawn, Casual, Hint)
+    string dialogueName;
+
+    Animator olala;
+    /*public AnimationCurve animCurveBoxMove;
+    RectTransform textContainerTransform;
+    float positionDown = -513;
+    float positionUp = -392;*/
 
 
-
-	void Start(){
-		StartCoroutine (CheckDistanceToPlayer ());
+    void Awake()
+    {
+        olala = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
+        /*textContainerTransform = GameObject.Find("BoxDialogueContainer").GetComponent<RectTransform>();
+        print(textContainerTransform.name);*/
+        StartCoroutine (CheckDistanceToPlayer ());
 	} // Start checkDistance coroutine
 
 	void Update(){
@@ -39,7 +49,8 @@ public class skDialogueManager : MonoBehaviour {
                 timer -= Time.deltaTime;
 				if(timer<=0){
 					UIDialogueText.ClearDisplay ();
-				    dialogueState = "NoDialogue";
+                    olala.SetBool("opened", false);
+                    dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
 			    }
@@ -49,6 +60,7 @@ public class skDialogueManager : MonoBehaviour {
                 if (timer <= 0)
                 {
 					UIDialogueText.ClearDisplay ();
+                    olala.SetBool("opened", false);
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -59,6 +71,7 @@ public class skDialogueManager : MonoBehaviour {
                 if (timer <= 0)
                 {
 					UIDialogueText.ClearDisplay ();
+                    olala.SetBool("opened", false);
                     print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
@@ -68,22 +81,24 @@ public class skDialogueManager : MonoBehaviour {
 		}
 	} // decrease timers and apply events 
 
-	public void ShowDialogueSetTimer(string typeDialogue /*(Spawn, Casual, Hint)*/, int whichDialogue){
-		PlayerController.pc.beingTalkedTo = gameObject;
+	public void ShowDialogueSetTimer(string typeDialogue /*(Spawn, Casual, Hint)*/, int whichDialogue)
+    {
+        olala.SetBool("opened", true);
+        PlayerController.pc.beingTalkedTo = gameObject;
 		mySkBehaviour.state = "Talking";
 		switch(typeDialogue){
 		    case "Spawn":
-				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue], dialogueName);
                 timer = timeSpawnDialogues[whichDialogue];
                 if (whichDialogue == 1)
                     mySkBehaviour.Invoke("MoveToRubble", timer);
 			    break;
 			case "Casual":
-				UIDialogueText.StartDisplaying (casualDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (casualDialogues [whichDialogue], dialogueName);
                 timer = timeCasualDialogues[whichDialogue];
                 break;
 			case "Hint":
-				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue], dialogueName);
                 timer = timeHintDialogues[whichDialogue];
                 break;
 		}
@@ -153,14 +168,38 @@ public class skDialogueManager : MonoBehaviour {
         }
     } // engage OutDialogue si on sort de la zone Dialogue alors qu'il était en train de parler
 
+   /* IEnumerator DisplayBoxMove(bool up)
+    {
+        float actualTime = 0f;
+        Vector3 pos = textContainerTransform.anchoredPosition;
+        Vector3 newPosition;
+        Vector3 oldPosition;
+        if (up)
+        {
+            newPosition = new Vector3(pos.x, positionUp, pos.z);
+            oldPosition = new Vector3(pos.x, positionDown, pos.z);
+        }
+        else
+        {
+            newPosition = new Vector3(pos.x, positionDown, pos.z);
+            oldPosition = new Vector3(pos.x, positionUp, pos.z);
+        }
+        while (actualTime < 0.37f)
+        {
+            actualTime += 0.02f;
+            textContainerTransform.anchoredPosition = Vector3.Lerp(oldPosition, newPosition, animCurveBoxMove.Evaluate(actualTime));
+            yield return new WaitForSeconds(0.02f);
+        }
+    }*/
 
-	//A NOTER : QUAND ON BARK PRES D'UN PNJ, CELUI-CI NOUS SORT UNE PHRASE DE DIALOGUE DE TYPE "DIALOGUE"
 
-
+    //A NOTER : QUAND ON BARK PRES D'UN PNJ, CELUI-CI NOUS SORT UNE PHRASE DE DIALOGUE DE TYPE "DIALOGUE"
     
-	public void SetMemento(Memento mementoParam)
+
+    public void SetMemento(Memento mementoParam)
 	{
 		memento = mementoParam;
+        dialogueName = memento.name;
 		SetDialogues ();
 	}
 	public void SetUIDialogueText(skDialogueUI text){
