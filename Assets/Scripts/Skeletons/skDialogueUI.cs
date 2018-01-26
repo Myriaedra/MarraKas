@@ -6,21 +6,22 @@ using UnityEngine.UI;
 public class skDialogueUI : MonoBehaviour {
 
 	Text myText;
+    string dialogueName;
 
 	void Start(){
 		myText = GetComponent<Text> ();
 	}
 
 	IEnumerator DisplayText(string sentence){
-		myText.text = "";
-		int nbChar = 0;
+        myText.text = dialogueName + " : ";
+        int nbChar = 0;
 		foreach(char letter in sentence.ToCharArray ()){
 			myText.text += letter;
 			nbChar++;
 			if(nbChar>38 && letter == ' '){
 				nbChar = 0;
 				yield return new WaitForSeconds (0.25f);
-				myText.text = "" + letter;				
+				myText.text = dialogueName + " : " + letter;				
 			}
 			yield return new WaitForSeconds (0.02f);
 
@@ -31,8 +32,9 @@ public class skDialogueUI : MonoBehaviour {
 		myText.text = "";
 	}
 
-	public void StartDisplaying(string newSentence){
+	public void StartDisplaying(string newSentence, string newName){
 		StopAllCoroutines ();
-		StartCoroutine (DisplayText (newSentence));
+        dialogueName = newName;
+        StartCoroutine (DisplayText (newSentence));
 	}
 }
