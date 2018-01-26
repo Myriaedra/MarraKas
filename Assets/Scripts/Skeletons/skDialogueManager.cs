@@ -17,6 +17,7 @@ public class skDialogueManager : MonoBehaviour {
 	public string[] hintDialogues = new string[3];
 	public float[] timeHintDialogues = new float[3];
 	public skBehaviour mySkBehaviour;
+    public skSpawner mySkSpawner;
 
 	float distancePreDialogue = 16;
 	float distanceDialogue = 6;
@@ -26,18 +27,23 @@ public class skDialogueManager : MonoBehaviour {
 	public string dialogueState = "NoDialogue"; //(NoDialogue, PreDialogue, Dialogue, OutDialogue, InstantDialogue)
 	public string dialogueType; //(Spawn, Casual, Hint)
 
+    Animator boxDialogueAnim;
 
 
-	void Start(){
+
+	void Awake(){
 		StartCoroutine (CheckDistanceToPlayer ());
+        boxDialogueAnim = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
 	} // Start checkDistance coroutine
 
 	void Update(){
 		switch(dialogueState){
 		    case "PreDialogue": //At the end you can no longer have the Dialogue
                 timer -= Time.deltaTime;
-				if(timer<=0){
-					UIDialogueText.ClearDisplay ();
+				if(timer<=0)
+                {
+                    boxDialogueAnim.SetBool("opened", false);
+                    UIDialogueText.ClearDisplay ();
 				    dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -47,7 +53,8 @@ public class skDialogueManager : MonoBehaviour {
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
-					UIDialogueText.ClearDisplay ();
+                    boxDialogueAnim.SetBool("opened", false);
+                    UIDialogueText.ClearDisplay ();
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -57,7 +64,8 @@ public class skDialogueManager : MonoBehaviour {
                 timer -= Time.deltaTime;
                 if (timer <= 0)
                 {
-					UIDialogueText.ClearDisplay ();
+                    boxDialogueAnim.SetBool("opened", false);
+                    UIDialogueText.ClearDisplay ();
                     print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
@@ -68,21 +76,22 @@ public class skDialogueManager : MonoBehaviour {
 	} // decrease timers and apply events 
 
 	public void ShowDialogueSetTimer(string typeDialogue /*(Spawn, Casual, Hint)*/, int whichDialogue){
-		PlayerController.pc.beingTalkedTo = gameObject;
+        boxDialogueAnim.SetBool("opened", true);
+        PlayerController.pc.beingTalkedTo = gameObject;
 		mySkBehaviour.state = "Talking";
 		switch(typeDialogue){
 		    case "Spawn":
-				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue], memento.name);
                 timer = timeSpawnDialogues[whichDialogue];
                 if (whichDialogue == 1)
                     mySkBehaviour.Invoke("MoveToRubble", timer);
 			    break;
 			case "Casual":
-				UIDialogueText.StartDisplaying (casualDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (casualDialogues [whichDialogue], memento.name);
                 timer = timeCasualDialogues[whichDialogue];
                 break;
 			case "Hint":
-				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue]);
+				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue], memento.name);
                 timer = timeHintDialogues[whichDialogue];
                 break;
 		}
@@ -160,119 +169,20 @@ public class skDialogueManager : MonoBehaviour {
 	public void SetMemento(Memento mementoParam)
 	{
 		memento = mementoParam;
-		SetSpawnDialogue ();
-		SetCasualDialogue ();
-		SetHintDialogue ();
+        SetDialogues();
 	}
 	public void SetUIDialogueText(skDialogueUI text){
 		UIDialogueText = text;
 	}
-	void SetSpawnDialogue(){
-		switch (memento.ID) {
-		case 0:
-			spawnDialogues [0] = "spawn - 0 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 0 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 0 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 1:
-			spawnDialogues [0] = "spawn - 1 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "Je suis Mickaël Mancini et je suis vraiment un super intervenant";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 1 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 2:
-			spawnDialogues [0] = "spawn - 2 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 2 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 2 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		case 3:
-			spawnDialogues [0] = "spawn - 3 - 0";
-			timeSpawnDialogues [0] = 3f;
-			spawnDialogues [1] = "spawn - 3 - 1";
-			timeSpawnDialogues [1] = 3f;
-			spawnDialogues [2] = "spawn - 3 - 2";
-			timeSpawnDialogues [2] = 3f;
-			break;
-		}
-	}
-	void SetCasualDialogue(){
-		switch (memento.ID) {
-		case 0:
-			casualDialogues [0] = "casual - 0 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 0 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 0 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 1:
-			casualDialogues [0] = "casual - 1 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 1 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 1 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 2:
-			casualDialogues [0] = "casual - 2 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 2 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 2 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		case 3:
-			casualDialogues [0] = "casual - 3 - 0";
-			timeCasualDialogues [0] = 3f;
-			casualDialogues [1] = "casual - 3 - 1";
-			timeCasualDialogues [1] = 3f;
-			casualDialogues [2] = "casual - 3 - 2";
-			timeCasualDialogues [2] = 3f;
-			break;
-		}
-	}
-	void SetHintDialogue(){
-		switch (memento.ID) {
-		case 0:
-			hintDialogues [0] = "hint - 0 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 0 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 0 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 1:
-			hintDialogues [0] = "hint - 1 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 1 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 1 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 2:
-			hintDialogues [0] = "hint - 2 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 2 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 2 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		case 3:
-			hintDialogues [0] = "hint - 3 - 0";
-			timeHintDialogues [0] = 3f;
-			hintDialogues [1] = "hint - 3 - 1";
-			timeHintDialogues [1] = 3f;
-			hintDialogues [2] = "hint - 3 - 2";
-			timeHintDialogues [2] = 3f;
-			break;
-		}
-	}
+    void SetDialogues()
+    {
+        spawnDialogues = mySkSpawner.dialogues[memento.ID].spawnDialogues;
+        timeSpawnDialogues = mySkSpawner.dialogues[memento.ID].timeSpawnDialogues;
+
+        casualDialogues = mySkSpawner.dialogues[memento.ID].casualDialogues;
+        timeCasualDialogues = mySkSpawner.dialogues[memento.ID].timeCasualDialogues;
+
+        hintDialogues = mySkSpawner.dialogues[memento.ID].hintDialogues;
+        timeHintDialogues = mySkSpawner.dialogues[memento.ID].timeHintDialogues;
+    }
 }

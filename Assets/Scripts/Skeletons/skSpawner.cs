@@ -8,7 +8,7 @@ public class skSpawner : MonoBehaviour {
 	PartsReference pRef;
 	public skDialogueUI UIDialogueText;
 
-	public DialogueSet[] didi = new DialogueSet[3];
+	public DialogueSet[] dialogues = new DialogueSet[3];
 
 	// Use this for initialization
 	void Start () {
@@ -74,7 +74,8 @@ public class skSpawner : MonoBehaviour {
 			skDialogueManager dialogueMan = torsoObj.AddComponent<skDialogueManager>();
 			dialogueMan.mySkBehaviour = skBh;
 			skBh.mySkDialogueManager = dialogueMan;
-			dialogueMan.SetMemento (memento);
+            dialogueMan.mySkSpawner = GetComponent<skSpawner>();
+            dialogueMan.SetMemento (memento);
 			dialogueMan.SetUIDialogueText (UIDialogueText);
 			dialogueMan.dialogueType = "Spawn";
 			dialogueMan.StartDialogue();

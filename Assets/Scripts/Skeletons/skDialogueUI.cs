@@ -18,13 +18,12 @@ public class skDialogueUI : MonoBehaviour {
 		foreach(char letter in sentence.ToCharArray ()){
 			myText.text += letter;
 			nbChar++;
-			if(nbChar>38 && letter == ' '){
+			if(nbChar>30 && letter == ' '){
 				nbChar = 0;
-				yield return new WaitForSeconds (0.25f);
+				yield return new WaitForSeconds (0.75f);
 				myText.text = dialogueName + " : " + letter;				
 			}
 			yield return new WaitForSeconds (0.02f);
-
 		}
 	}
 

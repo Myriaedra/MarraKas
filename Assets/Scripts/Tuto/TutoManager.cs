@@ -39,7 +39,7 @@ public class TutoManager : MonoBehaviour {
 		if (previousID != Mathf.FloorToInt(dialogueID) )
 		{
 			previousID = Mathf.FloorToInt(dialogueID);
-			UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)]);
+			//UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)]);
 		}
 
 		if (skCreated && timelineID == 2) 
