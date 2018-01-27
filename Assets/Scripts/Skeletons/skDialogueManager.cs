@@ -81,8 +81,9 @@ public class skDialogueManager : MonoBehaviour {
 		mySkBehaviour.state = "Talking";
 		switch(typeDialogue){
 		    case "Spawn":
-				UIDialogueText.StartDisplaying (spawnDialogues [whichDialogue], memento.name);
-                timer = timeSpawnDialogues[whichDialogue];
+				UIDialogueText.StartDisplaying (spawnDialogues [0], memento.name);
+                timer = timeSpawnDialogues[0];
+                typeDialogue = "Casual";
                 if (whichDialogue == 1)
                     mySkBehaviour.Invoke("MoveToRubble", timer);
 			    break;

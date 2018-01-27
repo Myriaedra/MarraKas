@@ -9,6 +9,7 @@ public class BarkManagement : MonoBehaviour {
     [HideInInspector]
     public List<Transform> spotsDetected = new List<Transform>();
     public List<skDialogueManager> skDetected = new List<skDialogueManager>();
+    public List<Animator> clochesDetected = new List<Animator>();
     [Space(5)]
     public PlayerController playerController;
     [Space(5)]
@@ -40,15 +41,21 @@ public class BarkManagement : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Spot")
+        if (other.tag == "Spot")
         {
             Transform actualSpot = other.GetComponent<Transform>();
             spotsDetected.Add(actualSpot);
         }
-        else if(other.tag == "Skeleton")
+        else if (other.tag == "Skeleton")
         {
             skDialogueManager newSkeleton = other.GetComponent<skDialogueManager>();
             skDetected.Add(newSkeleton);
+        }
+        else if (other.tag == "Cloche")
+        {
+            Animator newCloche = other.GetComponent<Animator>();
+            clochesDetected.Add(newCloche);
+            print("hey");
         }
     }//new spot in list
 
@@ -175,7 +182,11 @@ public class BarkManagement : MonoBehaviour {
                 nearestSk.dialogueState = "InstantDialogue";
                 nearestSk.StartDialogue();
             }
-
+        }
+        //Ringing Bells---------------
+        for (int i = 0; i < clochesDetected.Count; i++)
+        {
+            clochesDetected[i].SetTrigger("Ringing");
         }
     }
 

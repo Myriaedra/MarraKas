@@ -17,10 +17,9 @@ public class FleurScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 5f && !disappearing)
+		if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 5f && !disappearing && actualWaypoint<waypoints.Length-1)
         {
             disappearing = true;
-            print("hey");
             meshAnim.SetTrigger("Disappearing");
         }
 	}
@@ -35,5 +34,6 @@ public class FleurScript : MonoBehaviour {
     public void Reappear()
     {
         part.Play();
+        disappearing = false;
     }
 }
