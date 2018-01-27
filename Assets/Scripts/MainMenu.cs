@@ -13,12 +13,17 @@ public class MainMenu : MonoBehaviour {
 		buttons = GetComponentsInChildren<Button> ();
 		islandName = GetComponentInChildren<InputField> ();
 		islandName.gameObject.SetActive (false);
+		if (PlayerPrefs.HasKey("Name"))
+			print(PlayerPrefs.GetString("Name"));
+		else
+			print("no way !");
 	}
 
 	// Use this for initialization
 	public void StartNewGame()
 	{
 		SceneManager.LoadScene ("Beach_rubble");
+		PlayerPrefs.SetString ("Name", islandName.text);
 	}
 
 	public void BeginNameInput()
@@ -28,6 +33,7 @@ public class MainMenu : MonoBehaviour {
 			butt.gameObject.SetActive (false);
 		}
 		islandName.gameObject.SetActive (true);
+		islandName.ActivateInputField ();
 	}
 
 	public void QuitGame()
