@@ -8,7 +8,6 @@ public class DigManager : MonoBehaviour {
 	public ParticleSystem digFX;
 	public Canvas partPreview;
 	PartsReference pRef;
-	public BarkManagement barkMan;
 	public PlayerController player;
 
 	void Start()
@@ -19,52 +18,52 @@ public class DigManager : MonoBehaviour {
 	void Update()
 	{
 		if (Input.GetButtonDown ("Dig") && !digInput && PlayerController.controlsAble) {
-			digInput = true;	
+			digInput = true;
 		} else if (digInput) {
 			digInput = false;
 		}
-
-		/*if (Input.GetKeyDown ("x")) { //Test for preview
-			PartPreview (0, 1);
-		}*/
 	}
 
 	void OnTriggerStay(Collider other)
 	{
 		float distance = Vector3.Distance (other.transform.position, transform.position);
+        //SPOT------------------------------------------------------------------------------------------------
 		if (other.tag == "Spot" && digInput && distance<3f) 
 		{
 			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
 			PlayerController.controlsAble = false;
 			digInput = false;
 		}
-
-		if (other.tag == "Rubble" && digInput && distance<4f) 
+        //RUBBLE----------------------------------------------------------------------------------------------
+		else if (other.tag == "Rubble" && digInput && distance<6f) 
 		{
 			RubbleManager rubMan = other.gameObject.GetComponent<RubbleManager> ();
-			if (rubMan.readyToDig) 
+			if (rubMan.readyToDig)
 			{
 				rubMan.StartCoroutine ("RubbleClear");
 				PlayerController.controlsAble = false;
 			}
 			digInput = false;
 		}
+        else if(other.tag == "Baril" && digInput && distance < 2f)
+        {
+            Rigidbody rbBaril = other.GetComponent<Rigidbody>();
+            rbBaril.freezeRotation = false;
+            rbBaril.isKinematic = false;
+            rbBaril.AddForce (new Vector3(0, 50, 0));
+        }
 	}
 
 	IEnumerator Dig(SpotManager diggedSpot) 
 	{
 		Debug.Log ("You digged out the " + diggedSpot.type + " number " + diggedSpot.part);
 		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part);
-		//print (diggedSpot.gameObject.GetComponent<Animator> ());
-		//barkMan.spotsDetected.Remove(barkMan.spotsDetected.Find(diggedSpot.gameObject.GetComponent<Animator>()));//Add the sk part in the inventory
 		ParticleSystem instDigFX = Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
 		Destroy(instDigFX, 2f);
 
 		yield return new WaitForSeconds (2f);
 
-
 		PartPreview (diggedSpot.type, diggedSpot.part); //Instantiate canvas with preview of the sk part
-		//Destroy (fx, 1.5f);
 		Destroy (diggedSpot.transform.gameObject);
 	}
 
@@ -96,7 +95,6 @@ public class DigManager : MonoBehaviour {
 				break;
 
 		}
-		//foundPart.AddComponent<Rotator>();
 	}
 }
 
