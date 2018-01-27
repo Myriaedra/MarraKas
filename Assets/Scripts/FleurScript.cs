@@ -5,13 +5,14 @@ using UnityEngine;
 public class FleurScript : MonoBehaviour {
 
     public Transform[] waypoints;
-    int actualWaypoint = 0;
+    int actualWaypoint = -1;
     public Animator meshAnim;
     bool disappearing = false;
+    public ParticleSystem part;
 
 	// Use this for initialization
 	void Start () {
-		
+
 	}
 	
 	// Update is called once per frame
@@ -24,9 +25,15 @@ public class FleurScript : MonoBehaviour {
         }
 	}
 
-    public void ChangeWaypoint()
+    public void Disappear()
     {
+        part.Pause();
         actualWaypoint++;
         transform.position = waypoints[actualWaypoint].position;
+    }
+
+    public void Reappear()
+    {
+        part.Play();
     }
 }

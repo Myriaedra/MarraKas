@@ -16,8 +16,12 @@ public class MeshFleurScript : MonoBehaviour {
 		
 	}
 
-    public void ChangeWaypoint()
+    public void Disappear()
     {
-        fleurScript.ChangeWaypoint();
+        fleurScript.Disappear();
+    }
+    public void Reappear()
+    {
+        fleurScript.Reappear();
     }
 }
