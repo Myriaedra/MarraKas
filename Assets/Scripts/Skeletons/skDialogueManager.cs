@@ -66,7 +66,7 @@ public class skDialogueManager : MonoBehaviour {
                 {
                     boxDialogueAnim.SetBool("opened", false);
                     UIDialogueText.ClearDisplay ();
-                    print("here comes an event ?");
+                    //print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();
                     PlayerController.pc.beingTalkedTo = null;
@@ -175,6 +175,7 @@ public class skDialogueManager : MonoBehaviour {
 	public void SetUIDialogueText(skDialogueUI text){
 		UIDialogueText = text;
 	}
+
     void SetDialogues()
     {
         spawnDialogues = mySkSpawner.dialogues[memento.ID].spawnDialogues;

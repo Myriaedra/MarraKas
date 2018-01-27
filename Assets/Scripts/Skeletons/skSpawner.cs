@@ -21,10 +21,10 @@ public class skSpawner : MonoBehaviour {
 		
 	}
 
-	public void SpawnFromParts (int headID, int torsoID, int legID)
+	public void SpawnFromParts (int headID, int torsoID, int legID, Memento memento, Vector3 position) //Used for false arrival
 	{
 		//Spawn 3 parts (with head and leg child of torso)
-		GameObject spawnedTorso = Instantiate (pRef.torsoPrefabs [torsoID], new Vector3 (0, 0, 0), Quaternion.identity);
+		GameObject spawnedTorso = Instantiate (pRef.torsoPrefabs [torsoID], position, Quaternion.identity);
 		GameObject spawnedHead = Instantiate(pRef.headPrefabs[headID], spawnedTorso.transform);
 		GameObject spawnedLeg = Instantiate(pRef.legPrefabs[legID], spawnedTorso.transform);
 
@@ -34,10 +34,32 @@ public class skSpawner : MonoBehaviour {
 		skPA.AddLimb (spawnedHead, spawnedTorso);
 		skPA.AddLimb (spawnedLeg, spawnedTorso);
 
-		spawnedTorso.AddComponent<Rigidbody> ();
+		CapsuleCollider capCo = spawnedTorso.AddComponent<CapsuleCollider> ();
+		capCo.height = 2f;
+		capCo.center = new Vector3 (0f, 1f, 0f);
+		Rigidbody rB = spawnedTorso.AddComponent<Rigidbody> ();
+		rB.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+		rB.isKinematic = true;
+		//Behaviour
+		spawnedTorso.AddComponent<NavMeshAgent>();
+		skBehaviour skBh = spawnedTorso.AddComponent<skBehaviour> ();
+		skBh.SetMemento (memento);
+
+		spawnedTorso.GetComponentInChildren<Animator> ().enabled = true;
+
+		/*skDialogueManager dialogueMan = spawnedTorso.AddComponent<skDialogueManager>();
+		dialogueMan.mySkBehaviour = skBh;
+		skBh.mySkDialogueManager = dialogueMan;
+		dialogueMan.mySkSpawner = GetComponent<skSpawner>();
+		dialogueMan.SetMemento (memento);
+		dialogueMan.SetUIDialogueText (UIDialogueText);
+		dialogueMan.dialogueType = "Casual";
+		//dialogueMan.StartDialogue();*/
+
+		spawnedTorso.tag = "Skeleton";
 	}
 
-	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj, Memento memento)
+	public void SpawnFromParts (GameObject headObj, GameObject torsoObj, GameObject legObj, Memento memento) 
 	{
 		
 		//Add the adder script to torso

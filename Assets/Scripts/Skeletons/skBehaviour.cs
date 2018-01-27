@@ -20,11 +20,13 @@ public class skBehaviour : MonoBehaviour {
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
 		skRb = GetComponent<Rigidbody> ();
-		targetRubble = FindObjectOfType<RubbleManager> ();
-		targetSpot = targetRubble.GetSpotTransform ();
-		if (targetSpot == null)
+		if (memento.ID != 0) 
 		{
-			targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
+			targetRubble = FindObjectOfType<RubbleManager> ();
+			targetSpot = targetRubble.GetSpotTransform ();
+			if (targetSpot == null) {
+				targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
+			}
 		}
 		//Invoke ("MoveToRubble", 2.0f);
 	}

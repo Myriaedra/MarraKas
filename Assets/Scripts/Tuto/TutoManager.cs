@@ -32,11 +32,18 @@ public class TutoManager : MonoBehaviour {
 
 	Animator boxDialogueAnim;
 
+	//Elements
+	public GameObject[] digSpots;
+	public GameObject[] mementos;
+
 	// Use this for initialization
 	void Start () {
 		previousID = -1;
 		dialogueID = -1f;
 		boxDialogueAnim = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
+
+		StoreElements ();
+		SetElementsActive (false);
 	}
 	
 	// Update is called once per frame
@@ -140,12 +147,42 @@ public class TutoManager : MonoBehaviour {
 			skBh.SetMemento (new Memento (0, "Captain Tuto"));
 
 			skDialogueManager dialogueMan = captain.AddComponent<skDialogueManager>();
+			print (GameObject.FindGameObjectWithTag ("SkSpawner").name);
+			dialogueMan.mySkSpawner = GameObject.Find("SkSpawner").GetComponent<skSpawner>();
 			dialogueMan.mySkBehaviour = skBh;
 			skBh.mySkDialogueManager = dialogueMan;
 			dialogueMan.SetMemento (new Memento (0, "Captain Tuto"));
 			dialogueMan.SetUIDialogueText (UIDialogueText);
 
 			captain.tag = "Skeleton";
+
+			tutoEnded = true;
+			SetElementsActive (true);
+			Destroy (gameObject);
+
+		}
+	}
+
+	void StoreElements()
+	{
+		digSpots = GameObject.FindGameObjectsWithTag ("Spot");
+		mementos = GameObject.FindGameObjectsWithTag ("Collectable");
+	}
+
+	void SetElementsActive(bool value)
+	{
+		for (int i = 0; i < digSpots.Length; i++) 
+		{
+			if (digSpots [i] != null) 
+			{
+				if (!digSpots [i].GetComponent<TutoPart> ())
+					digSpots [i].SetActive (value);
+			}
+		}
+
+		for (int j = 0; j < mementos.Length; j++) 
+		{
+			mementos [j].SetActive (value);
 		}
 	}
 }
