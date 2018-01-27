@@ -21,6 +21,8 @@ public class TutoManager : MonoBehaviour {
 	public TimelineAsset[] timelines;
 	public PlayableDirector pD;
 
+	public bool barkTuto;
+
 
 	//Dialogues
 	public skDialogueUI UIDialogueText;
@@ -119,10 +121,11 @@ public class TutoManager : MonoBehaviour {
 		UIDialogueText.ClearDisplay ();
 		GameObject captain = GameObject.FindGameObjectWithTag ("Captain");
 
-		/*if (timelineID == 1) 
+		if (timelineID == 1) 
 		{
-			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
-		}*/
+			//transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
+			barkTuto = true;
+		}
 
 		if (timelineID == 3) 
 		{
