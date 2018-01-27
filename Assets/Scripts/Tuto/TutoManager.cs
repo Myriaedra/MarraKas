@@ -21,6 +21,8 @@ public class TutoManager : MonoBehaviour {
 	public TimelineAsset[] timelines;
 	public PlayableDirector pD;
 
+	public bool barkTuto;
+
 
 	//Dialogues
 	public skDialogueUI UIDialogueText;
@@ -35,7 +37,6 @@ public class TutoManager : MonoBehaviour {
 		previousID = -1;
 		dialogueID = -1f;
 		boxDialogueAnim = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
-		boxDialogueAnim.SetBool("opened", true);
 	}
 	
 	// Update is called once per frame
@@ -120,10 +121,11 @@ public class TutoManager : MonoBehaviour {
 		UIDialogueText.ClearDisplay ();
 		GameObject captain = GameObject.FindGameObjectWithTag ("Captain");
 
-		/*if (timelineID == 1) 
+		if (timelineID == 1) 
 		{
-			transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
-		}*/
+			//transform.GetComponentInChildren<skDialogueManager> ().enabled = true;
+			barkTuto = true;
+		}
 
 		if (timelineID == 3) 
 		{
