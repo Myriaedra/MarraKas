@@ -52,6 +52,12 @@ public class DigManager : MonoBehaviour {
             rbBaril.isKinematic = false;
             rbBaril.AddForce (new Vector3(0, 50, 0));
         }
+        else if(other.tag == "Pebble" && digInput && distance < 2f)
+        {
+            Rigidbody rbPebble = other.GetComponent<Rigidbody>();
+            rbPebble.isKinematic = false;
+            rbPebble.AddForce(-transform.forward * 150 + transform.up * 100);
+        }
 	}
 
 	IEnumerator Dig(SpotManager diggedSpot) 
