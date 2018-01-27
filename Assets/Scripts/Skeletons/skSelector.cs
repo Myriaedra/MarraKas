@@ -57,6 +57,7 @@ public class skSelector : MonoBehaviour {
 			if (Input.GetButtonDown ("Cancel")) 
 			{
 				DestroyCurrentParts ();
+				StopAllCoroutines ();
 				EndAssembly ();
 			}
 		} 

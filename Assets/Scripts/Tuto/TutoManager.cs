@@ -35,6 +35,7 @@ public class TutoManager : MonoBehaviour {
 		previousID = -1;
 		dialogueID = -1f;
 		boxDialogueAnim = GameObject.Find("BoxDialogueContainer").GetComponent<Animator>();
+		boxDialogueAnim.SetBool("opened", true);
 	}
 	
 	// Update is called once per frame
