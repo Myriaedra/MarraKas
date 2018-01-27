@@ -17,12 +17,16 @@ public class FleurScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 5f && !disappearing && actualWaypoint<waypoints.Length-1)
+		if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 7f && !disappearing && actualWaypoint<waypoints.Length-1)
         {
             disappearing = true;
             meshAnim.SetTrigger("Disappearing");
         }
-	}
+        else if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 7f && actualWaypoint >= waypoints.Length - 1){
+            meshAnim.SetTrigger("Destroy");
+        }
+
+    }
 
     public void Disappear()
     {
@@ -35,5 +39,10 @@ public class FleurScript : MonoBehaviour {
     {
         part.Play();
         disappearing = false;
+    }
+
+    public void DestroyFlower()
+    {
+        Destroy(gameObject);
     }
 }
