@@ -55,7 +55,6 @@ public class BarkManagement : MonoBehaviour {
         {
             Animator newCloche = other.GetComponent<Animator>();
             clochesDetected.Add(newCloche);
-            print("hey");
         }
     }//new spot in list
 

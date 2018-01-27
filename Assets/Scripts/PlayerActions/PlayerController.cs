@@ -58,14 +58,6 @@ public class PlayerController : MonoBehaviour {
 
 	void Update()//--------------------------------------------------------------------------------------------------------------------------
 	{
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            if (controlsAble)
-                controlsAble = false;
-            else
-                controlsAble = true;
-        }
-
         //JUMP MANAGEMENT
         if (Input.GetButtonDown("Jump") && IsGrounded() && controlsAble)
         {
