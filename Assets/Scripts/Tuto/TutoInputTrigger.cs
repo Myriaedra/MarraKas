@@ -23,7 +23,7 @@ public class TutoInputTrigger : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-		if (!moved && (Input.GetAxis ("Horizontal") > 0.2 || Input.GetAxis ("Horizontal") < -0.2 || Input.GetAxis ("Vertical") > 0.2 || Input.GetAxis ("Vertcial") < -0.2)) 
+		if (!moved && (Input.GetAxis ("Horizontal") > 0.2 || Input.GetAxis ("Horizontal") < -0.2 || Input.GetAxis ("Vertical") > 0.2 || Input.GetAxis ("Vertical") < -0.2)) 
 		{
 			moved = true;
 			rTImage.enabled = true;
