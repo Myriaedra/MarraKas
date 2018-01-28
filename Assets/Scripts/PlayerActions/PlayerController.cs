@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 	Rigidbody rb;
 	bool landed = false;
 
+    string feedbackCoroutineRunning = "Nothing";
+
 
 
     [Header("GroundValues : ")]
@@ -44,6 +46,12 @@ public class PlayerController : MonoBehaviour {
     public float airSprintMaxSpeed;
     public float airSprintDragValue;
 
+    [Header("Feedbacks Values : ")]
+    public float vignetteDefaultValue;
+    public float vignetteSprintValue;
+    public float fovDefaultValue;
+    public float fovSprintValue;
+
     [Header("OtherValues : ")]
     public float jumpForce;
 
@@ -55,8 +63,8 @@ public class PlayerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
 		pc = GetComponent<PlayerController> ();
 	}
-
-	void Update()//--------------------------------------------------------------------------------------------------------------------------
+    
+	void Update()//JUMP MANAGEMENT--------------------------------------------------------------------------------------------------------------------------
 	{
         //JUMP MANAGEMENT
         if (Input.GetButtonDown("Jump") && IsGrounded() && controlsAble)
@@ -65,7 +73,7 @@ public class PlayerController : MonoBehaviour {
         }
 	}
 
-	void FixedUpdate ()//-------------------------------------------------------------------------------------------------------------------
+	void FixedUpdate ()//AIR OR GROUND MOVEMENT --> Check ControlsAble------------------------------------------------------------------------------------
 	{
         if (controlsAble)
         {
@@ -87,7 +95,7 @@ public class PlayerController : MonoBehaviour {
 		vel.x *= 1 - drag;
 		vel.z *= 1 - drag;
 		rb.velocity = vel;
-	}
+	} //PERSONAL DRAG
 
 	void GroundMovement() //FONCTION MVT SOL
 	{
@@ -218,28 +226,77 @@ public class PlayerController : MonoBehaviour {
 
 	void FeedbacksManagement(bool sprintOrNot)
 	{
-		float wantedVignetteValue;
-		float wantedFieldOfView;
-		if (sprintOrNot)
+		//float wantedVignetteValue;
+		if (sprintOrNot && feedbackCoroutineRunning!="Sprint")
 		{
-			wantedVignetteValue = 0.42f;
-			wantedFieldOfView = 53;
+            StopAllCoroutines();
+            if (freeLookCM.m_Lens.FieldOfView != fovSprintValue)
+            {
+                StartCoroutine(feedbacksSprint(true));
+            }
 		}
-		else
+		else if(!sprintOrNot && feedbackCoroutineRunning!="Default")
 		{
-			wantedVignetteValue = 0.30f;
-			wantedFieldOfView = 40;
+            StopAllCoroutines();
+            if(freeLookCM.m_Lens.FieldOfView!= fovDefaultValue)
+            {
+                StartCoroutine(feedbacksSprint(false));
+            }
 		}
 
 		//vignette management---------------------------------------
-		var vignette = postProcess.vignette.settings;
-		vignette.intensity = Mathf.Lerp(vignette.intensity, wantedVignetteValue, 0.05f);
-		postProcess.vignette.settings = vignette;
+		//var vignette = postProcess.vignette.settings;
+		//vignette.intensity = Mathf.Lerp(vignette.intensity, wantedVignetteValue, 0.05f);
+		//postProcess.vignette.settings = vignette;
 
-        //field of view management----------------------------------
+    }
+    IEnumerator feedbacksSprint(bool sprint)
+    {
+        var vignette = postProcess.vignette.settings;
+        float startVignette = vignette.intensity;
 
-        freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(cam.fieldOfView, wantedFieldOfView, 0.05f);
-	}
+        float startFov = freeLookCM.m_Lens.FieldOfView;
+
+        if (sprint)
+        {
+            feedbackCoroutineRunning = "Sprint";
+            for (int i = 0; i < 50; i++)
+            {
+                float newLerpValue = i * 0.02f + 0.02f;
+
+                freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(startFov, fovSprintValue, newLerpValue);
+                vignette.intensity = Mathf.Lerp(startVignette, vignetteSprintValue, newLerpValue);
+                postProcess.vignette.settings = vignette;
+
+                if (i == 49)
+                {
+                    feedbackCoroutineRunning = "Nothing";
+                    print("endroit mauuuuudit");
+                }
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+        else
+        {
+            feedbackCoroutineRunning = "Default";
+            for (int i = 0; i < 50; i++)
+            {
+                float newLerpValue = i * 0.02f + 0.02f;
+
+                freeLookCM.m_Lens.FieldOfView = Mathf.Lerp(startFov, fovDefaultValue, newLerpValue);
+                vignette.intensity = Mathf.Lerp(startVignette, vignetteDefaultValue, newLerpValue);
+                postProcess.vignette.settings = vignette;
+
+                if (i == 49)
+                {
+                    feedbackCoroutineRunning = "Nothing";
+                    print("endroit mauuuuudit");
+                }
+
+                yield return new WaitForSeconds(0.01f);
+            }
+        }
+    }
 
 	public void SetRenderer(bool value)
 	{
