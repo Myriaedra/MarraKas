@@ -55,7 +55,6 @@ public class BarkManagement : MonoBehaviour {
         {
             Animator newCloche = other.GetComponent<Animator>();
             clochesDetected.Add(newCloche);
-            print("hey");
         }
     }//new spot in list
 
@@ -186,7 +185,8 @@ public class BarkManagement : MonoBehaviour {
         //Ringing Bells---------------
         for (int i = 0; i < clochesDetected.Count; i++)
         {
-            clochesDetected[i].SetTrigger("Ringing");
+            if(clochesDetected[i] != null)
+                clochesDetected[i].SetTrigger("Ringing");
         }
     }
 

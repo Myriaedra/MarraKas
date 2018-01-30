@@ -15,6 +15,7 @@ public class RubbleManager : MonoBehaviour {
 	public Vector3 originalPosition;
 
 	public PlayerController player;
+	public Animator playerAnim;
 
 	// Use this for initialization
 	void Start () {
@@ -65,5 +66,6 @@ public class RubbleManager : MonoBehaviour {
 		//Gives control back to the player
 		Destroy(rubbleDust);
 		PlayerController.controlsAble = true;
+		playerAnim.SetTrigger ("DigOverTrigger");
 	}
 }

@@ -24,4 +24,8 @@ public class MeshFleurScript : MonoBehaviour {
     {
         fleurScript.Reappear();
     }
+    public void DestroyFlower()
+    {
+        fleurScript.DestroyFlower();
+    }
 }
