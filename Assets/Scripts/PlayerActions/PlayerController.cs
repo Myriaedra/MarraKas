@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
 using Cinemachine;
+using Vuforia;
+using UnityEditor;
 
 public class PlayerController : MonoBehaviour {
 
@@ -14,6 +16,12 @@ public class PlayerController : MonoBehaviour {
 	public PostProcessingProfile postProcess;
 	public BarkManagement barkManagement;
 	public Animator anim;
+
+	public Transform spawnerSeaPart;
+	public GameObject seaPartBurst;
+	public ParticleSystem seaPartOverTime;
+	public ParticleSystem seaPartOverTimeSprint;
+	bool inWater = false;
 
 	[HideInInspector]
 	public GameObject beingTalkedTo;
@@ -59,6 +67,7 @@ public class PlayerController : MonoBehaviour {
 	// Use this for initialization
 	void Start ()
 	{
+		seaPartOverTimeSprint.Stop();		
 		cam = Camera.main;
 		camController = cam.GetComponent<CamController>();
 		rb = GetComponent<Rigidbody>();
@@ -72,7 +81,7 @@ public class PlayerController : MonoBehaviour {
         {
 			anim.SetTrigger ("JumpTrigger");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-        }
+        }		
 	}
 
 	void FixedUpdate ()//AIR OR GROUND MOVEMENT --> Check ControlsAble------------------------------------------------------------------------------------
@@ -109,6 +118,7 @@ public class PlayerController : MonoBehaviour {
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
             Drag(groundDragValue);
+			anim.speed = 1;
         }
 		else
 		{
@@ -116,9 +126,25 @@ public class PlayerController : MonoBehaviour {
 			LimitVelocity(groundSprintMaxSpeed);
 			OrientCharacter(0.2f);
 			FeedbacksManagement(true);
-            Drag(groundSprintDragValue);
+			Drag(groundSprintDragValue);
+			anim.speed = 2;
         }
 		anim.SetFloat ("Speed", rb.velocity.magnitude);
+
+		if(inWater){
+			if (!seaPartOverTime.isPlaying && rb.velocity.magnitude > 0.5f)
+				seaPartOverTime.Play ();
+			else if (seaPartOverTime.isPlaying && rb.velocity.magnitude < 0.5f)
+				seaPartOverTime.Stop ();
+			if (Input.GetAxisRaw ("Sprint") < 0.2f) {
+				seaPartOverTimeSprint.Stop ();
+			}
+			else{
+				seaPartOverTimeSprint.Play ();				
+			}
+		}
+		else if(!inWater && seaPartOverTime.isPlaying)
+			seaPartOverTime.Stop ();	
 	}
 
 	void AirMovement()//FONCTION MVT AIR
@@ -277,7 +303,6 @@ public class PlayerController : MonoBehaviour {
                 if (i == 49)
                 {
                     feedbackCoroutineRunning = "Nothing";
-                    print("endroit mauuuuudit");
                 }
                 yield return new WaitForSeconds(0.01f);
             }
@@ -296,7 +321,6 @@ public class PlayerController : MonoBehaviour {
                 if (i == 49)
                 {
                     feedbackCoroutineRunning = "Nothing";
-                    print("endroit mauuuuudit");
                 }
 
                 yield return new WaitForSeconds(0.01f);
@@ -307,5 +331,21 @@ public class PlayerController : MonoBehaviour {
 	public void SetRenderer(bool value)
 	{
 		meshRenderer.enabled = value;
+	}
+
+	void OnCollisionEnter(Collision other){
+		if(other.collider.tag == "Water"){
+			GameObject waterBurst = Instantiate (seaPartBurst, spawnerSeaPart.position, Quaternion.Euler (-90, 0, 0));
+			Destroy (waterBurst, 2);
+			inWater = true;
+		}
+	}
+
+	void OnCollisionExit(Collision other){
+		if(other.collider.tag == "Water"){
+			GameObject waterBurst = Instantiate (seaPartBurst, spawnerSeaPart.position, Quaternion.Euler (-90, 0, 0));
+			Destroy (waterBurst, 2);
+			inWater = false;
+		}
 	}
 }
