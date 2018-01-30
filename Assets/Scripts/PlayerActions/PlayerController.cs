@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour {
 	public SkinnedMeshRenderer meshRenderer;
 	public PostProcessingProfile postProcess;
 	public BarkManagement barkManagement;
+	public Animator anim;
 
 	[HideInInspector]
 	public GameObject beingTalkedTo;
@@ -69,6 +70,7 @@ public class PlayerController : MonoBehaviour {
         //JUMP MANAGEMENT
         if (Input.GetButtonDown("Jump") && IsGrounded() && controlsAble)
         {
+			anim.SetTrigger ("JumpTrigger");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
         }
 	}
@@ -116,6 +118,7 @@ public class PlayerController : MonoBehaviour {
 			FeedbacksManagement(true);
             Drag(groundSprintDragValue);
         }
+		anim.SetFloat ("Speed", rb.velocity.magnitude);
 	}
 
 	void AirMovement()//FONCTION MVT AIR
@@ -137,7 +140,8 @@ public class PlayerController : MonoBehaviour {
             OrientCharacter(0.05f);
             Drag(airSprintDragValue);
             FeedbacksManagement(true);
-        }
+		}
+		anim.SetFloat ("Speed", rb.velocity.magnitude);
 	}
 
 	void LimitVelocity(float speedLimit)//FONCTION MAXSPEED
@@ -209,6 +213,7 @@ public class PlayerController : MonoBehaviour {
 		{
             if (!landed)
 			{
+				anim.SetTrigger ("JumpOverTrigger");
 				landed = true;
 				//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
 				rb.velocity = new Vector3(rb.velocity.x/4, 0, rb.velocity.z/4); //Avoid slipping
@@ -250,6 +255,7 @@ public class PlayerController : MonoBehaviour {
 		//postProcess.vignette.settings = vignette;
 
     }
+
     IEnumerator feedbacksSprint(bool sprint)
     {
         var vignette = postProcess.vignette.settings;

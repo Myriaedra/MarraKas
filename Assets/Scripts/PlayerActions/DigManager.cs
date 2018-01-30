@@ -9,6 +9,7 @@ public class DigManager : MonoBehaviour {
 	public Canvas partPreview;
 	PartsReference pRef;
 	public PlayerController player;
+	public Animator anim;
 
 	void Start()
 	{
@@ -42,6 +43,7 @@ public class DigManager : MonoBehaviour {
 			{
 				rubMan.StartCoroutine ("RubbleClear");
 				PlayerController.controlsAble = false;
+				anim.SetTrigger ("DigTrigger");
 			}
 			digInput = false;
 		}
@@ -62,13 +64,14 @@ public class DigManager : MonoBehaviour {
 
 	IEnumerator Dig(SpotManager diggedSpot) 
 	{
+		anim.SetTrigger ("DigTrigger");
 		Debug.Log ("You digged out the " + diggedSpot.type + " number " + diggedSpot.part);
 		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part);
 		ParticleSystem instDigFX = Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
 		Destroy(instDigFX, 2f);
 
 		yield return new WaitForSeconds (2f);
-
+		anim.SetTrigger ("DigOverTrigger");
 		PartPreview (diggedSpot.type, diggedSpot.part); //Instantiate canvas with preview of the sk part
 		Destroy (diggedSpot.transform.gameObject);
 	}
