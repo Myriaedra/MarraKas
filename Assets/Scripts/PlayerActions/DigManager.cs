@@ -10,6 +10,9 @@ public class DigManager : MonoBehaviour {
 	PartsReference pRef;
 	public PlayerController player;
 	public Animator anim;
+	SpotManager newSpotManager;
+	Rigidbody newRbBaril;
+	bool diggedSomething;
 
 	void Start()
 	{
@@ -18,21 +21,29 @@ public class DigManager : MonoBehaviour {
 
 	void Update()
 	{
+		if (digInput){
+			StartCoroutine (Dig ("Nothing", 0.5f));
+			print ("oui je passe par ici :'(");
+		}
+	}//DIG s'il n'y avait rien dans l'area
+
+	void LateUpdate(){
 		if (Input.GetButtonDown ("Dig") && !digInput && PlayerController.controlsAble) {
 			digInput = true;
 		} else if (digInput) {
 			digInput = false;
 		}
-	}
+	}//Check l'Input
 
 	void OnTriggerStay(Collider other)
 	{
 		float distance = Vector3.Distance (other.transform.position, transform.position);
+
         //SPOT------------------------------------------------------------------------------------------------
 		if (other.tag == "Spot" && digInput && distance<3f) 
 		{
-			StartCoroutine(Dig (other.transform.GetComponent<SpotManager> ()));
-			PlayerController.controlsAble = false;
+			newSpotManager = other.transform.GetComponent<SpotManager> ();
+			StartCoroutine(Dig ("Spot", 2.0f));
 			digInput = false;
 		}
         //RUBBLE----------------------------------------------------------------------------------------------
@@ -47,33 +58,51 @@ public class DigManager : MonoBehaviour {
 			}
 			digInput = false;
 		}
-        else if(other.tag == "Baril" && digInput && distance < 2f)
-        {
-            Rigidbody rbBaril = other.GetComponent<Rigidbody>();
-            rbBaril.freezeRotation = false;
-            rbBaril.isKinematic = false;
-            rbBaril.AddForce (new Vector3(0, 50, 0));
-        }
-        else if(other.tag == "Pebble" && digInput && distance < 2f)
-        {
-            Rigidbody rbPebble = other.GetComponent<Rigidbody>();
-            rbPebble.isKinematic = false;
-            rbPebble.AddForce(-transform.forward * 150 + transform.up * 100);
+		//BARIL------------------------------------------------------------------------------------------
+        else if(other.tag == "Baril" && digInput && distance < 3.5f)
+		{
+			newRbBaril = other.GetComponent<Rigidbody>();
+			StartCoroutine (Dig("Baril", 1.5f));
+			digInput = false;
         }
 	}
 
-	IEnumerator Dig(SpotManager diggedSpot) 
+	IEnumerator Dig(string type, float duration) 
 	{
+		//BEGINNING--------------------------------------------------------
+		PlayerController.controlsAble = false;
 		anim.SetTrigger ("DigTrigger");
-		Debug.Log ("You digged out the " + diggedSpot.type + " number " + diggedSpot.part);
-		Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (diggedSpot.type, diggedSpot.part);
-		ParticleSystem instDigFX = Instantiate (digFX, diggedSpot.transform.position, Quaternion.identity); //Instantiate FX
-		Destroy(instDigFX, 2f);
+		ParticleSystem instDigFX = Instantiate (digFX, transform.position, Quaternion.identity); //Instantiate FX
+		Destroy(instDigFX, duration);
 
-		yield return new WaitForSeconds (2f);
+		switch(type){
+		case "Spot":
+			Debug.Log ("You digged out the " + newSpotManager.type + " number " + newSpotManager.part);
+			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (newSpotManager.type, newSpotManager.part);			
+			break;
+		}
+
+		//DURING
+		yield return new WaitForSeconds (duration);
+
+		//AFTER---------------------------------------------------------------
+
+		switch(type){
+		case "Spot":
+			PartPreview (newSpotManager.type, newSpotManager.part); //Instantiate canvas with preview of the sk part
+			Destroy (newSpotManager.transform.gameObject);
+			newSpotManager = null;
+			break;
+		case "Baril":
+			newRbBaril.freezeRotation = false;
+			newRbBaril.isKinematic = false;
+			newRbBaril.AddForce (new Vector3 (0, 50, 0));
+			break;
+		}
+
 		anim.SetTrigger ("DigOverTrigger");
-		PartPreview (diggedSpot.type, diggedSpot.part); //Instantiate canvas with preview of the sk part
-		Destroy (diggedSpot.transform.gameObject);
+		if(type!="Spot")
+			PlayerController.controlsAble = true;
 	}
 
 	public void PartPreview(int type, int part) //Spawn canvas with preview
