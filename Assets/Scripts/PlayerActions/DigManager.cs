@@ -14,6 +14,10 @@ public class DigManager : MonoBehaviour {
 	Rigidbody newRbBaril;
 	bool diggedSomething;
 
+	public AudioSource aS;
+
+	public AudioClip[] digChunks;
+
 	void Start()
 	{
 		pRef = Camera.main.GetComponent<PartsReference> ();
@@ -74,6 +78,7 @@ public class DigManager : MonoBehaviour {
 		anim.SetTrigger ("DigTrigger");
 		ParticleSystem instDigFX = Instantiate (digFX, transform.position, Quaternion.identity); //Instantiate FX
 		Destroy(instDigFX, duration);
+		Coroutine soundCo = StartCoroutine (DiggingSound(duration));
 
 		switch(type){
 		case "Spot":
@@ -134,5 +139,22 @@ public class DigManager : MonoBehaviour {
 
 		}
 	}
+
+	IEnumerator DiggingSound (float duration)
+	{
+		float time = 0;
+		while (time < duration) 
+		{
+			aS.pitch = Random.Range (0.95f, 1.05f);
+			aS.PlayOneShot(digChunks[Random.Range(0,3)]);
+			while (aS.isPlaying) 
+			{
+				time += 0.1f;
+				yield return new WaitForSeconds (0.1f);
+			}
+		}
+		aS.pitch = 1;
+	}
+
 }
 

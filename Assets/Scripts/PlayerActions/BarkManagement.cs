@@ -24,11 +24,13 @@ public class BarkManagement : MonoBehaviour {
     [Space(5)]
     public Text barkToInteractText;
 
-
+	public AudioSource aS;
+	public AudioClip barkSFX;
 
     Renderer rendererInSight;
     string whatIsInSight = "Nothing";
-	
+
+
 	// Update is called once per frame
 	void Update () {
         CheckWhatIsInFront();
@@ -36,6 +38,8 @@ public class BarkManagement : MonoBehaviour {
 		if (Input.GetButtonDown ("Bark") && PlayerController.controlsAble) 
 		{
 			Bark();
+			aS.pitch = Random.Range (0.95f, 1.05f);
+			aS.PlayOneShot (barkSFX);
 		}
 	}
 
