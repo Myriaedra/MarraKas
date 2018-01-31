@@ -5,6 +5,7 @@ using UnityEngine;
 public class MeshFleurScript : MonoBehaviour {
 
     public FleurScript fleurScript;
+	int whichParticleSpawn = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -23,9 +24,15 @@ public class MeshFleurScript : MonoBehaviour {
     public void Reappear()
     {
         fleurScript.Reappear();
+		whichParticleSpawn = 0;
     }
     public void DestroyFlower()
     {
+		print ("hey");
         fleurScript.DestroyFlower();
     }
+	public void SpawnParticleOnTheWay(){
+		whichParticleSpawn++;
+		fleurScript.SpawnParticleOnTheWay (whichParticleSpawn);
+	}
 }

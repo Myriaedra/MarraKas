@@ -38,7 +38,6 @@ public class skBehaviour : MonoBehaviour {
 		case "Moving":
 			if (navMesh != null) 
 			{
-				print ("hey");
 				if (targetSpot != null && navMesh.remainingDistance <= 0.1) {
 					navMesh.ResetPath ();
 					transform.rotation = targetSpot.rotation;
