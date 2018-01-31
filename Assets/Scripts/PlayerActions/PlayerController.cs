@@ -29,7 +29,8 @@ public class PlayerController : MonoBehaviour {
 	Camera cam;
 	CamController camController;
 	Rigidbody rb;
-	bool landed = false;
+	[HideInInspector]
+	public bool landed = false;
 
     string feedbackCoroutineRunning = "Nothing";
 
@@ -143,8 +144,10 @@ public class PlayerController : MonoBehaviour {
 				seaPartOverTimeSprint.Play ();				
 			}
 		}
-		else if(!inWater && seaPartOverTime.isPlaying)
-			seaPartOverTime.Stop ();	
+		else if(!inWater && seaPartOverTime.isPlaying){
+			seaPartOverTime.Stop ();
+			seaPartOverTimeSprint.Stop ();
+		}
 	}
 
 	void AirMovement()//FONCTION MVT AIR

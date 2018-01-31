@@ -59,7 +59,7 @@ public class DigManager : MonoBehaviour {
 			digInput = false;
 		}
 		//BARIL------------------------------------------------------------------------------------------
-        else if(other.tag == "Baril" && digInput && distance < 3.5f)
+		else if(other.tag == "Baril" && digInput && distance < 3.5f && other.GetComponent<Rigidbody>().isKinematic)
 		{
 			newRbBaril = other.GetComponent<Rigidbody>();
 			StartCoroutine (Dig("Baril", 1.5f));
