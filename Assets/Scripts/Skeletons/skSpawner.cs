@@ -42,6 +42,7 @@ public class skSpawner : MonoBehaviour {
 		rB.isKinematic = true;
 		//Behaviour
 		spawnedTorso.AddComponent<NavMeshAgent>();
+		spawnedTorso.AddComponent<AudioSource> ();
 		skBehaviour skBh = spawnedTorso.AddComponent<skBehaviour> ();
 		skBh.SetMemento (memento);
 
@@ -76,6 +77,7 @@ public class skSpawner : MonoBehaviour {
 		rB.isKinematic = true;
 		//Behaviour
 		torsoObj.AddComponent<NavMeshAgent>();
+		torsoObj.AddComponent<AudioSource> ();
 
 		if (memento.ID == 0) 
 		{

@@ -7,6 +7,7 @@ public class skCaptainBehaviour : MonoBehaviour {
 	
 	NavMeshAgent navMesh;
 	Rigidbody skRb;
+	AudioSource aS;
 
 	public Memento memento;
 	public skDialogueManager mySkDialogueManager;
@@ -16,6 +17,7 @@ public class skCaptainBehaviour : MonoBehaviour {
 	void Start () 
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
+		aS = GetComponent<AudioSource> ();
 		skRb = GetComponent<Rigidbody> ();
 		targetSpot = Camera.main.GetComponent<skSpotManager> ().GetSpotTransform ();
 

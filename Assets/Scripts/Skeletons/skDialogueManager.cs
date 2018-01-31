@@ -66,6 +66,10 @@ public class skDialogueManager : MonoBehaviour {
                 {
                     boxDialogueAnim.SetBool("opened", false);
                     UIDialogueText.ClearDisplay ();
+					if (dialogueType == "Spawn") 
+					{
+						PlayerController.controlsAble = true;
+					}
                     //print("here comes an event ?");
                     dialogueState = "NoDialogue";
                     mySkBehaviour.MoveToRubble();

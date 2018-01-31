@@ -12,6 +12,7 @@ public class skSelector : MonoBehaviour {
 	bool isActivated;
 	public CinemachineVirtualCamera assemblyView;
 
+	//Prefabs
 	public GameObject confettiFX;
 
 	Vector3 selectPosition;
@@ -30,6 +31,10 @@ public class skSelector : MonoBehaviour {
 	public GameObject uiCanvas;
 	UInterface_Assembly ui;
 
+	//Son
+	AudioSource aS;
+	public AudioClip deniedSFX;
+
 
 	// Use this for initialization
 	void Start () 
@@ -38,6 +43,7 @@ public class skSelector : MonoBehaviour {
 		ui = uiCanvas.GetComponent<UInterface_Assembly> ();
 		pRef = Camera.main.GetComponent<PartsReference> ();
 		playerInventory = Camera.main.GetComponent<InventoryManager> ().playerInventory;
+		aS = GetComponent<AudioSource> ();
 		selectPosition = transform.position;
 		mementoPosition = mementoPositionMarker.position;
 	}
@@ -59,6 +65,7 @@ public class skSelector : MonoBehaviour {
 				DestroyCurrentParts ();
 				StopAllCoroutines ();
 				EndAssembly ();
+				PlayerController.controlsAble = true;
 			}
 		} 
 	}
@@ -170,7 +177,7 @@ public class skSelector : MonoBehaviour {
 
 
 		} else {
-			//Play wrong sound
+			aS.PlayOneShot (deniedSFX);
 		}	
 	}
 
@@ -240,7 +247,7 @@ public class skSelector : MonoBehaviour {
 		ResetCurrentParts ();
 		isActivated = false;
 		player.SetRenderer(true);
-		PlayerController.controlsAble = true;
+		//PlayerController.controlsAble = true;
 	}
 
 

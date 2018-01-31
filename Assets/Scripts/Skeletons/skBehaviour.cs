@@ -8,6 +8,7 @@ public class skBehaviour : MonoBehaviour {
 	NavMeshAgent navMesh;
 	Rigidbody skRb;
 	RubbleManager targetRubble;
+	AudioSource aS;
 
 	bool moves;
 
@@ -19,6 +20,8 @@ public class skBehaviour : MonoBehaviour {
 	void Start () 
 	{
 		navMesh = GetComponent<NavMeshAgent> ();
+		aS = GetComponent<AudioSource> ();
+
 		skRb = GetComponent<Rigidbody> ();
 		if (memento.ID != 0) 
 		{
