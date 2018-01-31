@@ -19,9 +19,9 @@ public class ShadowJump : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//ActualizeOpacityGroundShadow();
-		//ActualizePositionGroundShadow ();
-		//ActualizeShadowCasting ();
+		ActualizeOpacityGroundShadow();
+		ActualizePositionGroundShadow ();
+		ActualizeShadowCasting ();
 	}
 
 	void ActualizeOpacityGroundShadow(){
@@ -51,11 +51,9 @@ public class ShadowJump : MonoBehaviour {
 
 	void ActualizeShadowCasting(){
 		if (PlayerController.pc.landed){
-			print ("yop");
 			skinnedMeshRend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.On;
 		}
 		else{
-			print ("nope");
 			skinnedMeshRend.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;	
 		}
 	}

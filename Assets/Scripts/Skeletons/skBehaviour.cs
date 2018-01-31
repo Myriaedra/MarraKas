@@ -38,6 +38,7 @@ public class skBehaviour : MonoBehaviour {
 		case "Moving":
 			if (navMesh != null) 
 			{
+				print ("hey");
 				if (targetSpot != null && navMesh.remainingDistance <= 0.1) {
 					navMesh.ResetPath ();
 					transform.rotation = targetSpot.rotation;
@@ -55,11 +56,11 @@ public class skBehaviour : MonoBehaviour {
 
 	public void MoveToRubble()
 	{
-			if ( navMesh != null && targetSpot != null) 
-			{
-				state = "Moving";
-				navMesh.SetDestination (targetSpot.position);
-			}
+		if ( navMesh != null && targetSpot != null) 
+		{
+			state = "Moving";
+			navMesh.SetDestination (targetSpot.position);
+		}
 		else
 			state = "Idle";
 	}
