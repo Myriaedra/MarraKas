@@ -35,11 +35,8 @@ public class PlayerController : MonoBehaviour {
     string feedbackCoroutineRunning = "Nothing";
 
 	public AudioSource aS;
-	Coroutine stepSoundCo;
-	float stepInterval;
 	AudioClip usedStep;
 	public AudioClip groundStep;
-	bool isWalking; 
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -79,7 +76,6 @@ public class PlayerController : MonoBehaviour {
 		rb = GetComponent<Rigidbody>();
 		pc = GetComponent<PlayerController> ();
 		usedStep = groundStep;
-		stepInterval = 0.5f;
 	}
     
 	void Update()//JUMP MANAGEMENT--------------------------------------------------------------------------------------------------------------------------
@@ -89,7 +85,7 @@ public class PlayerController : MonoBehaviour {
         {
 			anim.SetTrigger ("JumpTrigger");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
-        }		
+        }	
 	}
 
 	void FixedUpdate ()//AIR OR GROUND MOVEMENT --> Check ControlsAble------------------------------------------------------------------------------------
@@ -126,8 +122,6 @@ public class PlayerController : MonoBehaviour {
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
 			Drag(groundDragValue);
-			anim.speed = 1;
-			stepInterval = 0.5f;
 		}
 		else
 		{
@@ -137,23 +131,9 @@ public class PlayerController : MonoBehaviour {
 			FeedbacksManagement(true);
 			Drag(groundSprintDragValue);
 			anim.speed = 2;
-			stepInterval = 0.2f;
 		}
 		anim.SetFloat ("Speed", rb.velocity.magnitude);
 
-		//////StepSound
-		if (stepSoundCo == null && rb.velocity.magnitude > 0.5) 
-		{
-			stepSoundCo = StartCoroutine ("StepSound");
-			isWalking = true;
-		} 
-		else if (stepSoundCo != null && rb.velocity.magnitude < 0.1) 
-		{
-			//StopCoroutine (stepSoundCo);
-			aS.pitch = 1;
-			isWalking = false;
-			stepSoundCo = null;
-		}
 
 		if(inWater){
 			if (!seaPartOverTime.isPlaying && rb.velocity.magnitude > 0.5f)
@@ -374,17 +354,11 @@ public class PlayerController : MonoBehaviour {
 			inWater = false;
 		}
 	}
-
-	IEnumerator StepSound()
+		
+	public void Step()
 	{
-		while (isWalking) 
-		{
-			print ("step");
-			aS.pitch = Random.Range (0.95f, 1.05f);
-			aS.PlayOneShot (usedStep);
-			yield return new WaitForSeconds (stepInterval);
-		}
-		print ("stop");
-		aS.pitch = 1;
+		aS.pitch = Random.Range (0.95f, 1.05f);
+		aS.PlayOneShot (usedStep);
+		print ("dahell");
 	}
 }
