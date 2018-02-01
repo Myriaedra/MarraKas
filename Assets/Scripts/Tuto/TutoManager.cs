@@ -137,6 +137,7 @@ public class TutoManager : MonoBehaviour {
 		if (timelineID == 3) 
 		{
 			captain.GetComponent<skCaptainBehaviour> ().MoveToRubble ();
+			SetElementsActive (true);
 		}
 
 		if (timelineID == 4) 
@@ -157,7 +158,7 @@ public class TutoManager : MonoBehaviour {
 			captain.tag = "Skeleton";
 
 			tutoEnded = true;
-			SetElementsActive (true);
+
 			Destroy (gameObject);
 
 		}
