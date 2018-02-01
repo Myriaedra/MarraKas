@@ -30,8 +30,8 @@ public class TriggerFlower : MonoBehaviour {
         sh.scale += new Vector3(0.25f, 0.1f, 0);
         col.size = sh.scale;*/
         transform.position += direction * speed;
-        transform.localScale += new Vector3(0.25f, 0.1f, 0);
-        transform.position -= transform.up*0.03f;
+        transform.localScale += new Vector3(0.2f, 0.2f, 0);
+        transform.position -= transform.up*0.1f;
         if (Time.time - timerLife > lifeTime && !decreaseOpacity)
         {
             decreaseOpacity = true;

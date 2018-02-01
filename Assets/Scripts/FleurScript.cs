@@ -9,6 +9,8 @@ public class FleurScript : MonoBehaviour {
     public Animator meshAnim;
     bool disappearing = false;
     public ParticleSystem part;
+	Vector3 positionBeforeDisappear;
+	public GameObject particleBurst;
 
 	// Use this for initialization
 	void Start () {
@@ -22,7 +24,7 @@ public class FleurScript : MonoBehaviour {
             disappearing = true;
             meshAnim.SetTrigger("Disappearing");
         }
-        else if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 7f && actualWaypoint >= waypoints.Length - 1){
+		else if(Vector3.Distance(PlayerController.pc.transform.position, transform.position) < 7f && !disappearing &&  actualWaypoint >= waypoints.Length - 1){
             meshAnim.SetTrigger("Destroy");
         }
 
@@ -30,15 +32,24 @@ public class FleurScript : MonoBehaviour {
 
     public void Disappear()
     {
+		positionBeforeDisappear = transform.position;
         part.Pause();
         actualWaypoint++;
-        transform.position = waypoints[actualWaypoint].position;
     }
+
+	public void SpawnParticleOnTheWay (int where){
+		transform.position = Vector3.Lerp (positionBeforeDisappear, waypoints [actualWaypoint].position, where / 15f);
+		print (where);
+		GameObject partBurst = Instantiate (particleBurst, transform.position, Quaternion.identity);
+		Destroy (partBurst, 3.0f);
+	}
 
     public void Reappear()
     {
+		print ("prout");
         part.Play();
         disappearing = false;
+		transform.position = waypoints[actualWaypoint].position;
     }
 
     public void DestroyFlower()

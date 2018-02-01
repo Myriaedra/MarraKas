@@ -58,11 +58,11 @@ public class skBehaviour : MonoBehaviour {
 
 	public void MoveToRubble()
 	{
-			if ( navMesh != null && targetSpot != null) 
-			{
-				state = "Moving";
-				navMesh.SetDestination (targetSpot.position);
-			}
+		if ( navMesh != null && targetSpot != null) 
+		{
+			state = "Moving";
+			navMesh.SetDestination (targetSpot.position);
+		}
 		else
 			state = "Idle";
 	}
