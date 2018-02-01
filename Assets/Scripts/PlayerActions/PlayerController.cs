@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour {
 			OrientCharacter(0.2f);
 			FeedbacksManagement(false);
 			Drag(groundDragValue);
+			anim.speed = 1.4f;
 		}
 		else
 		{
@@ -239,9 +240,20 @@ public class PlayerController : MonoBehaviour {
         Vector3 position2 = transform.position;
         Vector3 position3 = transform.position + transform.forward;
         //Raycasts !
-        if (Physics.Raycast(position1, -transform.up, 1.0f, layerMask) 
-        || Physics.Raycast(position2, -transform.up, 1.0f, layerMask) 
-        || Physics.Raycast(position3, -transform.up, 1.0f, layerMask))
+
+		Debug.DrawRay (position1+transform.right*0.3f, -transform.up);
+		Debug.DrawRay (position2+transform.right*0.3f, -transform.up);
+		Debug.DrawRay (position3+transform.right*0.3f, -transform.up);
+		Debug.DrawRay (position1-transform.right*0.3f, -transform.up);
+		Debug.DrawRay (position2-transform.right*0.3f, -transform.up);
+		Debug.DrawRay (position3-transform.right*0.3f, -transform.up);
+		//Raycasts !
+		if (Physics.Raycast(position1+transform.right*0.3f, -transform.up, 1.2f, layerMask) 
+			|| Physics.Raycast(position2+transform.right*0.3f, -transform.up, 1.2f, layerMask) 
+			|| Physics.Raycast(position3+transform.right*0.3f, -transform.up, 1.2f, layerMask)
+			|| Physics.Raycast(position1-transform.right*0.3f, -transform.up, 1.2f, layerMask)
+			|| Physics.Raycast(position2-transform.right*0.3f, -transform.up, 1.2f, layerMask)
+			|| Physics.Raycast(position3-transform.right*0.3f, -transform.up, 1.2f, layerMask))
 		{
             if (!landed)
 			{
