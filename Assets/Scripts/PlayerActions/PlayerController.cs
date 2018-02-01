@@ -371,6 +371,5 @@ public class PlayerController : MonoBehaviour {
 	{
 		aS.pitch = Random.Range (0.95f, 1.05f);
 		aS.PlayOneShot (usedStep);
-		print ("dahell");
 	}
 }
