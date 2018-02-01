@@ -28,7 +28,6 @@ public class MeshFleurScript : MonoBehaviour {
     }
     public void DestroyFlower()
     {
-		print ("hey");
         fleurScript.DestroyFlower();
     }
 	public void SpawnParticleOnTheWay(){

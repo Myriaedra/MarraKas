@@ -32,7 +32,7 @@ public class DigManager : MonoBehaviour {
 	}//DIG s'il n'y avait rien dans l'area
 
 	void LateUpdate(){
-		if (Input.GetButtonDown ("Dig") && !digInput && PlayerController.controlsAble) {
+		if (Input.GetButtonDown ("Dig") && !digInput && PlayerController.controlsAble && PlayerController.pc.landed) {
 			digInput = true;
 		} else if (digInput) {
 			digInput = false;

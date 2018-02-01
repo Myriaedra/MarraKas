@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
 using Cinemachine;
-using Vuforia;
 using UnityEditor;
 
 public class PlayerController : MonoBehaviour {
@@ -11,12 +10,13 @@ public class PlayerController : MonoBehaviour {
 	public static PlayerController pc;
 	public static bool controlsAble = true;
 
-    public  CinemachineFreeLook freeLookCM;
+    public CinemachineFreeLook freeLookCM;
 	public SkinnedMeshRenderer meshRenderer;
 	public PostProcessingProfile postProcess;
 	public BarkManagement barkManagement;
 	public Animator anim;
 
+    [Header("========SeaPart========")]
 	public Transform spawnerSeaPart;
 	public GameObject seaPartBurst;
 	public ParticleSystem seaPartOverTime;
@@ -34,40 +34,42 @@ public class PlayerController : MonoBehaviour {
 
     string feedbackCoroutineRunning = "Nothing";
 
-	public AudioSource aS;
+
+    [Header("========AUDIO========")]
+    public AudioSource aS;
 	Coroutine stepSoundCo;
 	float stepInterval;
 	AudioClip usedStep;
 	public AudioClip groundStep;
 	bool isWalking; 
 
-    [Header("GroundValues : ")]
+    [Header("========GroundValues========")]
     public float groundAcceleration;
     public float groundMaxSpeed;
     public float groundDragValue;
 
-    [Header("GroundSprintValues : ")]
+    [Header("========GroundSprintValue========")]
     public float groundSprintAcceleration;
     public float groundSprintMaxSpeed;
     public float groundSprintDragValue;
 
-    [Header("AirValues : ")]
+    [Header("========AirValues========")]
     public float airAcceleration;
     public float airMaxSpeed;
     public float airDragValue;
 
-    [Header("AirSprintValues : ")]
+    [Header("========AirSprintValues========")]
     public float airSprintAcceleration;
     public float airSprintMaxSpeed;
     public float airSprintDragValue;
 
-    [Header("Feedbacks Values : ")]
+    [Header("========Feedbacks Values========")]
     public float vignetteDefaultValue;
     public float vignetteSprintValue;
     public float fovDefaultValue;
     public float fovSprintValue;
 
-    [Header("OtherValues : ")]
+    [Header("========OtherValues========")]
     public float jumpForce;
 
 	// Use this for initialization
@@ -306,7 +308,7 @@ public class PlayerController : MonoBehaviour {
 		//vignette.intensity = Mathf.Lerp(vignette.intensity, wantedVignetteValue, 0.05f);
 		//postProcess.vignette.settings = vignette;
 
-    }
+    } //StartCoroutine pour les feedbacks du sprint
 
     IEnumerator feedbacksSprint(bool sprint)
     {
@@ -352,12 +354,14 @@ public class PlayerController : MonoBehaviour {
                 yield return new WaitForSeconds(0.01f);
             }
         }
-    }
+    } // coroutine lerp feedbacks sprint
 
 	public void SetRenderer(bool value)
 	{
 		meshRenderer.enabled = value;
-	}
+	} // set renderer pour l'assemblage des squelettes
+
+    
 
 	void OnCollisionEnter(Collision other){
 		if(other.collider.tag == "Water"){
@@ -365,7 +369,7 @@ public class PlayerController : MonoBehaviour {
 			Destroy (waterBurst, 2);
 			inWater = true;
 		}
-	}
+	} // déclaration du "inWater" = ON + splash in part
 
 	void OnCollisionExit(Collision other){
 		if(other.collider.tag == "Water"){
@@ -373,18 +377,18 @@ public class PlayerController : MonoBehaviour {
 			Destroy (waterBurst, 2);
 			inWater = false;
 		}
-	}
+    } // déclaration du "inWater" = OFF + splash out part
 
-	IEnumerator StepSound()
+    IEnumerator StepSound()
 	{
 		while (isWalking) 
 		{
-			print ("step");
+			//print ("step");
 			aS.pitch = Random.Range (0.95f, 1.05f);
 			aS.PlayOneShot (usedStep);
 			yield return new WaitForSeconds (stepInterval);
 		}
-		print ("stop");
+		//print ("stop");
 		aS.pitch = 1;
 	}
 }
