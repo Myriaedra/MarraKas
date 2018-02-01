@@ -12,6 +12,7 @@ public class DigManager : MonoBehaviour {
 	public Animator anim;
 	SpotManager newSpotManager;
 	Rigidbody newRbBaril;
+	PalmiersScripts newPalmier;
 	bool diggedSomething;
 
 	public AudioSource aS;
@@ -47,7 +48,7 @@ public class DigManager : MonoBehaviour {
 		if (other.tag == "Spot" && digInput && distance<3f) 
 		{
 			newSpotManager = other.transform.GetComponent<SpotManager> ();
-			StartCoroutine(Dig ("Spot", 2.0f));
+			StartCoroutine(Dig ("Spot", 1.5f));
 			digInput = false;
 		}
         //RUBBLE----------------------------------------------------------------------------------------------
@@ -66,9 +67,15 @@ public class DigManager : MonoBehaviour {
 		else if(other.tag == "Baril" && digInput && distance < 3.5f && other.GetComponent<Rigidbody>().isKinematic)
 		{
 			newRbBaril = other.GetComponent<Rigidbody>();
-			StartCoroutine (Dig("Baril", 1.5f));
+			StartCoroutine (Dig("Baril", 1f));
 			digInput = false;
         }
+		else if(other.tag == "Palmier" && digInput && distance < 3f){
+			print ("nice");
+			StartCoroutine (Dig("Palmier", 1f));
+			digInput = false;
+			newPalmier = other.GetComponent<PalmiersScripts> ();
+		}
 	}
 
 	IEnumerator Dig(string type, float duration) 
@@ -102,6 +109,11 @@ public class DigManager : MonoBehaviour {
 			newRbBaril.freezeRotation = false;
 			newRbBaril.isKinematic = false;
 			newRbBaril.AddForce (new Vector3 (0, 50, 0));
+			break;
+		case "Palmier":
+			print ("hey");
+			newPalmier.NoixDeCocoFall ();
+			newPalmier = null;
 			break;
 		}
 

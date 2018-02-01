@@ -361,7 +361,12 @@ public class PlayerController : MonoBehaviour {
 		meshRenderer.enabled = value;
 	} // set renderer pour l'assemblage des squelettes
 
-    
+	void OnTriggerEnter(Collider other){
+		if(other.tag == "BumpSphere" && other.GetComponent<BumperSphereScript>().bumpEnabled && Vector3.Distance(transform.position, other.transform.position)<3){
+			anim.SetTrigger ("JumpTrigger");
+			rb.velocity = new Vector3(rb.velocity.x, jumpForce*1.6f, rb.velocity.z);
+		}
+	}
 
 	void OnCollisionEnter(Collision other){
 		if(other.collider.tag == "Water"){
