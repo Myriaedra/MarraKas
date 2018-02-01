@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource aS;
 	AudioClip usedStep;
 	public AudioClip groundStep;
+	public AudioClip waterStep;
+	public AudioClip splashSFX;
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -354,8 +356,10 @@ public class PlayerController : MonoBehaviour {
 	void OnCollisionEnter(Collision other){
 		if(other.collider.tag == "Water"){
 			GameObject waterBurst = Instantiate (seaPartBurst, spawnerSeaPart.position, Quaternion.Euler (-90, 0, 0));
+			aS.PlayOneShot (splashSFX);
 			Destroy (waterBurst, 2);
 			inWater = true;
+			usedStep = waterStep;
 		}
 	}
 
@@ -364,6 +368,7 @@ public class PlayerController : MonoBehaviour {
 			GameObject waterBurst = Instantiate (seaPartBurst, spawnerSeaPart.position, Quaternion.Euler (-90, 0, 0));
 			Destroy (waterBurst, 2);
 			inWater = false;
+			usedStep = groundStep;
 		}
 	}
 		

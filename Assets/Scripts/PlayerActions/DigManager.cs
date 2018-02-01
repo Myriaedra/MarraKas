@@ -101,7 +101,8 @@ public class DigManager : MonoBehaviour {
 
 		switch(type){
 		case "Spot":
-			PartPreview (newSpotManager.type, newSpotManager.part); //Instantiate canvas with preview of the sk part
+			//PartPreview (newSpotManager.type, newSpotManager.part); //Instantiate canvas with preview of the sk part
+			PartPreviewOverlay();
 			Destroy (newSpotManager.transform.gameObject);
 			newSpotManager = null;
 			break;
@@ -122,7 +123,7 @@ public class DigManager : MonoBehaviour {
 			PlayerController.controlsAble = true;
 	}
 
-	public void PartPreview(int type, int part) //Spawn canvas with preview
+	/*public void PartPreview(int type, int part) //Spawn canvas with preview
 	{
 		Canvas newCanvas = Instantiate (partPreview);
 		newCanvas.worldCamera = Camera.main;
@@ -150,7 +151,13 @@ public class DigManager : MonoBehaviour {
 				break;
 
 		}
+	}*/
+
+	public void PartPreviewOverlay()
+	{
+		Instantiate (partPreview);
 	}
+
 
 	IEnumerator DiggingSound (float duration)
 	{

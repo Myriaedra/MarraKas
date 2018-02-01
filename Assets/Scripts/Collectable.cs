@@ -85,7 +85,9 @@ public class Collectable : MonoBehaviour {
 			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (thisMemento);
 			if (preview) {
 				PlayerController.controlsAble = false;
-				PartPreview (mementoID);
+				//PartPreview (mementoID);
+				PartPreviewOverlay();
+
 			}
 		} else {
 			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (type, part);
@@ -95,7 +97,7 @@ public class Collectable : MonoBehaviour {
 
 	}
 
-	public void PartPreview(int ID) //Spawn canvas with preview
+	/*public void PartPreview(int ID) //Spawn canvas with preview
 	{
 		PartsReference pRef = Camera.main.GetComponent<PartsReference> ();
 		Canvas newCanvas = Instantiate (partPreview);
@@ -104,6 +106,11 @@ public class Collectable : MonoBehaviour {
 		foundPart = Instantiate (pRef.GetPrefabFromReference (3, mementoID), newCanvas.GetComponentInChildren<RectTransform> ()); //spawn right sk part
 		foundPart.transform.localPosition = new Vector3 (0.5f, 1.7f, -13.8f);
 		/*foundPart.transform.localRotation = Quaternion.Euler(new Vector3 (-5, -16, 0));*/
-		foundPart.transform.localScale = new Vector3 (100f, 100f, 100f);
+		/*foundPart.transform.localScale = new Vector3 (100f, 100f, 100f);
+	}*/
+
+	public void PartPreviewOverlay()
+	{
+		Instantiate (partPreview);
 	}
 }
