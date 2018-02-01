@@ -260,7 +260,7 @@ public class PlayerController : MonoBehaviour {
 				anim.SetTrigger ("JumpOverTrigger");
 				landed = true;
 				//rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.z);
-				rb.velocity = new Vector3(rb.velocity.x/4, 0, rb.velocity.z/4); //Avoid slipping
+				//rb.velocity = new Vector3(rb.velocity.x/4, 0, rb.velocity.z/4); //Avoid slipping
 			}     
 			return true;
 		}
