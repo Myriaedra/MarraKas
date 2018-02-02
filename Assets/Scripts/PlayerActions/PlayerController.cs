@@ -34,11 +34,13 @@ public class PlayerController : MonoBehaviour {
 
     string feedbackCoroutineRunning = "Nothing";
 
-	public AudioSource aS;
+	public AudioSource stepsAS;
 	AudioClip usedStep;
 	public AudioClip groundStep;
 	public AudioClip waterStep;
 	public AudioClip splashSFX;
+
+	public AudioSource pantingAS;
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -125,6 +127,7 @@ public class PlayerController : MonoBehaviour {
 			FeedbacksManagement(false);
 			Drag(groundDragValue);
 			anim.speed = 1.4f;
+			pantingAS.volume = 0;
 		}
 		else
 		{
@@ -134,6 +137,7 @@ public class PlayerController : MonoBehaviour {
 			FeedbacksManagement(true);
 			Drag(groundSprintDragValue);
 			anim.speed = 2;
+			pantingAS.volume = 0.2f;
 		}
 		anim.SetFloat ("Speed", rb.velocity.magnitude);
 
@@ -356,7 +360,7 @@ public class PlayerController : MonoBehaviour {
 	void OnCollisionEnter(Collision other){
 		if(other.collider.tag == "Water"){
 			GameObject waterBurst = Instantiate (seaPartBurst, spawnerSeaPart.position, Quaternion.Euler (-90, 0, 0));
-			aS.PlayOneShot (splashSFX);
+			stepsAS.PlayOneShot (splashSFX);
 			Destroy (waterBurst, 2);
 			inWater = true;
 			usedStep = waterStep;
@@ -374,7 +378,7 @@ public class PlayerController : MonoBehaviour {
 		
 	public void Step()
 	{
-		aS.pitch = Random.Range (0.95f, 1.05f);
-		aS.PlayOneShot (usedStep);
+		stepsAS.pitch = Random.Range (0.95f, 1.05f);
+		stepsAS.PlayOneShot (usedStep);
 	}
 }

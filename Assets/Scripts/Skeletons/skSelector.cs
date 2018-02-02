@@ -34,6 +34,9 @@ public class skSelector : MonoBehaviour {
 	//Son
 	AudioSource aS;
 	public AudioClip deniedSFX;
+	public AudioClip switchTypeSFX;
+	public AudioClip switchPartSFX;
+	public AudioClip creationSFX;
 
 
 	// Use this for initialization
@@ -83,6 +86,8 @@ public class skSelector : MonoBehaviour {
 			print ("type = " + nfmod(selectedType, 4));
 			ui.UpdateArrows(nfmod(selectedType, 4), nfmod(selectedType+1, 4));
 			snaped = true;
+			aS.pitch = 1f;
+			aS.PlayOneShot (switchTypeSFX);
 		}
 
 		if (Input.GetAxis("Vertical") < -0.2f && !snaped) 
@@ -91,6 +96,8 @@ public class skSelector : MonoBehaviour {
 			print ("type = " + nfmod(selectedType, 4));
 			ui.UpdateArrows(nfmod(selectedType, 4), nfmod(selectedType-1, 4));
 			snaped = true;
+			aS.pitch = 1f;
+			aS.PlayOneShot (switchTypeSFX);
 		}
 
 		if (Input.GetAxis("Horizontal") > 0.2f && !snaped) 
@@ -107,7 +114,8 @@ public class skSelector : MonoBehaviour {
 				ui.UpdateName (currentMemento);
 				UpdateVisualisation (modType, currentMemento.ID);
 			}
-
+			aS.pitch = 1f;
+			aS.PlayOneShot (switchPartSFX);
 			snaped = true;
 		}
 
@@ -125,6 +133,8 @@ public class skSelector : MonoBehaviour {
 				ui.UpdateName (currentMemento);
 				UpdateVisualisation (modType, currentMemento.ID);
 			}
+			aS.pitch = 0.999f;
+			aS.PlayOneShot (switchPartSFX);
 			snaped = true;
 
 		}
