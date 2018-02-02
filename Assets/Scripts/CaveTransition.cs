@@ -30,7 +30,7 @@ public class CaveTransition : MonoBehaviour {
 	{
 		if (other.gameObject.tag == "Player")
 		{
-			caveSnp.TransitionTo(transitionTime);
+			beachSnp.TransitionTo(transitionTime);
 			print ("OUT");
 		}
 	}

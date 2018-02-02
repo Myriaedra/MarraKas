@@ -22,7 +22,7 @@ public class MainMenu : MonoBehaviour {
 	// Use this for initialization
 	public void StartNewGame()
 	{
-		SceneManager.LoadScene ("Beach_rubble");
+		SceneManager.LoadScene ("Beach_Quentin");
 		PlayerPrefs.SetString ("Name", islandName.text);
 	}
 

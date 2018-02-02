@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
 using Cinemachine;
-using Vuforia;
+/*using Vuforia;
 using UnityEditor;
-
+*/
 public class PlayerController : MonoBehaviour {
 
 	public static PlayerController pc;
