@@ -16,7 +16,13 @@ public class skDialogueManager : MonoBehaviour {
 
 	public string[] hintDialogues = new string[3];
 	public float[] timeHintDialogues = new float[3];
+
+    public string[] helpDialogues = new string[3];
+    public float[] timeHelpDialogues = new float[3];
+
+    [HideInInspector]
 	public skBehaviour mySkBehaviour;
+    [HideInInspector]
     public skSpawner mySkSpawner;
 
 	float distancePreDialogue = 16;
@@ -45,7 +51,9 @@ public class skDialogueManager : MonoBehaviour {
                     boxDialogueAnim.SetBool("opened", false);
                     UIDialogueText.ClearDisplay ();
 				    dialogueState = "NoDialogue";
-                    mySkBehaviour.MoveToRubble();
+                    if(mySkBehaviour.readyToRubble)
+                        mySkBehaviour.MoveToRubble();
+
                     PlayerController.pc.beingTalkedTo = null;
 			    }
 			    break;
@@ -99,7 +107,11 @@ public class skDialogueManager : MonoBehaviour {
 				UIDialogueText.StartDisplaying (hintDialogues [whichDialogue], memento.name);
                 timer = timeHintDialogues[whichDialogue];
                 break;
-		}
+            case "Help":
+                UIDialogueText.StartDisplaying(helpDialogues[whichDialogue], memento.name);
+                timer = timeHelpDialogues[whichDialogue];
+                break;
+        }
 	} //Said in title
 
 	IEnumerator CheckDistanceToPlayer(){
@@ -139,7 +151,11 @@ public class skDialogueManager : MonoBehaviour {
     {
         if ((PlayerController.pc.beingTalkedTo == null || PlayerController.pc.beingTalkedTo == gameObject) && dialogueState == "NoDialogue")
         {
-            if (Random.Range(0, 2) == 0)
+            if (mySkBehaviour.readyToRubble)
+            {
+                dialogueType = "Help";
+            }
+            else if (Random.Range(0, 2) == 0)
                 dialogueType = "Casual";
             else
                 dialogueType = "Hint";
@@ -190,5 +206,8 @@ public class skDialogueManager : MonoBehaviour {
 
         hintDialogues = mySkSpawner.dialogues[memento.ID].hintDialogues;
         timeHintDialogues = mySkSpawner.dialogues[memento.ID].timeHintDialogues;
+
+        helpDialogues = mySkSpawner.dialogues[memento.ID].helpDialogues;
+        timeHelpDialogues = mySkSpawner.dialogues[memento.ID].timeHelpDialogues;
     }
 }

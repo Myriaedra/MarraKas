@@ -94,25 +94,24 @@ public class DigManager : MonoBehaviour {
 			break;
 		}
 
-		//DURING
+        //DURING
 		yield return new WaitForSeconds (duration);
 
 		//AFTER---------------------------------------------------------------
 
 		switch(type){
 		case "Spot":
-			//PartPreview (newSpotManager.type, newSpotManager.part); //Instantiate canvas with preview of the sk part
-			PartPreviewOverlay();
+                //PartPreview (newSpotManager.type, newSpotManager.part); //Instantiate canvas with preview of the sk part
+                PartPreviewOverlay();
 			Destroy (newSpotManager.transform.gameObject);
 			newSpotManager = null;
-			break;
+                break;
 		case "Baril":
 			newRbBaril.freezeRotation = false;
 			newRbBaril.isKinematic = false;
 			newRbBaril.AddForce (new Vector3 (0, 50, 0));
 			break;
 		case "Palmier":
-			print ("hey");
 			newPalmier.NoixDeCocoFall ();
 			newPalmier = null;
 			break;
@@ -121,7 +120,7 @@ public class DigManager : MonoBehaviour {
 		anim.SetTrigger ("DigOverTrigger");
 		if(type!="Spot")
 			PlayerController.controlsAble = true;
-	}
+    }
 
 	/*public void PartPreview(int type, int part) //Spawn canvas with preview
 	{
@@ -174,6 +173,5 @@ public class DigManager : MonoBehaviour {
 		}
 		aS.pitch = 1;
 	}
-
 }
 

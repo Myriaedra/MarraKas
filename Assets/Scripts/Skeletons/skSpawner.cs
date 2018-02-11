@@ -9,6 +9,10 @@ public class skSpawner : MonoBehaviour {
 	public skDialogueUI UIDialogueText;
 
 	public DialogueSet[] dialogues = new DialogueSet[3];
+    public Transform[] skSpotsBeforeRubble;
+
+    bool[] skSpawned = new bool[3];
+    skBehaviour[] readyToRubbleSetter = new skBehaviour[3];
 
 	// Use this for initialization
 	void Start () {
@@ -100,12 +104,41 @@ public class skSpawner : MonoBehaviour {
 			skBh.mySkDialogueManager = dialogueMan;
             dialogueMan.mySkSpawner = GetComponent<skSpawner>();
             dialogueMan.SetMemento (memento);
-			dialogueMan.SetUIDialogueText (UIDialogueText);
+            switch (memento.name)
+            {
+                case "Pedro":
+                    skBh.mySpot = skSpotsBeforeRubble[0];
+                    skSpawned[0] = true;
+                    readyToRubbleSetter[0] = skBh;
+                    break;
+                case "Sancho":
+                    skBh.mySpot = skSpotsBeforeRubble[1];
+                    skSpawned[1] = true;
+                    readyToRubbleSetter[1] = skBh;
+                    break;
+                case "Alessandro":
+                    skBh.mySpot = skSpotsBeforeRubble[2];
+                    skSpawned[2] = true;
+                    readyToRubbleSetter[2] = skBh;
+                    break;
+            }
+            dialogueMan.SetUIDialogueText (UIDialogueText);
 			dialogueMan.dialogueType = "Spawn";
 			dialogueMan.StartDialogue();
 
 			torsoObj.tag = "Skeleton";
-		}
+
+
+            if (skSpawned[0] && skSpawned[1] && skSpawned[2])
+            {
+                print("0");
+                for (int i = 0; i < readyToRubbleSetter.Length; i++)
+                {
+                    readyToRubbleSetter[i].readyToRubble = true;
+                    readyToRubbleSetter[i].MoveToRubble();
+                }
+            }
+        }
 
 	}
 }

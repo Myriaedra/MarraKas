@@ -14,4 +14,7 @@ public class DialogueSet{
 	public string[] hintDialogues = new string[3];
 	public float[] timeHintDialogues = new float[3];
 
+    public string[] helpDialogues = new string[3];
+    public float[] timeHelpDialogues = new float[3];
+
 }
