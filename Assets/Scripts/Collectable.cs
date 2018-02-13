@@ -24,6 +24,8 @@ public class Collectable : MonoBehaviour {
 	public int type;
 	public int part;
 
+	public AudioClip soulSFX;
+
 
 	// Use this for initialization
 	void Start () {
@@ -91,6 +93,17 @@ public class Collectable : MonoBehaviour {
 			}
 		} else {
 			Camera.main.GetComponent<InventoryManager> ().playerInventory.AddItem (type, part);
+		}
+
+
+		if (memento) 
+		{
+			GameObject whisper = new GameObject();
+			AudioSource whispSource = whisper.AddComponent<AudioSource> ();
+			whispSource.clip = soulSFX;
+			whispSource.volume = 0.5f;
+			Instantiate (whisper, new Vector3 (0, 0, 0), Quaternion.identity);
+			Destroy (whisper, 2f);
 		}
 
 		Destroy (gameObject);

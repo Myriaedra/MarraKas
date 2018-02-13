@@ -39,9 +39,12 @@ public class PlayerController : MonoBehaviour {
 	public AudioClip groundStep;
 	public AudioClip waterStep;
 	public AudioClip splashSFX;
-	public AudioClip jumpSFX;
+
 
 	public AudioSource pantingAS;
+
+	public AudioSource jumpAS;
+	public AudioClip jumpSFX;
 
     [Header("GroundValues : ")]
     public float groundAcceleration;
@@ -91,7 +94,7 @@ public class PlayerController : MonoBehaviour {
 			anim.SetTrigger ("JumpTrigger");
             rb.velocity = new Vector3(rb.velocity.x, jumpForce, rb.velocity.z);
 			stepsAS.pitch = Random.Range (0.95f, 1.05f);
-			stepsAS.PlayOneShot (jumpSFX);
+			jumpAS.PlayOneShot (jumpSFX);
         }	
 	}
 

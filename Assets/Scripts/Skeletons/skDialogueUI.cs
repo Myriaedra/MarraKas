@@ -8,9 +8,13 @@ public class skDialogueUI : MonoBehaviour {
 	Text myText;
     string dialogueName;
 
+	AudioSource aS;
+	public AudioClip[] xyloSFXs;
+
 
 	void Start(){
 		myText = GetComponent<Text> ();
+		aS = GetComponent<AudioSource> ();
 	}
 
 	IEnumerator DisplayText(string sentence){
@@ -23,6 +27,11 @@ public class skDialogueUI : MonoBehaviour {
 				nbChar = 0;
 				yield return new WaitForSeconds (0.75f);
 				myText.text = "" + letter;				
+			}
+
+			if (letter != ' ' && Random.Range(0, 3) >= 2) 
+			{
+				aS.PlayOneShot(xyloSFXs[Random.Range(0, xyloSFXs.Length)]);
 			}
 			yield return new WaitForSeconds (0.02f);
 		}

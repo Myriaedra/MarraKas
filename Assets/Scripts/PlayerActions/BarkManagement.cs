@@ -95,8 +95,8 @@ public class BarkManagement : MonoBehaviour {
                 OutlineOff();
 				rendererInSight = hit.collider.GetComponent<Renderer>();
                 OutlineOn();
-                whatIsInSight = "FlowerEmitter";
-            }
+				whatIsInSight = "FlowerEmitter";
+			}
             //SkSpawner
             else if (hit.collider.CompareTag("SkSpawner") && hit.collider.transform.GetChild(2).GetComponent<Renderer>() != rendererInSight)
             {
@@ -132,6 +132,7 @@ public class BarkManagement : MonoBehaviour {
             {
                 Vector3 spawnPosition = transform.position + new Vector3(0, -0.8f, 0);
                 GameObject barkPart = Instantiate(barkPartPrefab, spawnPosition, Quaternion.identity);
+				StartCoroutine(hit.collider.GetComponent<AmplifiedBark> ().BarkSound());
                 Destroy(barkPart, 4);
                 flowerEmitterTransform = hit.collider.GetComponent<Transform>();
                 FlowerEmitterAction();
@@ -157,6 +158,7 @@ public class BarkManagement : MonoBehaviour {
 				{
 					if (Vector3.Distance (spotsDetected [i].transform.position, playerController.transform.position) < showRange) {
                         GameObject flowerPart = Instantiate(littleFlowerPartPrefab, spotsDetected[i].position, Quaternion.identity);
+						spotsDetected [i].GetComponent<SpotManager> ().SFX ();
                         Destroy(flowerPart, 4);
 					}
 				}

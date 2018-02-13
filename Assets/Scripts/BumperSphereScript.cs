@@ -12,10 +12,14 @@ public class BumperSphereScript : MonoBehaviour {
 	Rigidbody myRb;
 	public ParticleSystem partUp;
 
+	AudioSource aS;
+	public AudioClip reboundSFX;
+
 
 	void Start(){
 		myCollider = GetComponent<BoxCollider> ();
 		myRb = GetComponent<Rigidbody> ();
+		aS = GetComponent<AudioSource>();
 	}
 
 	void OnTriggerEnter(Collider other){
@@ -28,6 +32,7 @@ public class BumperSphereScript : MonoBehaviour {
 	}
 
 	IEnumerator LerpTowardHoleCenter(){
+		aS.PlayOneShot (reboundSFX);
 		myCollider.enabled = true;
 		myRb.isKinematic = true;
 		GameObject confettiPartInstance = Instantiate (confettiPart, target.position, Quaternion.Euler (-90, 0, 0));

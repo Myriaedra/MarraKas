@@ -180,6 +180,7 @@ public class skSelector : MonoBehaviour {
 			playerInventory.RemoveItem (2, playerInventory.GetIDFromReference (2, nfmod (selectedParts [2], playerInventory.GetArrayLength (2))));
 			playerInventory.RemoveItem (currentMemento);
 			Destroy (currentMementoMesh);
+			aS.PlayOneShot (creationSFX);
 			GameObject conf = Instantiate (confettiFX, transform.position, Quaternion.Euler(new Vector3 (-90,0,0)));
 			Destroy (conf, 6f);
 			EndAssembly ();

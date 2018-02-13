@@ -7,8 +7,12 @@ public class SpotManager : MonoBehaviour {
 	public int part;
 	public bool randomInit;
 
+	AudioSource aS;
+	public AudioClip[] foundSFXs;
+
 	// Use this for initialization
 	void Start () {
+		aS = GetComponent<AudioSource> ();
 		if (randomInit) 
 		{
 			InitSpot ();
@@ -24,5 +28,10 @@ public class SpotManager : MonoBehaviour {
 	{
 		type = Random.Range (0, 3); 
 		part = Random.Range (0, 3); 
+	}
+
+	public void SFX()
+	{
+		aS.PlayOneShot (foundSFXs [Random.Range (0, foundSFXs.Length)]);
 	}
 }

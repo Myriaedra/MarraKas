@@ -17,6 +17,8 @@ public class RubbleManager : MonoBehaviour {
 	public PlayerController player;
 	public Animator playerAnim;
 
+	public AudioSource aS;
+
 	// Use this for initialization
 	void Start () {
 		skNeeded = skSpots.Count;
@@ -55,6 +57,8 @@ public class RubbleManager : MonoBehaviour {
 	{
 		//Disappear in the ground
 		rubbleDust = Instantiate(rubbleDust, transform.position, Quaternion.Euler(new Vector3 (-90,0,0)));
+		aS.Play ();
+		aS.loop = true;
 		while (transform.position.y > limitY) 
 		{
 			float xDif = Random.Range (-0.2f, 0.2f);
@@ -65,7 +69,20 @@ public class RubbleManager : MonoBehaviour {
 
 		//Gives control back to the player
 		Destroy(rubbleDust);
+		StartCoroutine (FadeOut (aS));
 		PlayerController.controlsAble = true;
 		playerAnim.SetTrigger ("DigOverTrigger");
+
+	}
+
+	public IEnumerator FadeOut(AudioSource audioSource)
+	{
+		while (audioSource.volume > 0f) 
+		{
+			audioSource.volume -= 0.02f;
+			yield return null;
+		}
+
+		audioSource.Stop ();
 	}
 }
