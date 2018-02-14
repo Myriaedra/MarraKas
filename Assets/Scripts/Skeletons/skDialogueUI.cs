@@ -17,7 +17,7 @@ public class skDialogueUI : MonoBehaviour {
 		aS = GetComponent<AudioSource> ();
 	}
 
-	IEnumerator DisplayText(string sentence){
+	IEnumerator DisplayText(string sentence, int tempo, float pitch){
         myText.text = "";
         int nbChar = 0;
 		foreach(char letter in sentence.ToCharArray ()){
@@ -29,8 +29,9 @@ public class skDialogueUI : MonoBehaviour {
 				myText.text = "" + letter;				
 			}
 
-			if (letter != ' ' && Random.Range(0, 3) >= 2) 
+			if (letter != ' ' && Random.Range(0, tempo) >= 2) 
 			{
+				aS.pitch = pitch;
 				aS.PlayOneShot(xyloSFXs[Random.Range(0, xyloSFXs.Length)]);
 			}
 			yield return new WaitForSeconds (0.02f);
@@ -41,9 +42,8 @@ public class skDialogueUI : MonoBehaviour {
 		myText.text = "";
 	}
 
-	public void StartDisplaying(string newSentence, string newName){
+	public void StartDisplaying(string newSentence, Memento memento){
 		StopAllCoroutines ();
-        dialogueName = newName;
-        StartCoroutine (DisplayText (newSentence));
+		StartCoroutine (DisplayText (newSentence, memento.tempo, memento.pitch));
 	}
 }

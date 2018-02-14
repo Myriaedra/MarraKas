@@ -51,7 +51,7 @@ public class TutoManager : MonoBehaviour {
 		if (previousID != Mathf.FloorToInt(dialogueID) )
 		{
 			previousID = Mathf.FloorToInt(dialogueID);
-			UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)], "Captain Tuto");
+			UIDialogueText.StartDisplaying (tutoDialogues [Mathf.FloorToInt(dialogueID)], new Memento (0, "Captain Tuto", 3, .09f));
 		}
 
 		if (skCreated && timelineID == 2) 
@@ -145,14 +145,14 @@ public class TutoManager : MonoBehaviour {
 			captain.GetComponent<skCaptainBehaviour> ().enabled = false;
 
 			skBehaviour skBh = captain.AddComponent<skBehaviour> ();
-			skBh.SetMemento (new Memento (0, "Captain Tuto"));
+			skBh.SetMemento (new Memento (0, "Captain Tuto", 3, 0.9f));
 
 			skDialogueManager dialogueMan = captain.AddComponent<skDialogueManager>();
 			print (GameObject.FindGameObjectWithTag ("SkSpawner").name);
 			dialogueMan.mySkSpawner = GameObject.Find("SkSpawner").GetComponent<skSpawner>();
 			dialogueMan.mySkBehaviour = skBh;
 			skBh.mySkDialogueManager = dialogueMan;
-			dialogueMan.SetMemento (new Memento (0, "Captain Tuto"));
+			dialogueMan.SetMemento (new Memento (0, "Captain Tuto", 3, 0.9f));
 			dialogueMan.SetUIDialogueText (UIDialogueText);
 
 			captain.tag = "Skeleton";

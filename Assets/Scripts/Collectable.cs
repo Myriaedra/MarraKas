@@ -19,6 +19,8 @@ public class Collectable : MonoBehaviour {
 	//Iventory
 	public int mementoID;
 	public string mementoName;
+	public int mementoTempo;
+	public float mementoPitch;
 	Memento thisMemento;
 
 	public int type;
@@ -33,7 +35,7 @@ public class Collectable : MonoBehaviour {
 			StartCoroutine ("Floating");
 		
 		player = GameObject.FindWithTag ("Player").GetComponent<Transform>();
-		thisMemento = new Memento (mementoID, mementoName);
+		thisMemento = new Memento (mementoID, mementoName, mementoTempo, mementoPitch);
 	}
 	
 	void OnTriggerEnter(Collider other)//TRIGGER ENTER------------------------------------------------------

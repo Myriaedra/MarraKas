@@ -31,7 +31,7 @@ public class ArrivalSimulation : MonoBehaviour {
 		}
 		//spawn
 		print ("it's-a me !");
-		skSp.SpawnFromParts (2, 1, 2, new Memento (1, "Mona"), spawnSpot.position);
+		skSp.SpawnFromParts (2, 1, 2, new Memento (1, "Mona", 2, 0.9f), spawnSpot.position);
 	}
 
 	void OnBecameInvisible()
