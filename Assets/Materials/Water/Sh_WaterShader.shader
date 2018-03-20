@@ -260,10 +260,10 @@ Shader "Shader Forge/Sh_Water_Tuto" {
                 float specularMonochrome;
                 float node_6398 = saturate((saturate((sceneZ-partZ)/_Depth)/0.5*dot(viewDirection,i.normalDir)+0.5));
                 float3 node_1638 = lerp(_ColorA.rgb,_ColorB.rgb,node_6398);
-                float4 node_7353 = _Time;
+                float4 node_9900 = _Time;
                 float node_2191 = 0.0;
                 float node_2846 = (1.0 - saturate((node_2191 + ( (node_6398 - _FoamMin) * (1.0 - node_2191) ) / (_FoamMax - _FoamMin))));
-                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_7353.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
+                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_9900.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
                 float3 diffuseColor = saturate((node_1638+node_7911)); // Need this for specular when using metallic
                 diffuseColor = DiffuseAndSpecularFromMetallic( diffuseColor, specularColor, specularColor, specularMonochrome );
                 specularMonochrome = 1.0-specularMonochrome;
@@ -492,10 +492,10 @@ Shader "Shader Forge/Sh_Water_Tuto" {
                 float specularMonochrome;
                 float node_6398 = saturate((saturate((sceneZ-partZ)/_Depth)/0.5*dot(viewDirection,i.normalDir)+0.5));
                 float3 node_1638 = lerp(_ColorA.rgb,_ColorB.rgb,node_6398);
-                float4 node_8618 = _Time;
+                float4 node_4266 = _Time;
                 float node_2191 = 0.0;
                 float node_2846 = (1.0 - saturate((node_2191 + ( (node_6398 - _FoamMin) * (1.0 - node_2191) ) / (_FoamMax - _FoamMin))));
-                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_8618.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
+                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_4266.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
                 float3 diffuseColor = saturate((node_1638+node_7911)); // Need this for specular when using metallic
                 diffuseColor = DiffuseAndSpecularFromMetallic( diffuseColor, specularColor, specularColor, specularMonochrome );
                 specularMonochrome = 1.0-specularMonochrome;
@@ -825,10 +825,10 @@ Shader "Shader Forge/Sh_Water_Tuto" {
                 
                 float node_6398 = saturate((saturate((sceneZ-partZ)/_Depth)/0.5*dot(viewDirection,i.normalDir)+0.5));
                 float3 node_1638 = lerp(_ColorA.rgb,_ColorB.rgb,node_6398);
-                float4 node_2726 = _Time;
+                float4 node_8704 = _Time;
                 float node_2191 = 0.0;
                 float node_2846 = (1.0 - saturate((node_2191 + ( (node_6398 - _FoamMin) * (1.0 - node_2191) ) / (_FoamMax - _FoamMin))));
-                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_2726.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
+                float3 node_7911 = saturate(((((node_1638*float3((i.uv0+node_8704.g*float2(0.01,0.01)),0.0))*node_2846)*_FoamPower)+pow(node_2846,5.0)));
                 float3 diffColor = saturate((node_1638+node_7911));
                 float specularMonochrome;
                 float3 specColor;
